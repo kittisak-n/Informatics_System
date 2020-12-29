@@ -1,0 +1,291 @@
+<template>
+  <div id="reveal_form">
+    <a-row :gutter="[8, 8]" type="flex" justify="center">
+      <a-col :span="24">
+        <a-card size="small" title="ใบเบิกวัสดุ">
+          <a-row :gutter="[8, 8]" type="flex" justify="center">
+            <a-col :span="24">หมายเหตุการเบิกวัสดุ </a-col>
+            <a-col :span="24"
+              ><a-input placeholder="วัตถุประสงค์การเบิกวัสดุ"
+            /></a-col>
+          </a-row>
+          <br />
+          <a-row :gutter="[8, 8]" type="flex" justify="center">
+            <a-col :span="24"> รายการเบิกวัสดุ</a-col>
+          </a-row>
+          <a-row :gutter="[8, 8]" type="flex" justify="center">
+            <a-col :span="24">
+              <a-table
+                :columns="columns"
+                :data-source="meterail"
+                :pagination="false"
+                size="small"
+                bordered
+              >
+                <span slot="key" slot-scope="text, record, index">
+                  <div :style="{ textAlign: 'center' }">
+                    {{ index + 1 }}
+                  </div>
+                </span>
+                <span slot="meterail_name" slot-scope="text, record, index">
+                  <div :style="{ textAlign: 'center' }">
+                    <a-select
+                      show-search
+                      :value="value"
+                      v-model="meterail[index].meterail_name"
+                      placeholder="กรอกชื่อวัสดุที่ต้องการเบิก"
+                      style="width: 100%"
+                      :default-active-first-option="false"
+                      :show-arrow="false"
+                      :filter-option="false"
+                      :not-found-content="null"
+                      @search="handleSearch"
+                      @change="handleChange"
+                    >
+                      <a-select-option v-for="d in data" :key="d.value">
+                        {{ d.text }}
+                      </a-select-option>
+                    </a-select>
+                  </div>
+                </span>
+                <span slot="meterail_unit" slot-scope="text">
+                  <div :style="{ textAlign: 'center' }">
+                    {{ text }}
+                  </div>
+                </span>
+                <span slot="meterail_balance" slot-scope="text">
+                  <div :style="{ textAlign: 'center' }">
+                    {{ text }}
+                  </div>
+                </span>
+                <span slot="meterail_reveal">
+                  <div :style="{ textAlign: 'center' }">
+                    <a-input placeholder="จำนวนวัสดุที่ต้องการเบิก" />
+                  </div>
+                </span>
+
+                <span slot="meterail_note">
+                  <div :style="{ textAlign: 'center' }">
+                    <a-input placeholder="ระบุหมายเหตุการเบิก" />
+                  </div>
+                </span>
+
+                <span slot="action" slot-scope="text, record, index">
+                  <div :style="{ textAlign: 'center' }">
+                    <a-tooltip placement="top">
+                      <template slot="title">
+                        <span>ลบข้อมูลวัสดุ</span>
+                      </template>
+                      <a-button
+                        :disabled="meterail.length == 1"
+                        type="danger"
+                        icon="close"
+                        @click="deleteRecordMeterail(index)"
+                      >
+                      </a-button>
+                    </a-tooltip>
+                  </div>
+                </span>
+              </a-table>
+            </a-col>
+          </a-row>
+          <a-row :gutter="[8, 8]" type="flex" justify="center">
+            <a-col :span="24">
+              <a-button
+                type="dashed"
+                style="width:100%"
+                icon="plus"
+                @click="addRecordMeterail()"
+                >เพิ่มรายการข้อมูล
+              </a-button>
+            </a-col>
+          </a-row>
+
+          <template slot="actions" class="ant-card-actions">
+            <a-row :gutter="[8, 8]" type="flex" justify="center">
+              <a-col :span="12" style="text-align:start">
+                <a-button
+                  style="width:25%;margin:0px 1.5%"
+                  icon="line"
+                  @click="cancleConfirm()"
+                  >กลับ
+                </a-button>
+              </a-col>
+              <a-col :span="12" style="text-align:end">
+                <a-button
+                  type="success"
+                  style="width:25%;margin:0px 1.5%"
+                  icon="save"
+                  @click="SaveRecordMeterail()"
+                  >บันทึกการเพิ่มข้อมูล
+                </a-button>
+              </a-col>
+            </a-row>
+          </template>
+        </a-card>
+      </a-col>
+    </a-row>
+  </div>
+</template>
+
+<script>
+import jsonp from "fetch-jsonp";
+import querystring from "querystring";
+// @ is an alias to /src
+// import HelloWorld from "@/components/HelloWorld.vue";
+let timeout;
+let currentValue;
+
+function fetch(value, callback) {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = null;
+  }
+  currentValue = value;
+
+  function fake() {
+    const str = querystring.encode({
+      code: "utf-8",
+      q: value,
+    });
+    jsonp(`https://suggest.taobao.com/sug?${str}`)
+      .then((response) => response.json())
+      .then((d) => {
+        if (currentValue === value) {
+          const result = d.result;
+          const data = [];
+          result.forEach((r) => {
+            data.push({
+              value: r[0],
+              text: r[0],
+            });
+          });
+          callback(data);
+        }
+      });
+  }
+
+  timeout = setTimeout(fake, 300);
+}
+export default {
+  name: "reveal_form",
+  components: {},
+  data() {
+    return {
+      columns: [
+        {
+          title: "ลำดับ",
+          dataIndex: "key",
+          key: "key",
+          width: "5%",
+          scopedSlots: {
+            customRender: "key",
+          },
+        },
+        {
+          title: "วัสดุ",
+          dataIndex: "meterail_name",
+          key: "meterail_name",
+          width: "15%",
+          scopedSlots: {
+            customRender: "meterail_name",
+          },
+        },
+        {
+          title: "หน่วย",
+          dataIndex: "meterail_unit",
+          key: "meterail_unit",
+          width: "10%",
+          scopedSlots: {
+            customRender: "meterail_unit",
+          },
+        },
+        {
+          title: "จำนวนวัสดุ",
+          children: [
+            {
+              title: "จำนวนคงเหลือ",
+              dataIndex: "meterail_balance",
+              key: "meterail_balance",
+              width: "10%",
+              scopedSlots: { customRender: "meterail_balance" },
+            },
+            {
+              title: "จำนวนเบิก",
+              dataIndex: "meterail_reveal",
+              key: "meterail_reveal",
+              width: "10%",
+              scopedSlots: { customRender: "meterail_reveal" },
+            },
+          ],
+        },
+        {
+          title: "หมายเหตุ",
+          dataIndex: "meterail_note",
+          key: "meterail_note",
+          width: "10%",
+          scopedSlots: {
+            customRender: "meterail_note",
+          },
+        },
+        {
+          title: "",
+          dataIndex: "action",
+          key: "action",
+          width: "5%",
+          scopedSlots: { customRender: "action" },
+        },
+      ],
+      meterail: [
+        {
+          key: 1,
+          meterail_name: null,
+          meterail_balance: 0,
+          meterail_reveal: null,
+          meterail_note: null,
+        },
+      ],
+      data: [],
+      value: undefined,
+    };
+  },
+  methods: {
+    handleSearch(value) {
+      fetch(value, (data) => (this.data = data));
+    },
+    handleChange(value) {
+      console.log(value);
+      this.value = value;
+      fetch(value, (data) => (this.data = data));
+    },
+    addRecordMeterail() {
+      let data_meterail = {
+        key: this.meterail.length + 1,
+        meterail_name: null,
+        meterail_balance: 0,
+        meterail_reveal: null,
+        meterail_note: null,
+      };
+      this.meterail.push(data_meterail);
+    },
+    deleteRecordMeterail(index) {
+      this.meterail.splice(index, 1);
+    },
+    SaveRecordMeterail() {},
+  },
+};
+</script>
+<style scoped>
+.steps-content {
+  margin-top: 16px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  min-height: 200px;
+  padding: 20px;
+}
+
+.steps-action {
+  margin-top: 24px;
+  text-align: end;
+}
+</style>
