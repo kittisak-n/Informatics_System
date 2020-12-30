@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import login from "../views/login.vue"
 import Home from "../views/Home.vue";
 
 
@@ -22,7 +23,7 @@ import MDS_import_form from "../views/MDS/MDS_import/MDS_import_form.vue";
 Vue.use(VueRouter);
 
 const routes = [{
-        path: "",
+        path: "/home",
         name: "Home",
         component: {
             render(c) {
@@ -34,11 +35,27 @@ const routes = [{
                 path: "",
                 component: Home
             },
-            {
-                path: "/home",
-                component: Home
-            }
+            
         ]
+    },
+    {
+        path:'',
+        name:'login',
+        meta:{breadCrumb : "เข้าสู่ระบบ"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: login
+        },
+        {
+            path: "/login",
+            component: login
+        }
+    ]
     },
     {
         path: "/calculator",

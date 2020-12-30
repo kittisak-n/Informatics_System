@@ -5,6 +5,7 @@
       :style="{
         height: '100%',
       }"
+      v-if="this.$store.state.status_login"
     >
       <a-drawer
         class="display_mobile"
@@ -344,6 +345,18 @@
         </a-layout-content>
       </a-layout>
     </a-layout>
+    <a-layout
+      :style="{
+        height: '100%',
+      }"
+      v-if="!this.$store.state.status_login"
+    >
+      <a-layout-content>
+        <div class="layout-login">
+          <router-view />
+        </div>
+      </a-layout-content>
+    </a-layout>
   </div>
 </template>
 <script>
@@ -408,7 +421,12 @@ export default {
     }
   }
 }
+.layout-login {
+  background-image: url("https://www.informatics.buu.ac.th/2020/wp-content/uploads/2018/07/NormalView.jpg") !important;
 
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 .ant-layout-sider {
   background: #ffffff !important;
 }
