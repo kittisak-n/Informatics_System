@@ -149,7 +149,7 @@
               <span>ระบบคำนวณภาระงาน</span>
             </span>
             <a-menu-item key="CWS_show">
-              <router-link :to="{ path: '/calculator/SummaryWorkload' }">
+              <router-link :to="{ path: '/calculator/Show_course' }">
               <a-icon type="folder-open" theme="filled" />ข้อมูลรายวิชา
               </router-link>
             </a-menu-item>

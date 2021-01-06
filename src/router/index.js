@@ -22,6 +22,7 @@ import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_
 import Detail_criteria from "../views/WLS/Calculation_criteria/Detail_criteria.vue";
 import Add_criteria from "../views/WLS/Calculation_criteria/Add_criteria.vue";
 import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.vue";
+import Show_course from "../views/WLS/Show_course/ShowCourse.vue"
 
 Vue.use(VueRouter);
 
@@ -60,7 +61,7 @@ const routes = [
         path: "Show_course",
         name: "Show_course",
         meta: { breadCrumb: "แสดงรายวิชา" },
-        component: Calculation_criteria,
+        component: Show_course,
       },
       {
         path: "Calculation_criteria",
