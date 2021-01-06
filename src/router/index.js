@@ -22,6 +22,7 @@ import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_
 import Detail_criteria from "../views/WLS/Calculation_criteria/Detail_criteria.vue";
 import Add_criteria from "../views/WLS/Calculation_criteria/Add_criteria.vue";
 import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -55,6 +56,12 @@ const routes = [
     },
     meta: { breadCrumb: "คำนวนภาระงานอาจารย์ประจำ" },
     children: [
+      {
+        path: "Show_course",
+        name: "Show_course",
+        meta: { breadCrumb: "แสดงรายวิชา" },
+        component: Calculation_criteria,
+      },
       {
         path: "Calculation_criteria",
         name: "Calculation_criteria",
