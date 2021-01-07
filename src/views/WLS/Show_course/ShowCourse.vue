@@ -113,7 +113,7 @@
         <a-row :gutter="[24, 30]">
           <a-col :span="24">
             <a-col :span="24">
-              <router-link :to="{ path: '/calculator/Calculation_criteria' }">
+              <router-link :to="{ path: '/calculator/Show_course/form' }">
                 <a-button type="primary" block>
                   เพิ่มรายวิชาด้วยตนเอง
                 </a-button>
