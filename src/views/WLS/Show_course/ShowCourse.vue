@@ -104,7 +104,7 @@
     </a-row>
     <div id="modal">
       <a-modal
-        title="Title"
+        title="เพิ่มรายวิชา"
         :visible="modal_insert"
         :confirm-loading="confirmLoading"
         @ok="handleOk"
@@ -112,23 +112,20 @@
       >
         <a-row :gutter="[24, 30]">
           <a-col :span="24">
-            <a-card :bordered="false">
-              <a-col :span="24">
-                <a-button type="submit" block> Primary </a-button>
-              </a-col>
-              <a-col :span="12" :offset="6">
-                <a-upload
-                  name="file"
-                  :multiple="true"
-                  :headers="headers"
-                  @change="handleChange"
-                >
-                  <a-button
-                    ><a-icon type="upload" /> เพิ่มแบบ Upload file
-                  </a-button>
-                </a-upload>
-              </a-col>
-            </a-card>
+            <a-col :span="24">
+              <router-link :to="{ path: '/calculator/Calculation_criteria' }">
+                <a-button type="primary" block>
+                  เพิ่มรายวิชาด้วยตนเอง
+                </a-button>
+              </router-link>
+            </a-col>
+            <a-col :span="24">
+              <a-upload :default-file-list="fileList">
+                <a-button block
+                  ><a-icon type="upload" /> เพิ่มแบบ Upload file Csv
+                </a-button>
+              </a-upload>
+            </a-col>
           </a-col>
         </a-row>
       </a-modal>
@@ -292,12 +289,12 @@ export default {
       this.modal_insert = false;
     },
     handleChange(info) {
-      if (info.file.status !== 'uploading') {
+      if (info.file.status !== "uploading") {
         console.log(info.file, info.fileList);
       }
-      if (info.file.status === 'done') {
+      if (info.file.status === "done") {
         this.$message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
+      } else if (info.file.status === "error") {
         this.$message.error(`${info.file.name} file upload failed.`);
       }
     },
