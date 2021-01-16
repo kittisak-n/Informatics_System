@@ -1,18 +1,42 @@
 <template>
   <div id="Add_criteria">
     <a-card size="small">
-      <a-steps :current="current">
-        <a-step v-for="item in steps" :key="item.title" :title="item.title" />
-      </a-steps>
+      <a-row :gutter="[8, 8]">
+        <a-col   xs="24"
+              sm="24"
+              md="18"
+              lg="15"
+              xl="10"
+              xxl="5">
+        <a-steps :current="current + 1">
+          >
+          <a-step v-for="item in steps" :key="item.title" :title="item.title" />
+        </a-steps>
+        </a-col>
+      </a-row>
+
       <div class="steps-content">
         <!-- STEP 0 -->
         <div v-if="current == 0" style="padding-top: 50px">
           <a-row :gutter="[8, 8]">
-            <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
-            <a-col :span="12" style="margin: 0.2em 0px">
+            <a-col
+              :span="8"
+              style="margin: 0.2em 0px"
+            >
+            </a-col>
+            <a-col
+             :span="8"
+              style="margin: 0.2em 0px"
+            >
               <span>ชื่อกำหนดการ: </span>
 
               <a-input
+                xs="10"
+                sm="10"
+                md="18"
+                lg="15"
+                xl="10"
+                xxl="5"
                 v-model="criteria_name"
                 placeholder="กรุณากรอกชื่อ"
                 allow-clear
@@ -20,7 +44,7 @@
                 style="width: 500px"
               />
             </a-col>
-            <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
+            <a-col :span="8" style="margin: 0.2em 0px"> </a-col>
           </a-row>
           <a-row :gutter="[8, 8]">
             <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
@@ -28,6 +52,7 @@
               <span>วันที่เริ่มใช้งาน: </span>
 
               <a-date-picker
+               
                 style="width: 500px"
                 v-model="criteria_start_date"
                 @change="onChangedate"
@@ -42,7 +67,15 @@
         <div v-if="current == 1">
           <a-card size="small">
             <a-row :gutter="[8, 8]">
-              <a-col :span="24" style="margin: 0.2em 0px">
+              <a-col
+                xs="24"
+                sm="24"
+                md="18"
+                lg="15"
+                xl="10"
+                xxl="5"
+                style="margin: 0.2em 0px"
+              >
                 <a-card-meta title="ตั้งค่าทั่วไป"> </a-card-meta
               ></a-col>
             </a-row>
@@ -1376,7 +1409,6 @@ export default {
 
       value: undefined,
       current: 0,
-      s: null,
       steps: [
         {
           title: "กำหนดชื่อ",

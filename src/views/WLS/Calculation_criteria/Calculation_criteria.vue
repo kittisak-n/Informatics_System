@@ -4,7 +4,15 @@
       <a-col :span="24">
         <a-card size="small">
           <a-row :gutter="[8, 8]">
-            <a-col :span="20" style="margin: 0.2em 0px">
+            <a-col
+              xs="24"
+              sm="20"
+              md="18"
+              lg="15"
+              xl="10"
+              xxl="5"
+              style="margin: 0.2em 0px"
+            >
               <a-card-meta title="หลักเกณฑ์การคำนวณ">
                 <a-icon
                   slot="avatar"
@@ -15,7 +23,15 @@
                 /> </a-card-meta
             ></a-col>
 
-            <a-col :span="4" :style="{ textAlign: 'right' }">
+            <a-col
+               xs="24"
+              sm="20"
+              md="18"
+              lg="15"
+              xl="10"
+              xxl="5"
+              :style="{ textAlign: 'right' }"
+            >
               <router-link :to="{ path: '/calculator/Add_criteria' }">
                 <a-button type="primary" icon="setting">
                   ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน
@@ -24,14 +40,22 @@
             </a-col>
           </a-row>
           <hr style="width: 100%" />
-          <a-row :gutter="[8, 8]" type="flex" justify="end">
-            <a-col :span="24" style="text-align: end">
+          <a-row :gutter="[8, 8]"  justify="end">
+            <a-col   xs="24"
+              sm="20"
+              md="18"
+              lg="15"
+              xl="10"
+              xxl="5"
+                style="text-align: end">
               <a-table
                 :columns="columns_calculation_criteria"
                 :data-source="calculation_criteria"
                 :pagination="false"
                 size="small"
                 bordered
+
+                
               >
                 <span slot="key" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
@@ -44,7 +68,7 @@
                   </div>
                 </span>
                 <span slot="cc_start_date" slot-scope="text">
-                  <div :style="{ textAlign: 'center' }">
+                  <div   :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
@@ -66,10 +90,8 @@
                         <span>ดูรายละเอียด</span>
                       </template>
                       <router-link
-                        :to="{ name: 'Detail_criteria', params: { id: index } } " 
+                        :to="{ name: 'Detail_criteria', params: { id: index } }"
                       >
-                   
-
                         <a-button type="warning" icon="search"> </a-button
                       ></router-link>
                     </a-tooltip>

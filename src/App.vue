@@ -166,7 +166,11 @@
               <a-icon type="area-chart"  />สรุปภาระงานเพื่อการจ่ายค่าตอบแทน </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_check">
-              <a-icon type="search" />ตรวจสอบภาระงาน
+
+                <router-link :to="{ path: '/calculator/Inspect_workload' }">
+                 <a-icon type="search" />ตรวจสอบภาระงาน</router-link>
+
+          
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="MDS">

@@ -24,7 +24,7 @@ import Add_criteria from "../views/WLS/Calculation_criteria/Add_criteria.vue";
 import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.vue";
 import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
 import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
-
+import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -95,6 +95,14 @@ const routes = [
         component: SummaryWorkload,
         
       },
+      {
+      
+        path: "Inspect_workload",
+        name: "Inspect_workload",
+        meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+        component: Inspect_workload,
+      },
+
     ],
   },
 
