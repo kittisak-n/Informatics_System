@@ -139,8 +139,10 @@
             </router-link>
           </a-menu-item>
           <a-menu-item key="user">
-            <a-icon type="user" />
-            <span>ข้อมูลส่วนตัว</span>
+            <router-link :to="{ path: '/personal_data' }">
+              <a-icon type="user" />
+              <span>ข้อมูลส่วนตัว</span>
+            </router-link>
           </a-menu-item>
           <a-menu-item key="management">
             <router-link :to="{ path: '/permission_manage' }">

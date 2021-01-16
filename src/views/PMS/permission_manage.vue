@@ -1,7 +1,7 @@
 <template>
   <div id="permisson">
     <a-row :gutter="[8, 8]">
-      <a-col :span="6">
+      <a-col :span="7">
         <a-card>
           <a-row>
             <a-col :span="4">
@@ -14,6 +14,7 @@
               />
             </a-col>
             <a-col :span="20" style="text-align:end">
+              <br />
               <div class="text-head">จำนวนบุคลากรที่มีอยู่ในระบบ</div>
               <div><span class="text-number ">3 </span>คน</div>
             </a-col>
@@ -95,14 +96,23 @@
                 <span slot="action">
                   <div style="text-align:center">
                     <a-tooltip placement="top" title="จัดการสิทธิ์">
-                      <a-button type="warning" @click="showModal" icon="edit">
+                      <a-button
+                        type="warning"
+                        @click="showModal_manage"
+                        icon="edit"
+                      >
                       </a-button>
                     </a-tooltip>
                     <a-tooltip placement="top" title="ปิดการใช้งาน">
                       <a-button type="danger" icon="close"> </a-button>
                     </a-tooltip>
                     <a-tooltip placement="top" title="ตรวจสอบข้อมูล">
-                      <a-button type="primary" icon="search"> </a-button>
+                      <a-button
+                        type="primary"
+                        @click="showModal_info"
+                        icon="search"
+                      >
+                      </a-button>
                     </a-tooltip>
                   </div>
                 </span>
@@ -149,25 +159,25 @@
     <!-- modal -->
     <div>
       <a-modal
-        v-model="visible"
+        v-model="visible_manage"
         title="จัดการสิทธิ์"
         @ok="handleOk"
         cancelText="ปิด"
         okText="ยืนยัน"
       >
         <a-table
-          :columns="columns_modal"
-          :data-source="data_modal"
+          :columns="columns_modal_manage"
+          :data-source="data_modal_manage"
           size="small"
           :pagination="false"
           bordered
         >
-          <template slot="name_system" slot-scope="text, record, index">
-            <div v-if="index < data_modal.length - 1">
+          <template slot="permission" slot-scope="text, record, index">
+            <div v-if="index < data_modal_manage.length - 1">
               {{ text }}
             </div>
             <div
-              v-if="index == data_modal.length - 1"
+              v-if="index == data_modal_manage.length - 1"
               style="text-align:center"
             >
               <a-select
@@ -194,11 +204,14 @@
           </template>
 
           <span slot="status_modal" slot-scope="text, record, index">
-            <div v-if="index < data_modal.length - 1" style="text-align:center">
+            <div
+              v-if="index < data_modal_manage.length - 1"
+              style="text-align:center"
+            >
               <a-switch default-checked />
             </div>
             <div
-              v-if="index == data_modal.length - 1"
+              v-if="index == data_modal_manage.length - 1"
               style="text-align:center"
             >
               <a-button type="success" icon="save"></a-button>
@@ -212,6 +225,129 @@
           </template> -->
         </a-table>
       </a-modal>
+
+      <a-modal
+        v-model="visible_info"
+        title="ข้อมูลรายละเอียด"
+        @ok="handleOk"
+        :footer="null"
+      >
+        <a-row :gutter="[8, 8]">
+          <a-col :span="12">
+            <a-card>
+              <a-row>
+                <a-col :span="4">
+                  <a-icon
+                    type="database"
+                    :style="{
+                      fontSize: '300%',
+                      color: '#000080',
+                    }"
+                  />
+                </a-col>
+                <a-col :span="20" style="text-align:end">
+                  <div class="text-head">จำนวนระบบ</div>
+                  <div><span class="text-number ">2 </span>ระบบ</div>
+                </a-col>
+              </a-row>
+            </a-card>
+          </a-col>
+          <a-col :span="12">
+            <a-card>
+              <a-row>
+                <a-col :span="4">
+                  <a-icon
+                    type="clock-circle"
+                    :style="{
+                      fontSize: '300%',
+                      color: '#008000',
+                    }"
+                  />
+                </a-col>
+                <a-col :span="20" style="text-align:end">
+                  <div class="text-head">จำนวนการเข้าใช้ระบบ</div>
+                  <div><span class="text-number ">10 </span>จำนวนครั้ง</div>
+                </a-col>
+              </a-row>
+            </a-card>
+          </a-col>
+        </a-row>
+        <a-row :gutter="[8, 8]">
+          <a-col>
+            <a-table
+              :columns="columns_modal_info"
+              :data-source="data_modal_info"
+              :pagination="false"
+              size="small"
+            >
+            </a-table>
+          </a-col>
+        </a-row>
+        <br />
+        <a-row :gutter="[8, 8]">
+          <a-col :span="24">
+            <a-row :gutter="[8, 8]">
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>ชื่อ : </span>
+                  <span>ประไพพรรณ</span>
+                </div>
+              </a-col>
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>นามสกุล : </span>
+                  <span>สุ่มทรัพย์</span>
+                </div>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[8, 8]">
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>ตำแหน่ง : </span>
+                  <span>เจ้าหน้าที่ฝ่ายธุรการ</span>
+                </div>
+              </a-col>
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>ที่อยู่ : </span>
+                  <span>199/116 หมู่16</span>
+                </div>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[8, 8]">
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>ตำบล : </span>
+                  <span>ศรีราชา</span>
+                </div>
+              </a-col>
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>อำเภอ : </span>
+                  <span>ศรีราชา</span>
+                </div>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[8, 8]">
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>จังหวัด : </span>
+                  <span>ชลบุรี</span>
+                </div>
+              </a-col>
+              <a-col :span="12">
+                <div style="text-align:center">
+                  <span>รหัสไปรษณีย์ : </span>
+                  <span>20000</span>
+                </div>
+              </a-col>
+            </a-row>
+          </a-col>
+        </a-row>
+      </a-modal>
     </div>
   </div>
 </template>
@@ -221,7 +357,7 @@ const columns = [
     dataIndex: "key",
     key: "key",
     title: "ลำดับ",
-    width: "5%",
+    width: "10%",
     scopedSlots: { customRender: "key" },
   },
   {
@@ -238,13 +374,13 @@ const columns = [
     key: "age",
     scopedSlots: { customRender: "position" },
   },
-  {
-    title: "ไว้ก่อน",
-    dataIndex: "address",
-    width: "20%",
-    key: "address",
-    scopedSlots: { customRender: "test" },
-  },
+  // {
+  //   title: "ไว้ก่อน",
+  //   dataIndex: "address",
+  //   width: "20%",
+  //   key: "address",
+  //   scopedSlots: { customRender: "test" },
+  // },
   {
     title: "สถานะ",
     key: "tags",
@@ -253,17 +389,18 @@ const columns = [
     scopedSlots: { customRender: "status" },
   },
   {
-    title: "Action",
+    title: "ดำเนินการ",
     key: "action",
+    width: "30%",
     scopedSlots: { customRender: "action" },
   },
 ];
 
-const columns_modal = [
+const columns_modal_manage = [
   {
     title: "สิทธิ์การใช้งาน",
-    dataIndex: "name_system",
-    scopedSlots: { customRender: "name_system" },
+    dataIndex: "permission",
+    scopedSlots: { customRender: "permission" },
   },
   {
     title: "จัดการ",
@@ -271,42 +408,61 @@ const columns_modal = [
   },
 ];
 
+const columns_modal_info = [
+  {
+    title: "ระบบที่มีสิทธิ์เข้าถึง",
+    dataIndex: "permission_activate",
+    scopedSlots: { customRender: "" },
+  },
+];
+
 const data = [
   {
     key: "1",
-    name: "นายมีชัย มีโชค",
-    position: "เจ้าหน้าที่ ฝ่ายธุรการ",
+    name: "ประไพพรรณ สุ่มทรัพย์",
+    position: "เจ้าหน้าที่ฝ่ายธุรการ",
     address: "New York No. 1 Lake Park",
     tags: ["nice", "developer"],
   },
   {
     key: "2",
-    name: "นายมีชัย มีโชค",
-    position: "เบิกวัสดุ",
+    name: "นันทิกานต์ คุ้มเพชร",
+    position: "เจ้าหน้าที่เบิกวัสดุ",
     address: "London No. 1 Lake Park",
     tags: ["loser"],
   },
   {
     key: "3",
-    name: "นายมีชัย มีโชค",
-    position: "Test",
+    name: "ปุณณานันท์ มีเงินมาก",
+    position: "อาจารย์ที่ปรึกษา",
     address: "Sidney No. 1 Lake Park",
     tags: ["cool", "teacher"],
   },
 ];
 
-const data_modal = [
+const data_modal_manage = [
   {
     key: "1",
-    name_system: "เจ้าหน้าที่ฝ่ายธุรการ",
+    permission: "เจ้าหน้าที่ฝ่ายธุรการ",
   },
   {
     key: "2",
-    name_system: "บุคลากรทั่วไป",
+    permission: "บุคลากรทั่วไป",
   },
   {
     key: "3",
-    name_system: "บุคลากรทั่วไป",
+    permission: "บุคลากรทั่วไป",
+  },
+];
+
+const data_modal_info = [
+  {
+    key: "1",
+    permission_activate: "ระบบคำนวณภาระงาน",
+  },
+  {
+    key: "2",
+    permission_activate: "ระบบเบิกจ่ายวัสดุ",
   },
 ];
 
@@ -315,18 +471,25 @@ export default {
     return {
       data,
       columns,
-      visible: false,
-      data_modal,
-      columns_modal,
+      data_modal_manage,
+      columns_modal_manage,
+      data_modal_info,
+      columns_modal_info,
+      visible_manage: false,
+      visible_info: false,
     };
   },
   methods: {
-    showModal() {
-      this.visible = true;
+    showModal_manage() {
+      this.visible_manage = true;
+    },
+    showModal_info() {
+      this.visible_info = true;
     },
     handleOk(e) {
       console.log(e);
-      this.visible = false;
+      this.visible_manage = false;
+      this.visible_info = false;
     },
   },
 };

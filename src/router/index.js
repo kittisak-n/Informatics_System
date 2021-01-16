@@ -3,9 +3,11 @@ import VueRouter from "vue-router";
 import login from "../views/login.vue"
 import Home from "../views/Home.vue";
 
+
 //PMS_manage
 import permission_manage from "../views/PMS/permission_manage.vue";
 import adduser from "../views/PMS/add.vue";
+import personal_data from "../views/PMS/personal_data.vue";
 
 //MDS_exchequer
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
@@ -36,6 +38,22 @@ const routes = [{
         children: [{
                 path: "",
                 component: Home
+            },
+            
+        ]
+    },
+    {
+        path: "/personal_data",
+        name: "personal_data",
+        component: {
+            render(c) {
+                return c("router-view");
+            }
+        },
+        meta: { breadCrumb: "ข้อมูลส่วนตัว" },
+        children: [{
+                path: "",
+                component: personal_data
             },
             
         ]
