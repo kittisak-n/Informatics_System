@@ -159,7 +159,9 @@
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_calculation">
+              <router-link :to="{ path: '/calculator/Calculation_workload' }">
               <a-icon type="calculator" theme="filled" />คำนวณภาระงาน
+              </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_conclution">
                 <router-link :to="{ path: '/calculator/SummaryWorkload' }">
