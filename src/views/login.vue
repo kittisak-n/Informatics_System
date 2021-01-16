@@ -2,7 +2,7 @@
   <div id="display">
     <a-crad
       :style="{
-        width: '300px',
+        width: '22%',
         background: '#ffffff90',
         border: '2px solid #035096',
         padding: '3%',

@@ -3,7 +3,9 @@ import VueRouter from "vue-router";
 import login from "../views/login.vue"
 import Home from "../views/Home.vue";
 
-
+//PMS_manage
+import permission_manage from "../views/PMS/permission_manage.vue";
+import adduser from "../views/PMS/add.vue";
 
 //MDS_exchequer
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
@@ -51,9 +53,33 @@ const routes = [{
             path: "",
             component: login
         },
+    ]
+    },   
+    {
+        path:'/permission_manage',
+        name:'permission_manage',
+        meta:{breadCrumb : "จัดการสิทธิ์การใช้งาน"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: permission_manage
+        },
         {
-            path: "/login",
-            component: login
+            path: "adduser",
+            meta:{breadCrumb : "เพิ่มผู้ใช้งาน"},
+            component:{
+                render(c){
+                    return c("router-view");
+                }
+            },
+            children:[{
+                path: "",
+                component: adduser
+            }]
         }
     ]
     },
