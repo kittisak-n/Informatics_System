@@ -114,7 +114,7 @@
             <a slot="extra" href="#">Clear</a>
             <div>
               <a-input-search
-                placeholder="ค้าหา ชื่ออาจารย์"
+                placeholder="ค้นหา ชื่ออาจารย์"
                 style="width: 100%"
               />
             </div>
@@ -136,7 +136,7 @@
           <a-card title="รายชื่ออาจารย์" style="width: 100%">
             <div>
               <a-input-search
-                placeholder="ค้าหา ชื่ออาจารย์"
+                placeholder="ค้นหา ชื่ออาจารย์"
                 style="width: 100%"
               />
             </div>
