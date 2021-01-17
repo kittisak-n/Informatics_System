@@ -20,7 +20,7 @@
         <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
         <a-col :span="6" style="margin: 0.2em 0px">ชื่อกำหนดการ:</a-col>
         <a-col :span="6" style="margin: 0.2em 0px">
-          <a-input id="" name="" disabled v-model="criteria_name"
+          <a-input  style="width: 100%" disabled v-model="criteria_name"
         /></a-col>
         <a-col :span="6" style="margin: 0.2em 0px"></a-col>
       </a-row>
@@ -30,7 +30,7 @@
         <a-col :span="6" style="margin: 0.2em 0px">วันที่เริ่มใช้:</a-col>
         <a-col :span="6" style="margin: 0.2em 0px">
           <a-date-picker
-            style="width: 500px"
+             style="width: 100%"
             v-model="criteria_start_date"
             disabled
           />
@@ -42,7 +42,7 @@
         <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
         <a-col :span="6" style="margin: 0.2em 0px">ผู้สร้างกำหนดการ:</a-col>
         <a-col :span="6" style="margin: 0.2em 0px">
-          <a-input id="" name="" disabled
+          <a-input  style="width: 100%" disabled
         /></a-col>
         <a-col :span="6" style="margin: 0.2em 0px"></a-col>
       </a-row>
@@ -51,6 +51,7 @@
         <a-col :span="6" style="margin: 0.2em 0px">อัตราเงินต่อหน่วยกิต:</a-col>
         <a-col :span="6" style="margin: 0.2em 0px">
           <a-input
+           style="width: 100%"
             v-model="criteria_rate_per_credit"
             disabled
             addon-after="บาท"
@@ -73,7 +74,7 @@
           <a-input
             addon-after="หน่วยภาระงานสอน"
             type="number"
-            style="width: 400px"
+          style="width: 70%"
             disabled
             v-model="nmp_minimum"
           />
@@ -84,7 +85,7 @@
           <a-input
             addon-after="หน่วยภาระงานสอน"
             type="number"
-            style="width: 400px"
+             style="width: 70%"
             v-model="nmp_maximum"
             disabled
           />

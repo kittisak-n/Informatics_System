@@ -2,8 +2,8 @@
   <div id="Add_criteria">
     <a-card size="small">
       <a-row :gutter="[8, 8]">
-        <a-col :xs="24" :sm="24" :md="18" :lg="15" :xl="10">
-          <a-steps :current="current">
+        <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+          <a-steps :current="current + 1">
             >
             <a-step v-for="item in steps" :key="item.index" :title="item.title">
               {{ index }}
@@ -16,11 +16,7 @@
         <!-- STEP 0 -->
         <div v-if="current == 0" style="padding-top: 50px">
           <a-row :gutter="[8, 8]">
-            <a-col :xs="0"
-              :sm="0"
-              :md="5"
-              :lg="5"
-              :xl="5" style="margin: 0.2em 0px"> </a-col>
+            <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
             <a-col
               :xs="24"
               :sm="24"
@@ -36,18 +32,25 @@
                 placeholder="กรุณากรอกชื่อ"
                 allow-clear
                 @change="onChange"
-                style="width: 70%"
+                style="width: 50%"
               />
             </a-col>
-            <a-col :span="8" style="margin: 0.2em 0px"> </a-col>
+            <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
           </a-row>
           <a-row :gutter="[8, 8]">
             <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
-            <a-col :span="12" style="margin: 0.2em 0px">
+            <a-col
+              :xs="24"
+              :sm="24"
+              :md="14"
+              :lg="14"
+              :xl="14"
+              style="margin: 0.2em 0px"
+            >
               <span>วันที่เริ่มใช้งาน: </span>
 
               <a-date-picker
-                style="width: 500px"
+                style="width: 50%"
                 v-model="criteria_start_date"
                 @change="onChangedate"
               />
@@ -62,11 +65,11 @@
           <a-card size="small">
             <a-row :gutter="[8, 8]">
               <a-col
-                xs="24"
-                sm="24"
-                md="18"
-                lg="15"
-                xl="10"
+                :xs="24"
+                :sm="24"
+                :md="24"
+                :lg="24"
+                :xl="24"
                 style="margin: 0.2em 0px"
               >
                 <a-card-meta title="ตั้งค่าทั่วไป"> </a-card-meta
@@ -85,6 +88,7 @@
                   addon-after="บาท"
                   type="number"
                   min="1"
+                  style="width: 100%"
               /></a-col>
               <a-col :span="6" style="margin: 0.2em 0px"></a-col>
             </a-row>
@@ -98,23 +102,37 @@
             </a-row>
 
             <a-row :gutter="[8, 8]" style="text-align: center">
-              <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
+              <a-col
+                :xs="12"
+                :sm="12"
+                :md="12"
+                :lg="12"
+                :xl="12"
+                style="margin: 0.2em 0px; text-align: center"
+              >
                 ขั้นต่ำ:
                 <a-input
                   addon-after="หน่วยภาระงานสอน"
                   type="number"
-                  style="width: 400px"
+                  style="width: 80%"
                   v-model="nmp_minimum"
                   min="1"
                 />
               </a-col>
 
-              <a-col :span="12" style="margin: 0.2em 0px; text-align: start">
+              <a-col
+                :xs="12"
+                :sm="12"
+                :md="12"
+                :lg="12"
+                :xl="12"
+                style="margin: 0.2em 0px; text-align: start"
+              >
                 ขั้นสูง:
                 <a-input
                   addon-after="หน่วยภาระงานสอน"
                   type="number"
-                  style="width: 400px"
+                  style="width: 80%"
                   v-model="nmp_maximum"
                   min="1"
                 />
@@ -161,6 +179,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                      style="width: 80%"
                       min="1"
                       v-model="criteria_Internal.lab.Bachelor"
                       addon-after="คน"
@@ -178,6 +197,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                      style="width: 80%"
                       min="1"
                       v-model="criteria_Internal.lab.Graduate"
                       addon-after="คน"
@@ -231,7 +251,7 @@
                             min="1"
                             type="number"
                             placeholder=""
-                            style="width: 14%"
+                            style="width: 10%"
                             addon-after="คน"
                             v-model="
                               criteria_Internal.lab.condition[index]
@@ -277,8 +297,13 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :span="20">
+                  <a-col  :xs="24"
+                :sm="24"
+                :md="24"
+                :lg="24"
+                :xl="24">
                     <a-button
+              
                       type="dashed"
                       style="width: 100%"
                       icon="plus"
@@ -322,6 +347,7 @@
                       v-model="criteria_Internal.lecture.Bachelor"
                       addon-after="คน"
                       type="number"
+                             style="width: 80%"
                     />
                   </a-col>
                   <a-col
@@ -339,6 +365,7 @@
                       v-model="criteria_Internal.lecture.Graduate"
                       addon-after="คน"
                       type="number"
+                         style="width: 80%"
                     />
                   </a-col>
                 </a-row>
@@ -434,7 +461,11 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :span="20">
+                  <a-col :xs="24"
+                :sm="24"
+                :md="24"
+                :lg="24"
+                :xl="24">
                     <a-button
                       type="dashed"
                       style="width: 100%"
@@ -487,6 +518,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                        style="width: 80%"
                       min="1"
                       v-model="criteria_external.lab.Bachelor"
                       addon-after="คน"
@@ -504,6 +536,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 80%"
                       min="1"
                       v-model="criteria_external.lab.Graduate"
                       addon-after="คน"
@@ -603,7 +636,11 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :span="20">
+                  <a-col :xs="24"
+                :sm="24"
+                :md="24"
+                :lg="24"
+                :xl="24">
                     <a-button
                       type="dashed"
                       style="width: 100%"
@@ -644,6 +681,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                    style="width: 80%"
                       v-model="criteria_external.lecture.Bachelor"
                       addon-after="คน"
                       type="number"
@@ -660,6 +698,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                      style="width: 80%"
                       v-model="criteria_external.lecture.Graduate"
                       addon-after="คน"
                       type="number"
@@ -755,7 +794,11 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :span="20">
+                  <a-col :xs="24"
+                :sm="24"
+                :md="24"
+                :lg="24"
+                :xl="24">
                     <a-button
                       type="dashed"
                       style="width: 100%"
@@ -787,7 +830,7 @@
               <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
               <a-col :span="6" style="margin: 0.2em 0px">ชื่อกำหนดการ:</a-col>
               <a-col :span="6" style="margin: 0.2em 0px">
-                <a-input id="" name="" disabled v-model="criteria_name"
+                <a-input style="width: 100%" disabled v-model="criteria_name"
               /></a-col>
               <a-col :span="6" style="margin: 0.2em 0px"></a-col>
             </a-row>
@@ -797,7 +840,7 @@
               <a-col :span="6" style="margin: 0.2em 0px">วันที่เริ่มใช้:</a-col>
               <a-col :span="6" style="margin: 0.2em 0px">
                 <a-date-picker
-                  style="width: 500px"
+                  style="width: 100%"
                   v-model="criteria_start_date"
                   disabled
                 />
@@ -811,7 +854,7 @@
                 >ผู้สร้างกำหนดการ:</a-col
               >
               <a-col :span="6" style="margin: 0.2em 0px">
-                <a-input id="" name="" disabled
+                <a-input style="width: 100%" disabled
               /></a-col>
               <a-col :span="6" style="margin: 0.2em 0px"></a-col>
             </a-row>
@@ -822,6 +865,7 @@
               >
               <a-col :span="6" style="margin: 0.2em 0px">
                 <a-input
+                style="width: 100%"
                   v-model="criteria_rate_per_credit"
                   disabled
                   addon-after="บาท"
@@ -839,23 +883,31 @@
             </a-row>
 
             <a-row :gutter="[8, 8]" style="text-align: center">
-              <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
+              <a-col :xs="12"
+                :sm="12"
+                :md="12"
+                :lg="12"
+                :xl="12" style="margin: 0.2em 0px; text-align: center">
                 ขั้นต่ำ:
                 <a-input
                   addon-after="หน่วยภาระงานสอน"
                   type="number"
-                  style="width: 400px"
+                  style="width: 70%"
                   disabled
                   v-model="nmp_minimum"
                 />
               </a-col>
 
-              <a-col :span="12" style="margin: 0.2em 0px; text-align: start">
+              <a-col :xs="12"
+                :sm="12"
+                :md="12"
+                :lg="12"
+                :xl="12" style="margin: 0.2em 0px; text-align: start">
                 ขั้นสูง:
                 <a-input
                   addon-after="หน่วยภาระงานสอน"
                   type="number"
-                  style="width: 400px"
+                  style="width: 70%"
                   v-model="nmp_maximum"
                   disabled
                 />
@@ -902,6 +954,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lab.Bachelor"
                       addon-after="คน"
@@ -919,6 +972,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lab.Graduate"
                       addon-after="คน"
@@ -948,21 +1002,21 @@
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                       style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                       style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                      style="width: 100px"
+                   style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -998,6 +1052,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lecture.Bachelor"
                       addon-after="คน"
@@ -1015,6 +1070,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lecture.Graduate"
                       addon-after="คน"
@@ -1043,22 +1099,23 @@
                   >
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
+                    
                       disabled
-                      style="width: 100px"
+                style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                    style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                      style="width: 100px"
+                     style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1106,6 +1163,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_external.lab.Bachelor"
                       addon-after="คน"
@@ -1123,6 +1181,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_external.lab.Graduate"
                       addon-after="คน"
@@ -1152,21 +1211,21 @@
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                     style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                      style="width: 100px"
+                   style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1202,6 +1261,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_external.lecture.Bachelor"
                       addon-after="คน"
@@ -1219,6 +1279,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     style="width: 100%"
                       disabled
                       v-model="criteria_external.lecture.Graduate"
                       addon-after="คน"
@@ -1248,21 +1309,21 @@
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                     style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                      style="width: 100px"
+                    style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                      style="width: 100px"
+                  style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1276,7 +1337,7 @@
         <!-- END STEP 2-->
       </div>
       <div class="steps-action" style="text-align: end">
-        <a-button v-if="current > 0" style="margin-right: 92%" @click="prev">
+        <a-button v-if="current > 0" style="margin-right: 91%" @click="prev">
           ย้อนกลับ
         </a-button>
         <a-button
@@ -1286,7 +1347,7 @@
         >
           ถัดไป
         </a-button>
-        <router-link :to="{ path: '/calculator/Calculation_criteria' }">
+        <router-link :to="{ path: '/Calculation_criteria' }">
           <a-button
             v-if="current == steps.length - 1"
             type="primary"

@@ -5,12 +5,11 @@
         <a-card size="small">
           <a-row :gutter="[8, 8]">
             <a-col
-              xs="24"
-              sm="20"
-              md="18"
-              lg="15"
-              xl="10"
-              xxl="5"
+              :xs="24"
+              :sm="20"
+              :md="18"
+              :lg="15"
+              :xl="10"
               style="margin: 0.2em 0px"
             >
               <a-card-meta title="หลักเกณฑ์การคำนวณ">
@@ -24,12 +23,11 @@
             ></a-col>
 
             <a-col
-              xs="24"
-              sm="20"
-              md="18"
-              lg="15"
-              xl="10"
-              xxl="5"
+              :xs="24"
+              :sm="24"
+              :md="24"
+              :lg="24"
+              :xl="24"
               :style="{ textAlign: 'right' }"
             >
               <router-link :to="{ path: '/Calculation_criteria/Add_criteria' }">
@@ -42,12 +40,11 @@
           <hr style="width: 100%" />
           <a-row :gutter="[8, 8]" justify="end">
             <a-col
-              xs="24"
-              sm="20"
-              md="18"
-              lg="15"
-              xl="10"
-              xxl="5"
+              :xs="24"
+              :sm="24"
+              :md="24"
+              :lg="24"
+              :xl="24"
               style="text-align: end"
             >
               <a-table
@@ -56,8 +53,9 @@
                 :pagination="false"
                 size="small"
                 bordered
+                
               >
-                <span slot="key" slot-scope="text, record, index">
+                <span  slot="key" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     {{ index + 1 }}
                   </div>
@@ -89,11 +87,6 @@
                       <template slot="title">
                         <span>ดูรายละเอียด</span>
                       </template>
-                      <!-- <router-link
-                        :to="{ name: 'Detail_criteria' }"
-                        target="_blank"
-                      > -->
-                      <!--  :to="{ name: 'Detail_criteria', params: { id: index } }"  -->
                       <a-button type="warning" icon="search" @click="go_to_detail()"   >
                       </a-button>
                     </a-tooltip>
@@ -118,7 +111,7 @@ export default {
           dataIndex: "key",
           key: "key",
           width: "3%",
-          scopedSlots: {
+            scopedSlots: {
             customRender: "key",
           },
         },
