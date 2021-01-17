@@ -220,18 +220,9 @@ export default {
           this.all_teacher[i].status = 0;
       }
     },
-    SeconChange(value) {
-      console.log("changed", value);
-    },
-    StudentChange(value) {
-      console.log("changed", value);
-    },
-    DatehandleChange(value) {
-      console.log(value);
-    },
     Years_course() {
       var j = 0;
-      for (var i = 10; i > 0; i--) {
+      for (var i = 10; i > -1; i--) {
         if (i == 10) {
           this.course_years.push(new Date().getFullYear() + 543);
         } else {
