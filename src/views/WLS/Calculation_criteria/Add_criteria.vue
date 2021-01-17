@@ -297,13 +297,8 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col  :xs="24"
-                :sm="24"
-                :md="24"
-                :lg="24"
-                :xl="24">
+                  <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <a-button
-              
                       type="dashed"
                       style="width: 100%"
                       icon="plus"
@@ -347,7 +342,7 @@
                       v-model="criteria_Internal.lecture.Bachelor"
                       addon-after="คน"
                       type="number"
-                             style="width: 80%"
+                      style="width: 80%"
                     />
                   </a-col>
                   <a-col
@@ -365,7 +360,7 @@
                       v-model="criteria_Internal.lecture.Graduate"
                       addon-after="คน"
                       type="number"
-                         style="width: 80%"
+                      style="width: 80%"
                     />
                   </a-col>
                 </a-row>
@@ -461,11 +456,7 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :xs="24"
-                :sm="24"
-                :md="24"
-                :lg="24"
-                :xl="24">
+                  <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <a-button
                       type="dashed"
                       style="width: 100%"
@@ -518,7 +509,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                        style="width: 80%"
+                      style="width: 80%"
                       min="1"
                       v-model="criteria_external.lab.Bachelor"
                       addon-after="คน"
@@ -536,7 +527,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 80%"
+                      style="width: 80%"
                       min="1"
                       v-model="criteria_external.lab.Graduate"
                       addon-after="คน"
@@ -636,11 +627,7 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :xs="24"
-                :sm="24"
-                :md="24"
-                :lg="24"
-                :xl="24">
+                  <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <a-button
                       type="dashed"
                       style="width: 100%"
@@ -681,7 +668,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                    style="width: 80%"
+                      style="width: 80%"
                       v-model="criteria_external.lecture.Bachelor"
                       addon-after="คน"
                       type="number"
@@ -794,11 +781,7 @@
                   </a-col>
                 </a-row>
                 <a-row :gutter="[8, 8]" type="flex" justify="center">
-                  <a-col :xs="24"
-                :sm="24"
-                :md="24"
-                :lg="24"
-                :xl="24">
+                  <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <a-button
                       type="dashed"
                       style="width: 100%"
@@ -865,7 +848,7 @@
               >
               <a-col :span="6" style="margin: 0.2em 0px">
                 <a-input
-                style="width: 100%"
+                  style="width: 100%"
                   v-model="criteria_rate_per_credit"
                   disabled
                   addon-after="บาท"
@@ -883,11 +866,14 @@
             </a-row>
 
             <a-row :gutter="[8, 8]" style="text-align: center">
-              <a-col :xs="12"
+              <a-col
+                :xs="12"
                 :sm="12"
                 :md="12"
                 :lg="12"
-                :xl="12" style="margin: 0.2em 0px; text-align: center">
+                :xl="12"
+                style="margin: 0.2em 0px; text-align: center"
+              >
                 ขั้นต่ำ:
                 <a-input
                   addon-after="หน่วยภาระงานสอน"
@@ -898,11 +884,14 @@
                 />
               </a-col>
 
-              <a-col :xs="12"
+              <a-col
+                :xs="12"
                 :sm="12"
                 :md="12"
                 :lg="12"
-                :xl="12" style="margin: 0.2em 0px; text-align: start">
+                :xl="12"
+                style="margin: 0.2em 0px; text-align: start"
+              >
                 ขั้นสูง:
                 <a-input
                   addon-after="หน่วยภาระงานสอน"
@@ -954,7 +943,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lab.Bachelor"
                       addon-after="คน"
@@ -972,7 +961,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lab.Graduate"
                       addon-after="คน"
@@ -1002,21 +991,21 @@
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
                       disabled
-                       style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                       style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                   style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1052,7 +1041,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lecture.Bachelor"
                       addon-after="คน"
@@ -1070,7 +1059,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_Internal.lecture.Graduate"
                       addon-after="คน"
@@ -1099,23 +1088,22 @@
                   >
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
-                    
                       disabled
-                style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                    style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                     style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1163,7 +1151,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_external.lab.Bachelor"
                       addon-after="คน"
@@ -1181,7 +1169,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_external.lab.Graduate"
                       addon-after="คน"
@@ -1211,21 +1199,21 @@
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
                       disabled
-                     style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                   style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1261,7 +1249,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_external.lecture.Bachelor"
                       addon-after="คน"
@@ -1279,7 +1267,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
-                     style="width: 100%"
+                      style="width: 100%"
                       disabled
                       v-model="criteria_external.lecture.Graduate"
                       addon-after="คน"
@@ -1309,21 +1297,21 @@
                     <span>จำนวนนิสิตที่เกิน: </span>
                     <a-input
                       disabled
-                     style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Minimum_number_students"
                       addon-after="คน"
                     />
                     <span> ถึง </span>
                     <a-input
                       disabled
-                    style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Maximum_number_students"
                       addon-after="คน"
                     />
                     <span> เท่ากับ </span
                     ><a-input
                       disabled
-                  style="width: 15%"
+                      style="width: 15%"
                       v-model="data.Weight_per_credit"
                     />
                     <span> ค่าน้ำหนักต่อหน่วยกิต</span>
@@ -1480,6 +1468,39 @@ export default {
     };
   },
   methods: {
+    //ตรวจสอบการกรอกข้อมูล
+    validate_add() {
+      //false กรุณากรอก ข้อมูลว่าง
+      let check = null;
+
+      if (this.current == 0) {
+        if (
+          this.criteria_name == null ||
+          this.criteria_start_date == null ||
+          this.criteria_name == ""
+        ) {
+          check = false;
+          console.log("test");
+        } else {
+          check = true;
+          console.log("กรอกแล้ว");
+        }
+      } else if (this.current == 1) {
+        if (
+          this.criteria_rate_per_credit == null || this.criteria_rate_per_credit == "" ||
+          this.criteria_start_date == null ||
+          this.criteria_name == ""
+        ) {
+          check = false;
+          console.log("test");
+        } else {
+          check = true;
+          console.log("กรอกแล้ว");
+        }
+      }
+
+      return check;
+    },
     // บันทึก ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน
     add_criteria() {
       this.$message.success(
@@ -1516,7 +1537,13 @@ export default {
     },
 
     next() {
-      this.current++;
+      if (this.validate_add()) {
+        console.log(this.criteria_name);
+        this.current++;
+      } else {
+        console.log("กรุณากรอกข้อความ");
+        console.log(this.validate_add());
+      }
     },
     prev() {
       this.current--;
