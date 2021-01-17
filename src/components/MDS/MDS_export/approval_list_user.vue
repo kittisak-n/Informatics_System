@@ -213,13 +213,7 @@ export default {
             customRender: "disbursement_code",
           },
         },
-        {
-          title: "ชื่อผู้เบิกวัสดุ",
-          dataIndex: "disbursement_date",
-          key: "disbursement_date",
-          width: "5%",
-          scopedSlots: { customRender: "disbursement_date" },
-        },
+
         {
           title: "วันที่ทำการเบิกวัสดุ",
           dataIndex: "disbursement_date",
