@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
- @@ -0,0 +1,431 @@
->>>>>>> f0bab99beee97bfe60a6d727295a8fe53d223f58
 <template>
   <div id="SummaryWorkload">
     <a-row :gutter="[8, 8]">
