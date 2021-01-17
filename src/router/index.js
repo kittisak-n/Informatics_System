@@ -25,7 +25,7 @@ import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.v
 import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
 import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
-
+import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
 
 Vue.use(VueRouter);
 
@@ -51,26 +51,34 @@ const routes = [
     ],
   },
   {
-    path: "/calculator",
-    name: "calculator",
+    path: "/Show_course",
+    name: "Show_course",
     component: {
       render(c) {
         return c("router-view");
       },
     },
-    meta: { breadCrumb: "คำนวนภาระงานอาจารย์ประจำ" },
+    meta: { breadCrumb: "แสดงรายวิชา" },
     children: [
       {
-        path: "Show_course",
-        name: "Show_course",
-        meta: { breadCrumb: "แสดงรายวิชา" },
+        path: "",
         component: Show_course,
       },
       {
-        path: "Show_course/form",
+        path: "form",
         name: "InsertCourse",
+        component: {
+          render(c) {
+            return c("router-view");
+          },
+        },
         meta: { breadCrumb: "เพิ่มรายวิชา" },
-        component: InsertCourse,
+        children: [
+          {
+            path: "",
+            component: InsertCourse,
+          },
+        ]
       },
       {
         path: "Calculation_criteria",
@@ -101,10 +109,10 @@ const routes = [
         name: "SummaryWorkload",
         meta: { breadCrumb: "สรุปภาระงานเพื่อการจ่ายค่าตอบแทน" },
         component: SummaryWorkload,
-        
+
       },
       {
-      
+
         path: "Inspect_workload",
         name: "Inspect_workload",
         meta: { breadCrumb: "ตรวจสอบภาระงาน" },

@@ -70,6 +70,9 @@
                 :scroll="{ y: 500 }"
                 bordered
               >
+                <span slot="Action">
+                  <a-button type="warning" :size="size"> <a-icon type="edit" />  </a-button></span
+                >
               </a-table>
             </a-col>
           </a-row>
@@ -113,7 +116,7 @@
         <a-row :gutter="[24, 30]">
           <a-col :span="24">
             <a-col :span="24">
-              <router-link :to="{ path: '/calculator/Show_course/form' }">
+              <router-link :to="{ path: '/Show_course/form' }">
                 <a-button type="primary" block>
                   เพิ่มรายวิชาด้วยตนเอง
                 </a-button>
@@ -144,7 +147,7 @@ export default {
           title: "รหัสวิชา",
           dataIndex: "course_code",
           key: "course_code",
-          width: "3%",
+          width: "5%",
           scopedSlots: {
             customRender: "course_code",
           },
@@ -155,7 +158,7 @@ export default {
           title: "ปีหลักสูตร",
           dataIndex: "course_year",
           key: "course_year",
-          width: "3%",
+          width: "5%",
           scopedSlots: {
             customRender: "course_year",
           },
@@ -175,7 +178,7 @@ export default {
           title: "หน่วยกิต",
           dataIndex: "course_credit",
           key: "course_credit",
-          width: "3%",
+          width: "5%",
           scopedSlots: {
             customRender: "course_credit",
           },
@@ -197,7 +200,7 @@ export default {
           title: "จานวนลง",
           dataIndex: "course_student",
           key: "course_student",
-          width: "2%",
+          width: "3%",
           scopedSlots: {
             customRender: "course_student",
           },
@@ -208,7 +211,7 @@ export default {
           title: "วันที่สอน",
           dataIndex: "course_day",
           key: "course_day",
-          width: "2%",
+          width: "3%",
           scopedSlots: {
             customRender: "course_day",
           },
@@ -244,6 +247,15 @@ export default {
           width: "5%",
           scopedSlots: {
             customRender: "course_teacher",
+          },
+          type: "flex",
+          align: "center",
+        },
+        {
+          title: "ดำเนินการ",
+          width: "5%",
+          scopedSlots: {
+            customRender: "Action",
           },
           type: "flex",
           align: "center",
