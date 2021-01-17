@@ -111,7 +111,7 @@
       <a-row :span="24" :gutter="[10, 10]">
         <a-col :span="5" :offset="1">
           <a-card title="อาจารย์ที่สอน" style="width: 100%">
-            <a slot="extra" href="#">Clear</a>
+            <a slot="extra" @click="clear_status()">Clear</a>
             <div>
               <a-input-search
                 placeholder="ค้นหา ชื่ออาจารย์"
@@ -157,10 +157,10 @@
       </a-row>
       <a-row :span="24" :gutter="[10, 40]">
         <a-col :span="12" :style="{ textAlign: 'end' }"
-          ><a-button   type="danger" style="width:20%">ยกเลิก</a-button></a-col
+          ><a-button type="danger" style="width: 20%">ยกเลิก</a-button></a-col
         >
-         <a-col :span="12" 
-          ><a-button type="success" style="width:20%">บันทึก</a-button></a-col
+        <a-col :span="12"
+          ><a-button type="success" style="width: 20%">บันทึก</a-button></a-col
         >
       </a-row>
     </a-card>
@@ -213,6 +213,11 @@ export default {
         if (this.all_teacher[i].id == id) {
           this.all_teacher[i].status = 0;
         }
+      }
+    },
+    clear_status() {
+      for (var i = this.all_teacher.length - 1; i > -1; i--) {
+          this.all_teacher[i].status = 0;
       }
     },
     SeconChange(value) {
