@@ -2,16 +2,13 @@
   <div id="Add_criteria">
     <a-card size="small">
       <a-row :gutter="[8, 8]">
-        <a-col   xs="24"
-              sm="24"
-              md="18"
-              lg="15"
-              xl="10"
-              xxl="5">
-        <a-steps :current="current + 1">
-          >
-          <a-step v-for="item in steps" :key="item.title" :title="item.title" />
-        </a-steps>
+        <a-col :xs="24" :sm="24" :md="18" :lg="15" :xl="10">
+          <a-steps :current="current">
+            >
+            <a-step v-for="item in steps" :key="item.index" :title="item.title">
+              {{ index }}
+            </a-step>
+          </a-steps>
         </a-col>
       </a-row>
 
@@ -19,29 +16,27 @@
         <!-- STEP 0 -->
         <div v-if="current == 0" style="padding-top: 50px">
           <a-row :gutter="[8, 8]">
+            <a-col :xs="0"
+              :sm="0"
+              :md="5"
+              :lg="5"
+              :xl="5" style="margin: 0.2em 0px"> </a-col>
             <a-col
-              :span="8"
-              style="margin: 0.2em 0px"
-            >
-            </a-col>
-            <a-col
-             :span="8"
+              :xs="24"
+              :sm="24"
+              :md="14"
+              :lg="14"
+              :xl="14"
               style="margin: 0.2em 0px"
             >
               <span>ชื่อกำหนดการ: </span>
 
               <a-input
-                xs="10"
-                sm="10"
-                md="18"
-                lg="15"
-                xl="10"
-                xxl="5"
                 v-model="criteria_name"
                 placeholder="กรุณากรอกชื่อ"
                 allow-clear
                 @change="onChange"
-                style="width: 500px"
+                style="width: 70%"
               />
             </a-col>
             <a-col :span="8" style="margin: 0.2em 0px"> </a-col>
@@ -52,7 +47,6 @@
               <span>วันที่เริ่มใช้งาน: </span>
 
               <a-date-picker
-               
                 style="width: 500px"
                 v-model="criteria_start_date"
                 @change="onChangedate"
@@ -73,7 +67,6 @@
                 md="18"
                 lg="15"
                 xl="10"
-                xxl="5"
                 style="margin: 0.2em 0px"
               >
                 <a-card-meta title="ตั้งค่าทั่วไป"> </a-card-meta
@@ -1411,12 +1404,15 @@ export default {
       current: 0,
       steps: [
         {
+          index: 1,
           title: "กำหนดชื่อ",
         },
         {
+          index: 2,
           title: "ตั้งค่าเงื่อนไขการคำนวณ",
         },
         {
+          index: 3,
           title: "ตรวจสอบ",
         },
       ],

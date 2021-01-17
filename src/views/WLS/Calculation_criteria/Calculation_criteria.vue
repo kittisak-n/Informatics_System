@@ -24,7 +24,7 @@
             ></a-col>
 
             <a-col
-               xs="24"
+              xs="24"
               sm="20"
               md="18"
               lg="15"
@@ -32,7 +32,7 @@
               xxl="5"
               :style="{ textAlign: 'right' }"
             >
-              <router-link :to="{ path: '/calculator/Add_criteria' }">
+              <router-link :to="{ path: '/Calculation_criteria/Add_criteria' }">
                 <a-button type="primary" icon="setting">
                   ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน
                 </a-button>
@@ -40,22 +40,22 @@
             </a-col>
           </a-row>
           <hr style="width: 100%" />
-          <a-row :gutter="[8, 8]"  justify="end">
-            <a-col   xs="24"
+          <a-row :gutter="[8, 8]" justify="end">
+            <a-col
+              xs="24"
               sm="20"
               md="18"
               lg="15"
               xl="10"
               xxl="5"
-                style="text-align: end">
+              style="text-align: end"
+            >
               <a-table
                 :columns="columns_calculation_criteria"
                 :data-source="calculation_criteria"
                 :pagination="false"
                 size="small"
                 bordered
-
-                
               >
                 <span slot="key" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
@@ -68,7 +68,7 @@
                   </div>
                 </span>
                 <span slot="cc_start_date" slot-scope="text">
-                  <div   :style="{ textAlign: 'center' }">
+                  <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
@@ -83,17 +83,19 @@
                     </span>
                   </div>
                 </span>
-                <span slot="action" slot-scope="text, record, index">
+                <span slot="action">
                   <div :style="{ textAlign: 'center' }">
                     <a-tooltip placement="top">
                       <template slot="title">
                         <span>ดูรายละเอียด</span>
                       </template>
-                      <router-link
-                        :to="{ name: 'Detail_criteria', params: { id: index } }"
-                      >
-                        <a-button type="warning" icon="search"> </a-button
-                      ></router-link>
+                      <!-- <router-link
+                        :to="{ name: 'Detail_criteria' }"
+                        target="_blank"
+                      > -->
+                      <!--  :to="{ name: 'Detail_criteria', params: { id: index } }"  -->
+                      <a-button type="warning" icon="search" @click="go_to_detail()"   >
+                      </a-button>
                     </a-tooltip>
                   </div>
                 </span>
@@ -176,6 +178,11 @@ export default {
   methods: {
     detail(index) {
       console.log("in methods detail : " + index);
+    },
+    go_to_detail() {
+      this.$store.state.criteriaId = 0;
+       this.$router.push("Calculation_criteria/Detail_criteria");
+
     },
   },
 };

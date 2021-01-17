@@ -303,7 +303,16 @@ export default {
     this.id = this.$route.params.id;
   },
 
-  methods: {},
+  methods: {
+
+    show_criteriaId(){
+      console.log("show_criteriaId = " + this.$store.state.criteriaId)
+    }
+  },
+  mounted() {
+
+    this.show_criteriaId()
+  },
 };
 </script>
 

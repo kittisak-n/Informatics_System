@@ -22,11 +22,10 @@ import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_
 import Detail_criteria from "../views/WLS/Calculation_criteria/Detail_criteria.vue";
 import Add_criteria from "../views/WLS/Calculation_criteria/Add_criteria.vue";
 import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.vue";
-import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
-import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
+// import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
+// import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
-
 
 Vue.use(VueRouter);
 
@@ -51,67 +50,111 @@ const routes = [
       },
     ],
   },
+  
+
+  // หลักเกณฑ์การคำนวณ
   {
-    path: "/calculator",
-    name: "calculator",
+    path: "/Calculation_criteria",
+    name: "Calculation_criteria",
     component: {
       render(c) {
         return c("router-view");
       },
     },
-    meta: { breadCrumb: "คำนวนภาระงานอาจารย์ประจำ" },
+    meta: { breadCrumb: "หลักเกณฑ์การคำนวณ" },
     children: [
       {
-        path: "Show_course",
-        name: "Show_course",
-        meta: { breadCrumb: "แสดงรายวิชา" },
-        component: Show_course,
-      },
-      {
-        path: "Show_course/form",
-        name: "InsertCourse",
-        meta: { breadCrumb: "เพิ่มรายวิชา" },
-        component: InsertCourse,
-      },
-      {
-        path: "Calculation_criteria",
-        name: "Calculation_criteria",
-        meta: { breadCrumb: "หลักเกณฑ์การคำนวณ" },
+        path: "",
         component: Calculation_criteria,
-      },
-      {
-        path: "Calculation_workload",
-        name: "Calculation_workload",
-        meta: { breadCrumb: "คำนวณภาระงาน" },
-        component: Calculation_workload,
       },
       {
         path: "Add_criteria",
         name: "Add_criteria",
-        meta: { breadCrumb: "ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน" },
-        component: Add_criteria,
+        meta: { breadCrumb: "ตั้งค่าอัตราการจ่ายค่าตอบแทน" },
+        component: {
+          render(c) {
+            return c("router-view");
+          },
+        },
+        children: [
+          {
+            path: "",
+            component: Add_criteria,
+          },
+        ],
       },
       {
-        path: "Detail_criteria/:id",
+        path: "Detail_criteria",
         name: "Detail_criteria",
         meta: { breadCrumb: "แสดงรายละเอียดหลักเกณฑ์" },
-        component: Detail_criteria,
+        component: {
+          render(c) {
+            return c("router-view");
+          },
+        },
+        children: [
+          {
+            path: "",
+            component: Detail_criteria,
+          },
+        ],
       },
-      {
-        path: "SummaryWorkload",
-        name: "SummaryWorkload",
-        meta: { breadCrumb: "สรุปภาระงานเพื่อการจ่ายค่าตอบแทน" },
-        component: SummaryWorkload,
-        
+    ],
+  },
+
+
+  // ตรวจสอบภาระงาน
+  {
+    path: "/Inspect_workload",
+    name: "Inspect_workload",
+    component: {
+      render(c) {
+        return c("router-view");
       },
+    },
+    meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+    children: [
       {
-      
-        path: "Inspect_workload",
-        name: "Inspect_workload",
-        meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+        path: "",
         component: Inspect_workload,
       },
+    ],
+  },
+  
+  //สรุปภาระงานเพื่อจ่ายค่าตอบแทนอาจารย์ประจำ
+  {
+    path: "/SummaryWorkload",
+    name: "SummaryWorkload",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+    children: [
+      {
+        path: "",
+        component: SummaryWorkload,
+      },
+    ],
+  },
 
+  
+   //คำนวณภาระงาน Calculation_workload
+   {
+    path: "/Calculation_workload",
+    name: "Calculation_workload",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    meta: { breadCrumb: "คำนวณภาระงาน" },
+    children: [
+      {
+        path: "",
+        component: Calculation_workload,
+      },
     ],
   },
 

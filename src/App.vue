@@ -149,27 +149,27 @@
               <span>ระบบคำนวณภาระงาน</span>
             </span>
             <a-menu-item key="CWS_show">
-              <router-link :to="{ path: '/calculator/Show_course' }">
+              <router-link :to="{ path: '/Show_course' }">
               <a-icon type="folder-open" theme="filled" />ข้อมูลรายวิชา
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_setting">
-              <router-link :to="{ path: '/calculator/Calculation_criteria' }">
+              <router-link :to="{ path: '/Calculation_criteria' }">
               <a-icon type="file-sync" />หลักเกณฑ์การคำนวณ
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_calculation">
-              <router-link :to="{ path: '/calculator/Calculation_workload' }">
+              <router-link :to="{ path: '/Calculation_workload' }">
               <a-icon type="calculator" theme="filled" />คำนวณภาระงาน
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_conclution">
-                <router-link :to="{ path: '/calculator/SummaryWorkload' }">
+                <router-link :to="{ path: '/SummaryWorkload' }">
               <a-icon type="area-chart"  />สรุปภาระงานเพื่อการจ่ายค่าตอบแทน </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_check">
 
-                <router-link :to="{ path: '/calculator/Inspect_workload' }">
+                <router-link :to="{ path: '/Inspect_workload' }">
                  <a-icon type="search" />ตรวจสอบภาระงาน</router-link>
 
           
