@@ -5,6 +5,7 @@
       :style="{
         height: '100%',
       }"
+      v-if="this.$store.state.status_login"
     >
       <a-drawer
         class="display_mobile"
@@ -132,16 +133,22 @@
           :default-selected-keys="['home']"
         >
           <a-menu-item key="home">
-            <a-icon type="home" theme="filled" />
-            <span>หน้าแรก</span>
+            <router-link :to="{ path: '/home' }">
+              <a-icon type="home" theme="filled" />
+              <span>หน้าแรก</span>
+            </router-link>
           </a-menu-item>
           <a-menu-item key="user">
-            <a-icon type="user" />
-            <span>ข้อมูลส่วนตัว</span>
+            <router-link :to="{ path: '/personal_data' }">
+              <a-icon type="user" />
+              <span>ข้อมูลส่วนตัว</span>
+            </router-link>
           </a-menu-item>
           <a-menu-item key="management">
-            <a-icon type="api" theme="filled" />
-            <span>จัดการสิทธิ์เข้าใช้งาน</span>
+            <router-link :to="{ path: '/permission_manage' }">
+              <a-icon type="api" theme="filled" />
+              <span>จัดการสิทธิ์เข้าใช้งาน</span>
+            </router-link>
           </a-menu-item>
           <a-sub-menu key="CWS">
             <span slot="title">
@@ -344,6 +351,18 @@
         </a-layout-content>
       </a-layout>
     </a-layout>
+    <a-layout
+      :style="{
+        height: '100%',
+      }"
+      v-if="!this.$store.state.status_login"
+    >
+      <a-layout-content>
+        <div class="layout-login">
+          <router-view />
+        </div>
+      </a-layout-content>
+    </a-layout>
   </div>
 </template>
 <script>
@@ -408,7 +427,12 @@ export default {
     }
   }
 }
+.layout-login {
+  background-image: url("https://www.informatics.buu.ac.th/2020/wp-content/uploads/2018/07/NormalView.jpg") !important;
 
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 .ant-layout-sider {
   background: #ffffff !important;
 }

@@ -1,8 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import login from "../views/login.vue"
 import Home from "../views/Home.vue";
 
 
+//PMS_manage
+import permission_manage from "../views/PMS/permission_manage.vue";
+import adduser from "../views/PMS/add.vue";
+import personal_data from "../views/PMS/personal_data.vue";
 
 //MDS_exchequer
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
@@ -18,7 +23,7 @@ import MDS_disbursement_form from "../views/MDS/MDS_disbursement/MDS_disbursemen
 Vue.use(VueRouter);
 
 const routes = [{
-        path: "",
+        path: "/home",
         name: "Home",
         component: {
             render(c) {
@@ -30,11 +35,67 @@ const routes = [{
                 path: "",
                 component: Home
             },
-            {
-                path: "/home",
-                component: Home
-            }
+            
         ]
+    },
+    {
+        path: "/personal_data",
+        name: "personal_data",
+        component: {
+            render(c) {
+                return c("router-view");
+            }
+        },
+        meta: { breadCrumb: "ข้อมูลส่วนตัว" },
+        children: [{
+                path: "",
+                component: personal_data
+            },
+            
+        ]
+    },
+    {
+        path:'',
+        name:'login',
+        meta:{breadCrumb : "เข้าสู่ระบบ"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: login
+        },
+    ]
+    },   
+    {
+        path:'/permission_manage',
+        name:'permission_manage',
+        meta:{breadCrumb : "จัดการสิทธิ์การใช้งาน"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: permission_manage
+        },
+        {
+            path: "adduser",
+            meta:{breadCrumb : "เพิ่มผู้ใช้งาน"},
+            component:{
+                render(c){
+                    return c("router-view");
+                }
+            },
+            children:[{
+                path: "",
+                component: adduser
+            }]
+        }
+    ]
     },
     {
         path: "/calculator",
