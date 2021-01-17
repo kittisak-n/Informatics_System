@@ -8,16 +8,12 @@ import Home from "../views/Home.vue";
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
 import MDS_exchequer_adjust_suppiles from "../views/MDS/MDS_exchequer/MDS_exchequer_adjust_suppiles.vue";
 
-//MDS_disbursement_user
-import MDS_disbursement_user from "../views/MDS/MDS_disbursement/user/MDS_disbursement.vue";
-import MDS_disbursement_form_user from "../views/MDS/MDS_disbursement/user/MDS_disbursement_form.vue";
-
-//MDS_disbursement_admin 
-import MDS_disbursement_admin from "../views/MDS/MDS_disbursement/admin/MDS_disbursement.vue";
-import MDS_disbursement_form_admin from "../views/MDS/MDS_disbursement/admin/MDS_disbursement_form.vue";
-
 import MDS_import from "../views/MDS/MDS_import/MDS_import.vue";
 import MDS_import_form from "../views/MDS/MDS_import/MDS_import_form.vue";
+import MDS_export from "../views/MDS/MDS_export/MDS_export.vue"
+import MDS_report from "../views/MDS/MDS_report/MDS_report.vue"
+import MDS_disbursement from "../views/MDS/MDS_disbursement/MDS_disbursement.vue";
+import MDS_disbursement_form from "../views/MDS/MDS_disbursement/MDS_disbursement_form.vue";
 
 Vue.use(VueRouter);
 
@@ -86,7 +82,7 @@ const routes = [{
             }
         ]
     }, {
-        path: "/MDS_disbursement_user",
+        path: "/MDS_disbursement",
         name: 'MDS_disbursement',
         component: {
             render(c) {
@@ -96,10 +92,10 @@ const routes = [{
         meta: { breadCrumb: 'เบิกวัสดุ' },
         children: [{
                 path: '',
-                component: MDS_disbursement_user
+                component: MDS_disbursement
             }, {
 
-                path: 'MDS_disbursement_form_user',
+                path: 'MDS_disbursement_form',
                 component: {
                     render(c) {
                         return c("router-view");
@@ -108,7 +104,7 @@ const routes = [{
                 meta: { breadCrumb: 'แบบฟอร์มเบิกวัสดุ' },
                 children: [{
                     path: "",
-                    component: MDS_disbursement_form_user,
+                    component: MDS_disbursement_form,
 
                 }]
 
@@ -117,32 +113,33 @@ const routes = [{
         ]
     },
     {
-        path: "/MDS_disbursement_admin",
-        name: 'MDS_disbursement',
+        path: "/MDS_export",
+        name: 'MDS_export',
         component: {
             render(c) {
                 return c("router-view");
             }
         },
-        meta: { breadCrumb: 'เบิกวัสดุ' },
+        meta: { breadCrumb: "รายการเบิกจ่ายวัสดุ" },
         children: [{
                 path: '',
-                component: MDS_disbursement_admin
-            }, {
+                component: MDS_export
+            },
 
-                path: 'MDS_disbursement_form_admin',
-                component: {
-                    render(c) {
-                        return c("router-view");
-                    }
-                },
-                meta: { breadCrumb: 'แบบฟอร์มเบิกวัสดุ' },
-                children: [{
-                    path: "",
-                    component: MDS_disbursement_form_admin,
-
-                }]
-
+        ]
+    },
+    {
+        path: "/MDS_report",
+        name: 'MDS_report',
+        component: {
+            render(c) {
+                return c("router-view");
+            }
+        },
+        meta: { breadCrumb: "รายงานผลการเบิกจ่ายวัสดุ" },
+        children: [{
+                path: '',
+                component: MDS_report
             },
 
         ]

@@ -179,13 +179,13 @@
                 <a-icon type="file-done" />รายการนำเข้าวัสดุ
               </router-link>
             </a-menu-item>
-            <a-menu-item key="MDS_disbursement_admin">
-              <router-link :to="{ path: '/MDS_disbursement_admin' }">
+            <a-menu-item key="MDS_export">
+              <router-link :to="{ path: '/MDS_export' }">
                 <a-icon type="file-sync" />รายการเบิกจ่ายวัสดุ
               </router-link>
             </a-menu-item>
             <a-menu-item key="MDS_report">
-              <router-link :to="{ path: '/MDS_disbursement_user' }">
+              <router-link :to="{ path: '/MDS_report' }">
                 <a-icon type="area-chart" />รายงานผลเบิกจ่ายวัสดุ
               </router-link>
             </a-menu-item>
@@ -194,8 +194,8 @@
                 <a-icon type="setting" theme="filled" />ตั้งต่าระบบเบิกจ่าย
               </router-link>
             </a-menu-item>
-            <a-menu-item key="MDS_disbursement_user">
-              <router-link :to="{ path: '/MDS_disbursement_user' }">
+            <a-menu-item key="MDS_disbursement">
+              <router-link :to="{ path: '/MDS_disbursement' }">
                 <a-icon type="block" />เบิกจ่ายวัสดุ
               </router-link>
             </a-menu-item>

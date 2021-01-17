@@ -2,7 +2,7 @@
   <div class="MDS_exchequer">
     <!-- ส่วนแสดง CARD รายงาน -->
     <a-row :gutter="[8, 8]">
-      <a-col :span="4">
+      <a-col :xs="24" :sm="24" :md="24" :lg="24" :xxl="4">
         <a-card>
           <a-row>
             <a-col :span="5">
@@ -22,7 +22,7 @@
           </a-row>
         </a-card>
       </a-col>
-      <a-col :span="5">
+      <a-col :xs="24" :sm="24" :md="12" :lg="12" :xxl="5">
         <a-card>
           <a-row :gutter="[8, 8]">
             <a-col :span="5">
@@ -42,7 +42,7 @@
           </a-row>
         </a-card>
       </a-col>
-      <a-col :span="5">
+      <a-col :xs="24" :sm="24" :md="12" :lg="12" :xxl="5">
         <a-card>
           <a-row :gutter="[8, 8]">
             <a-col :span="5">
@@ -61,7 +61,7 @@
           </a-row>
         </a-card>
       </a-col>
-      <a-col :span="5">
+      <a-col :xs="24" :sm="24" :md="12" :lg="12" :xxl="5">
         <a-card>
           <a-row>
             <a-col :span="4">
@@ -81,7 +81,7 @@
           </a-row>
         </a-card>
       </a-col>
-      <a-col :span="5">
+      <a-col :xs="24" :sm="24" :md="12" :lg="12" :xxl="5">
         <a-card>
           <a-row>
             <a-col :span="4">
@@ -105,7 +105,7 @@
     <!-- สิ้นสุดส่วนแสดง CARD รายงาน -->
     <!-- ส่วนแสดงรายการวัสดุ -->
     <a-row :gutter="[8, 8]">
-      <a-col :span="24">
+      <a-col :xs="24" :sm="24" :md="24" :lg="24" :xxl="24">
         <a-card size="small">
           <a-row :gutter="[8, 8]">
             <a-col :span="20" style="margin: 0.2em 0px;">

@@ -124,9 +124,10 @@
                     <a-input placeholder="จำนวนวัสดุ" />
                   </div>
                 </span>
-                <span slot="meterail_balance" slot-scope="text">
+
+                <span slot="order_meterail_price_per_unit">
                   <div :style="{ textAlign: 'center' }">
-                    {{ text }}
+                    <a-input placeholder="ราคาต่อหน่วย" />
                   </div>
                 </span>
                 <span slot="order_meterail_price">
@@ -198,8 +199,7 @@
 <script>
 import jsonp from "fetch-jsonp";
 import querystring from "querystring";
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
+
 let timeout;
 let currentValue;
 
@@ -276,12 +276,20 @@ export default {
             customRender: "order_meterail_unit",
           },
         },
-
+        {
+          title: "ราคาต่อหน่วย",
+          dataIndex: "order_meterail_price_per_unit",
+          key: "order_meterail_price_per_unit",
+          width: "5%",
+          scopedSlots: {
+            customRender: "order_meterail_price_per_unit",
+          },
+        },
         {
           title: "ราคารวม (บาท)",
           dataIndex: "order_meterail_price",
           key: "order_meterail_price",
-          width: "10%",
+          width: "5%",
           scopedSlots: {
             customRender: "order_meterail_price",
           },
