@@ -5,7 +5,6 @@
       :style="{
         height: '100%',
       }"
-      v-if="this.$store.state.status_login"
     >
       <a-drawer
         class="display_mobile"
@@ -133,22 +132,16 @@
           :default-selected-keys="['home']"
         >
           <a-menu-item key="home">
-            <router-link :to="{ path: '/home' }">
-              <a-icon type="home" theme="filled" />
-              <span>หน้าแรก</span>
-            </router-link>
+            <a-icon type="home" theme="filled" />
+            <span>หน้าแรก</span>
           </a-menu-item>
           <a-menu-item key="user">
-            <router-link :to="{ path: '/personal_data' }">
-              <a-icon type="user" />
-              <span>ข้อมูลส่วนตัว</span>
-            </router-link>
+            <a-icon type="user" />
+            <span>ข้อมูลส่วนตัว</span>
           </a-menu-item>
           <a-menu-item key="management">
-            <router-link :to="{ path: '/permission_manage' }">
-              <a-icon type="api" theme="filled" />
-              <span>จัดการสิทธิ์เข้าใช้งาน</span>
-            </router-link>
+            <a-icon type="api" theme="filled" />
+            <span>จัดการสิทธิ์เข้าใช้งาน</span>
           </a-menu-item>
           <a-sub-menu key="CWS">
             <span slot="title">

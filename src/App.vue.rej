@@ -1,0 +1,9 @@
+diff a/src/App.vue b/src/App.vue	(rejected hunks)
+@@ -5,6 +5,7 @@
+       :style="{
+         height: '100%',
+       }"
++      v-if="this.$store.state.status_login"
+     >
+       <a-drawer
+         class="display_mobile"
