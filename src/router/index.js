@@ -26,7 +26,6 @@ import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
 import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
-
 Vue.use(VueRouter);
 
 const routes = [
