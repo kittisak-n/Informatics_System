@@ -213,7 +213,6 @@ export default {
             customRender: "disbursement_code",
           },
         },
-
         {
           title: "วันที่ทำการเบิกวัสดุ",
           dataIndex: "disbursement_date",
