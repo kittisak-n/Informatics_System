@@ -22,8 +22,8 @@ import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_
 import Detail_criteria from "../views/WLS/Calculation_criteria/Detail_criteria.vue";
 import Add_criteria from "../views/WLS/Calculation_criteria/Add_criteria.vue";
 import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.vue";
-// import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
-// import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
+import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
+import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
 Vue.use(VueRouter);
@@ -137,8 +137,30 @@ const routes = [
       },
     ],
   },
-
+//Show_course ฮาย
+{
+  path: "/Show_course",
+  name: "Show_course",
+  component: {
+    render(c) {
+      return c("router-view");
+    },
+  },
+  meta: { breadCrumb: "คำนวณภาระงาน" },
+  children: [
+    {
+      path: "",
+      component: Show_course,
+    },
+    {
+      
+      path: "InsertCourse",
+      component: InsertCourse,
+    }
+  ],
+},
   
+
    //คำนวณภาระงาน Calculation_workload
    {
     path: "/Calculation_workload",
