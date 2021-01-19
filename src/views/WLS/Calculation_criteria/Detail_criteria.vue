@@ -3,7 +3,7 @@
     <a-card size="small">
       <a-row :gutter="[8, 8]">
         <a-col :span="24" style="margin: 0.2em 0px">
-          <a-card-meta title="แสดงรายละเอียดอัตราการจ่ายค่าตอบแทนภาระงานสอน">
+          <a-card-meta title="แสดงรายละเอียดหลักเกณฑ์การกำหนดภาระงานสอน">
             <a-icon
               slot="avatar"
               type="search"
@@ -297,22 +297,21 @@
 export default {
   data() {
     return {
-      id: 0,
+ 
     };
   },
-  created() {
-    this.id = this.$route.params.id;
-  },
+
 
   methods: {
 
     show_criteriaId(){
-      console.log("show_criteriaId = " + this.$store.state.criteriaId)
+      console.log("show_criteriaId = " + this.$store.state.criteriaId);
+       
     }
   },
   mounted() {
 
-    this.show_criteriaId()
+    this.show_criteriaId();
   },
 };
 </script>

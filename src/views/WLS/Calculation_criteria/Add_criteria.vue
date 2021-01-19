@@ -39,7 +39,7 @@
               :xl="14"
               style="margin: 0.2em 0px"
             >
-              <span>ชื่อกำหนดการ: </span>
+              <span>ชื่อหลักเกณฑ์กำหนดภาระงาน: </span>
 
               <a-input
                 v-model="criteria_name"
@@ -90,6 +90,7 @@
                 type="number"
                 min="1"
                 style="width: 50%"
+                    placeholder="เช่น 400"
               />
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
@@ -115,6 +116,7 @@
               ขั้นต่ำ:
               <a-input
                 addon-after="หน่วยภาระงานสอน"
+                   placeholder="เช่น 6"
                 type="number"
                 style="width: 80%"
                 v-model="nmp_minimum"
@@ -137,6 +139,7 @@
                 style="width: 80%"
                 v-model="nmp_maximum"
                 min="1"
+                   placeholder="เช่น 18"
               />
             </a-col>
           </a-row>
@@ -187,6 +190,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                       placeholder="เช่น 50"
                       min="1"
                       v-model="criteria_Internal.lecture.Bachelor"
                       addon-after="คน"
@@ -205,6 +209,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                       placeholder="เช่น 20"
                       min="1"
                       v-model="criteria_Internal.lecture.Graduate"
                       addon-after="คน"
@@ -242,6 +247,7 @@
                           <span>จำนวนนิสิตที่เกิน: </span>
 
                           <a-input
+                             placeholder="1"
                             min="1"
                             type="number"
                             style="width: 14%"
@@ -254,9 +260,10 @@
                           </a-input>
                           <span> ถึง </span>
                           <a-input
+                             placeholder="20"
                             min="1"
                             type="number"
-                            placeholder=""
+                     
                             style="width: 14%"
                             addon-after="คน"
                             v-model="
@@ -268,7 +275,7 @@
                           <a-input
                             min="0"
                             type="number"
-                            placeholder=""
+                            placeholder="เช่น 0.0156"
                             style="width: 40%"
                             addon-after="ค่าน้ำหนักต่อหน่วยกิต"
                             v-model="
@@ -344,6 +351,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                       placeholder="เช่น 50"
                       style="width: 80%"
                       min="1"
                       v-model="criteria_Internal.lab.Bachelor"
@@ -362,6 +370,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                       placeholder="เช่น 20"
                       style="width: 80%"
                       min="1"
                       v-model="criteria_Internal.lab.Graduate"
@@ -403,6 +412,7 @@
                             type="number"
                             style="width: 14%"
                             addon-after="คน"
+                               placeholder="เช่น 1"
                             v-model="
                               criteria_Internal.lab.condition[index]
                                 .Minimum_number_students
@@ -413,7 +423,7 @@
                           <a-input
                             min="1"
                             type="number"
-                            placeholder=""
+                        placeholder="20"
                             style="width: 14%"
                             addon-after="คน"
                             v-model="
@@ -425,7 +435,7 @@
                           <a-input
                             min="0"
                             type="number"
-                            placeholder=""
+                            placeholder="เช่น 0.0015"
                             style="width: 40%"
                             addon-after="ค่าน้ำหนักต่อหน่วยกิต"
                             v-model="
@@ -513,6 +523,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                       placeholder="เช่น 50"
                       style="width: 80%"
                       v-model="criteria_external.lecture.Bachelor"
                       addon-after="คน"
@@ -530,6 +541,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                       placeholder="เช่น 20"
                       style="width: 80%"
                       v-model="criteria_external.lecture.Graduate"
                       addon-after="คน"
@@ -562,12 +574,11 @@
                         </div>
                       </span>
                       <span slot="condition" slot-scope="text, record, index">
-                        <div :style="{ textAlign: 'center'  , fontSize: '15px',}">
-                          <span 
-                            >จำนวนนิสิตที่เกิน:
-                          </span>
+                        <div :style="{ textAlign: 'center', fontSize: '15px' }">
+                          <span>จำนวนนิสิตที่เกิน: </span>
 
                           <a-input
+                             placeholder="1"
                             type="number"
                             style="width: 14%"
                             addon-after="คน"
@@ -577,10 +588,10 @@
                             "
                           >
                           </a-input>
-                          <span > ถึง </span>
+                          <span> ถึง </span>
                           <a-input
                             type="number"
-                            placeholder=""
+                            placeholder="20"
                             style="width: 14%"
                             addon-after="คน"
                             v-model="
@@ -588,10 +599,10 @@
                                 .Maximum_number_students
                             "
                           ></a-input>
-                          <span > เท่ากับ </span>
+                          <span> เท่ากับ </span>
                           <a-input
                             type="number"
-                            placeholder=""
+                               placeholder="เช่น 0.0015"
                             style="width: 40%"
                             addon-after="ค่าน้ำหนักต่อหน่วยกิต"
                             v-model="
@@ -668,6 +679,7 @@
                   >
                     <a-input
                       style="width: 80%"
+                       placeholder="เช่น 50"
                       min="1"
                       v-model="criteria_external.lab.Bachelor"
                       addon-after="คน"
@@ -685,6 +697,7 @@
                     style="margin: 0.2em 0px; text-align: center"
                   >
                     <a-input
+                     placeholder="เช่น 20"
                       style="width: 80%"
                       min="1"
                       v-model="criteria_external.lab.Graduate"
@@ -718,12 +731,11 @@
                         </div>
                       </span>
                       <span slot="condition" slot-scope="text, record, index">
-                        <div :style="{ textAlign: 'center',  fontSize: '15px', }">
-                          <span 
-                            >จำนวนนิสิตที่เกิน:
-                          </span>
+                        <div :style="{ textAlign: 'center', fontSize: '15px' }">
+                          <span>จำนวนนิสิตที่เกิน: </span>
 
                           <a-input
+                           placeholder="1"
                             min="1"
                             type="number"
                             style="width: 14%"
@@ -734,11 +746,11 @@
                             "
                           >
                           </a-input>
-                          <span > ถึง </span>
+                          <span> ถึง </span>
                           <a-input
                             min="1"
                             type="number"
-                            placeholder=""
+                         placeholder="20"
                             style="width: 14%"
                             addon-after="คน"
                             v-model="
@@ -746,11 +758,11 @@
                                 .Maximum_number_students
                             "
                           ></a-input>
-                          <span > เท่ากับ </span>
+                          <span> เท่ากับ </span>
                           <a-input
                             min="0"
                             type="number"
-                            placeholder=""
+                     placeholder="เช่น 0.0015"
                             style="width: 40%"
                             addon-after="ค่าน้ำหนักต่อหน่วยกิต"
                             v-model="
@@ -816,7 +828,7 @@
           <a-card size="small">
             <a-row :gutter="[8, 8]">
               <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
-              <a-col :span="6" style="margin: 0.2em 0px">ชื่อกำหนดการ:</a-col>
+              <a-col :span="6" style="margin: 0.2em 0px">ชื่อหลักเกณฑ์กำหนดภาระงาน:</a-col>
               <a-col :span="6" style="margin: 0.2em 0px">
                 <a-input style="width: 100%" disabled v-model="criteria_name"
               /></a-col>
@@ -839,7 +851,7 @@
             <a-row :gutter="[8, 8]">
               <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
               <a-col :span="6" style="margin: 0.2em 0px"
-                >ผู้สร้างกำหนดการ:</a-col
+                >ผู้สร้างหลักเกณฑ์กำหนดภาระงาน:</a-col
               >
               <a-col :span="6" style="margin: 0.2em 0px">
                 <a-input style="width: 100%" disabled
@@ -1497,48 +1509,141 @@ export default {
           check = false;
         } else {
           check = true;
-          console.log("กรอกแล้ว");
+          console.log("กรอกข้อมูลครบแล้ว");
         }
       } else if (this.current == 1) {
-        //       criteria_Internal: {
-        //   lab: {
-        //     Bachelor: null,
-        //     Graduate: null,
-        //     index_condition: 0,
-        //     condition: [
-        //       {
-        //         key: 1,
-        //         Minimum_number_students: null,
-        //         Maximum_number_students: null,
-        //         Weight_per_credit: null,
-        //       },
-        //     ],
-        //   },
-        //   lecture: {
-        //     Bachelor: null,
-        //     Graduate: null,
-        //     index_condition: 0,
-        //     condition: [
-        //       {
-        //         key: 1,
-        //         Minimum_number_students: null,
-        //         Maximum_number_students: null,
-        //         Weight_per_credit: null,
-        //       },
-        //     ],
-        //   },
-        // },
-        // if (
-        //   this.criteria_rate_per_credit == null || this.criteria_rate_per_credit == "" ||
-        //   this.criteria_start_date == null ||
-        //   this.criteria_name == ""
-        // ) {
-        //   check = false;
-        //   console.log("test");
-        // } else {
-        //   check = true;
-        //   console.log("กรอกแล้ว");
-        // }
+      
+
+      // เช็ควิชาใน บรรยาย
+        for (
+          let i = 0;
+          i < this.criteria_Internal.lecture.condition.length;
+          i++
+        ) {
+          if (
+            this.criteria_Internal.lecture.Bachelor == null ||
+            this.criteria_Internal.lecture.Bachelor == "" ||
+            this.criteria_Internal.lecture.Graduate == null ||
+            this.criteria_Internal.lecture.Graduate == "" ||
+            this.criteria_Internal.lecture.condition[i]
+              .Minimum_number_students == null ||
+            this.criteria_Internal.lecture.condition[i]
+              .Minimum_number_students == "" ||
+            this.criteria_Internal.lecture.condition[i]
+              .Maximum_number_students == null ||
+            this.criteria_Internal.lecture.condition[i]
+              .Maximum_number_students == "" ||
+            this.criteria_Internal.lecture.condition[i].Weight_per_credit ==
+              null ||
+            this.criteria_Internal.lecture.condition[i].Weight_per_credit ==
+              "" 
+          ) {
+            console.log("กรุณากรอกข้อความ วิชาใน บรรยาย");
+            check = false;
+          } else {
+            check = true;
+            console.log("กรอกข้อมูลครบแล้ว");
+          }
+        }
+
+// เช็ควิชาใน ปฏิบัติ
+        for (
+          let i = 0;
+          i < this.criteria_Internal.lab.condition.length;
+          i++
+        ) {
+          if (
+            this.criteria_Internal.lab.Bachelor == null ||
+            this.criteria_Internal.lab.Bachelor == "" ||
+            this.criteria_Internal.lab.Graduate == null ||
+            this.criteria_Internal.lab.Graduate == "" ||
+            this.criteria_Internal.lab.condition[i].Minimum_number_students ==
+              null ||
+            this.criteria_Internal.lab.condition[i].Minimum_number_students ==
+              "" ||
+            this.criteria_Internal.lab.condition[i].Maximum_number_students ==
+              null ||
+            this.criteria_Internal.lab.condition[i].Maximum_number_students ==
+              "" ||
+            this.criteria_Internal.lab.condition[i].Weight_per_credit == null ||
+            this.criteria_Internal.lab.condition[i].Weight_per_credit == ""
+          ) {
+            console.log("กรุณากรอกข้อความ วิชาใน ปฏิบัติ");
+            check = false;
+          } else {
+            check = true;
+            console.log("กรอกข้อมูลครบแล้ว");
+          }
+        }
+
+
+
+
+
+
+      // เช็ควิชานอก บรรยาย
+        for (
+          let i = 0;
+          i < this.criteria_external.lecture.condition.length;
+          i++
+        ) {
+          if (
+            this.criteria_external.lecture.Bachelor == null ||
+            this.criteria_external.lecture.Bachelor == "" ||
+            this.criteria_external.lecture.Graduate == null ||
+            this.criteria_external.lecture.Graduate == "" ||
+            this.criteria_external.lecture.condition[i]
+              .Minimum_number_students == null ||
+            this.criteria_external.lecture.condition[i]
+              .Minimum_number_students == "" ||
+            this.criteria_external.lecture.condition[i]
+              .Maximum_number_students == null ||
+            this.criteria_external.lecture.condition[i]
+              .Maximum_number_students == "" ||
+            this.criteria_external.lecture.condition[i].Weight_per_credit ==
+              null ||
+            this.criteria_external.lecture.condition[i].Weight_per_credit ==
+              "" 
+          ) {
+            console.log("กรุณากรอกข้อความ วิชานอก บรรยาย");
+            check = false;
+          } else {
+            check = true;
+            console.log("กรอกข้อมูลครบแล้ว");
+          }
+        }
+
+// เช็ควิชานอก ปฏิบัติ
+        for (
+          let i = 0;
+          i < this.criteria_external.lab.condition.length;
+          i++
+        ) {
+          if (
+            this.criteria_external.lab.Bachelor == null ||
+            this.criteria_external.lab.Bachelor == "" ||
+            this.criteria_external.lab.Graduate == null ||
+            this.criteria_external.lab.Graduate == "" ||
+            this.criteria_external.lab.condition[i].Minimum_number_students ==
+              null ||
+            this.criteria_external.lab.condition[i].Minimum_number_students ==
+              "" ||
+            this.criteria_external.lab.condition[i].Maximum_number_students ==
+              null ||
+            this.criteria_external.lab.condition[i].Maximum_number_students ==
+              "" ||
+            this.criteria_external.lab.condition[i].Weight_per_credit == null ||
+            this.criteria_external.lab.condition[i].Weight_per_credit == ""
+          ) {
+            console.log("กรุณากรอกข้อความ วิชานอก ปฏิบัติ");
+            check = false;
+          } else {
+            check = true;
+            console.log("กรอกข้อมูลครบแล้ว");
+          }
+        }
+
+        
       }
 
       return check;
@@ -1583,6 +1688,8 @@ export default {
         this.current++;
       } else {
         console.log("ไม่สามารถเปลี่ยน Step ได้กรุณากรอกข้อความก่อน");
+          this.$message.error('กรุณากรอกข้อมูลให้ครบก่อนไปลำดับถัดไป');
+ 
       }
     },
     prev() {

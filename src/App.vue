@@ -155,7 +155,7 @@
             </a-menu-item>
             <a-menu-item key="CWS_setting">
               <router-link :to="{ path: '/Calculation_criteria' }">
-              <a-icon type="file-sync" />หลักเกณฑ์การคำนวณ
+              <a-icon type="file-sync" />หลักเกณฑ์กำหนดภาระงานสอน
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_calculation">
