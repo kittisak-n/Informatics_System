@@ -77,7 +77,7 @@
                       <a-tag color="green"> กำลังใช้งาน </a-tag></span
                     >
                     <span v-if="text === 0">
-                      <a-tag color="red"> ไม่ได้ใช้งาน </a-tag>
+                      <a-tag color="red"> ไม่ใช้งาน </a-tag>
                     </span>
                   </div>
                 </span>

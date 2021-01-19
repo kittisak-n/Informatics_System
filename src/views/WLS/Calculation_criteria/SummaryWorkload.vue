@@ -2,7 +2,7 @@
   <div id="SummaryWorkload">
     <a-row :gutter="[8, 8]">
       <a-col :span="24">
-        <a-card size="small" title="ตารางแสดงรายการเบิกจ่ายวัสดุ">
+        <a-card size="small" title="ตารางแสดงรายละเอียดการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ">
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="24" style="text-align: center">
               <h1>
