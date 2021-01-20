@@ -60,7 +60,7 @@ const routes = [
         return c("router-view");
       },
     },
-    meta: { breadCrumb: "หลักเกณฑ์การคำนวณ" },
+    meta: { breadCrumb: "หลักเกณฑ์กำหนดภาระงานสอน" },
     children: [
       {
         path: "",
@@ -69,7 +69,7 @@ const routes = [
       {
         path: "Add_criteria",
         name: "Add_criteria",
-        meta: { breadCrumb: "ตั้งค่าอัตราการจ่ายค่าตอบแทน" },
+        meta: { breadCrumb: "ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน" },
         component: {
           render(c) {
             return c("router-view");
@@ -85,7 +85,7 @@ const routes = [
       {
         path: "Detail_criteria",
         name: "Detail_criteria",
-        meta: { breadCrumb: "แสดงรายละเอียดหลักเกณฑ์" },
+        meta: { breadCrumb: "แสดงรายละเอียดหลักเกณฑ์การกำหนดภาระงานสอน" },
         component: {
           render(c) {
             return c("router-view");

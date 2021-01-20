@@ -12,7 +12,7 @@
               :xl="10"
               style="margin: 0.2em 0px"
             >
-              <a-card-meta title="หลักเกณฑ์การคำนวณ">
+              <a-card-meta title="หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน">
                 <a-icon
                   slot="avatar"
                   type="schedule"
@@ -77,7 +77,7 @@
                       <a-tag color="green"> กำลังใช้งาน </a-tag></span
                     >
                     <span v-if="text === 0">
-                      <a-tag color="red"> ไม่ได้ใช้งาน </a-tag>
+                      <a-tag color="red"> ไม่ใช้งาน </a-tag>
                     </span>
                   </div>
                 </span>
@@ -105,6 +105,8 @@
 export default {
   data() {
     return {
+
+      
       columns_calculation_criteria: [
         {
           title: "ลำดับ",
@@ -116,7 +118,7 @@ export default {
           },
         },
         {
-          title: "ชื่อหลักเกณฑ์การคำนวณ",
+          title: "ชื่อหลักเกณฑ์การกำหนดภาระงาน",
           dataIndex: "cc_name",
           key: "cc_name",
           width: "15%",

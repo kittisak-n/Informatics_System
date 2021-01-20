@@ -154,9 +154,16 @@
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_setting">
-              <router-link :to="{ path: '/Calculation_criteria' }">
-              <a-icon type="file-sync" />หลักเกณฑ์การคำนวณ
+              <a-tooltip placement="right">
+        <template slot="title">
+          <span>หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน</span>
+        </template>
+          <router-link :to="{ path: '/Calculation_criteria' }">
+              <a-icon type="file-sync" />หลักเกณฑ์กำหนดภาระงาน.
               </router-link>
+      </a-tooltip>
+
+          
             </a-menu-item>
             <a-menu-item key="CWS_calculation">
               <router-link :to="{ path: '/Calculation_workload' }">
@@ -164,10 +171,22 @@
               </router-link>
             </a-menu-item>
             <a-menu-item key="CWS_conclution">
-                <router-link :to="{ path: '/SummaryWorkload' }">
-              <a-icon type="area-chart"  />สรุปภาระงานเพื่อการจ่ายค่าตอบแทน </router-link>
+             
+                           <a-tooltip placement="right">
+        <template slot="title">
+          <span>สรุปภาระงานเพื่อการจ่ายค่าตอบแทน</span>
+        </template>
+        <router-link :to="{ path: '/SummaryWorkload' }">
+              <a-icon type="area-chart"  />สรุปภาระงานเพื่อการจ่าย. </router-link>
+      </a-tooltip>
+
+             
+               
             </a-menu-item>
             <a-menu-item key="CWS_check">
+
+
+
 
                 <router-link :to="{ path: '/Inspect_workload' }">
                  <a-icon type="search" />ตรวจสอบภาระงาน</router-link>
