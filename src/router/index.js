@@ -49,7 +49,7 @@ const routes = [
       },
     ],
   },
-  
+
 
   // หลักเกณฑ์การคำนวณ
   {
@@ -119,7 +119,7 @@ const routes = [
       },
     ],
   },
-  
+
   //สรุปภาระงานเพื่อจ่ายค่าตอบแทนอาจารย์ประจำ
   {
     path: "/SummaryWorkload",
@@ -137,32 +137,31 @@ const routes = [
       },
     ],
   },
-//Show_course ฮาย
-{
-  path: "/Show_course",
-  name: "Show_course",
-  component: {
-    render(c) {
-      return c("router-view");
+  //Show_course ฮาย
+  {
+    path: "/Show_course",
+    name: "Show_course",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
     },
+    meta: { breadCrumb: "แสดงรายวิชา" },
+    children: [
+      {
+        path: "",
+        component: Show_course,
+      },
+      {
+        meta: { breadCrumb: "เพิ่มรายวิชา" },
+        path: "InsertCourse",
+        component: InsertCourse,
+      }
+    ],
   },
-  meta: { breadCrumb: "คำนวณภาระงาน" },
-  children: [
-    {
-      path: "",
-      component: Show_course,
-    },
-    {
-      
-      path: "InsertCourse",
-      component: InsertCourse,
-    }
-  ],
-},
-  
 
-   //คำนวณภาระงาน Calculation_workload
-   {
+  //คำนวณภาระงาน Calculation_workload
+  {
     path: "/Calculation_workload",
     name: "Calculation_workload",
     component: {

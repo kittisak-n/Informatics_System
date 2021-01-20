@@ -71,8 +71,9 @@
                 bordered
               >
                 <span slot="Action">
-                  <a-button type="warning" :size="size"> <a-icon type="edit" />  </a-button></span
-                >
+                  <a-button type="warning" :size="size">
+                    <a-icon type="edit" /> </a-button
+                ></span>
               </a-table>
             </a-col>
           </a-row>
@@ -113,24 +114,60 @@
         @ok="handleOk"
         @cancel="handleCancel"
       >
-        <a-row :gutter="[24, 30]">
-          <a-col :span="24">
-            <a-col :span="24">
-              <router-link :to="{ path: '/Show_course/form' }">
-                <a-button type="primary" block>
-                  เพิ่มรายวิชาด้วยตนเอง
-                </a-button>
-              </router-link>
-            </a-col>
-            <a-col :span="24">
-              <a-upload :default-file-list="fileList">
-                <a-button block
-                  ><a-icon type="upload" /> เพิ่มแบบ Upload file Csv
-                </a-button>
-              </a-upload>
-            </a-col>
+        <a-row :gutter="[10, 50]">
+          <a-col :span="24" :style="{ textAlign: 'center' }">
+            <router-link :to="{ path: '/Show_course/InsertCourse' }">
+              <a-button type="primary" style="width:80%"> เพิ่มรายวิชาด้วยตนเอง </a-button>
+            </router-link>
           </a-col>
         </a-row>
+        <br />
+        <hr />
+        <br />
+        <a-row :gutter="[10, 10]">
+          <a-col :span="6" :style="{ textAlign: 'end' }">
+            <p style="margin-top: 5px">ภาคเรียนที่ :</p>
+          </a-col>
+          <a-col :span="3">
+            <a-select
+              label-in-value
+              @change="DatehandleChange"
+              style="width: 60px"
+              :default-value="{ key: '1' }"
+            >
+              <a-select-option value="1"> 1 </a-select-option>
+              <a-select-option value="2"> 2 </a-select-option>
+            </a-select>
+          </a-col>
+          <a-col :span="6" :style="{ textAlign: 'end' }">
+            <p style="margin-top: 5px">ปีการศึกษา :</p>
+          </a-col>
+          <a-col :span="6">
+            <a-select
+              label-in-value
+              @change="DatehandleChange"
+              style="width: 100%"
+              :default-value="{ key: '1' }"
+            >
+              <a-select-option value="1"> 2564 </a-select-option>
+              <a-select-option value="2"> 2563 </a-select-option>
+            </a-select>
+          </a-col>
+        </a-row>
+        <a-row :gutter="[10, 10]">
+          <a-col :span="24" :style="{ textAlign: 'center' }">
+              <a-button  style="width:80%;" icon="upload" type="file"> Upload file Csv </a-button>
+          </a-col>
+        </a-row>
+        <!-- <a-row :gutter="[10, 10]">
+          <a-col :span="24">
+            <a-upload :default-file-list="fileList" >
+              <a-button block 
+                ><a-icon type="upload" /> เพิ่มแบบ Upload file Csv
+              </a-button>
+            </a-upload>
+          </a-col>
+        </a-row> -->
       </a-modal>
     </div>
   </div>
@@ -197,7 +234,7 @@ export default {
           align: "center",
         },
         {
-          title: "จานวนลง",
+          title: "จำนวนลงทะเบียน",
           dataIndex: "course_student",
           key: "course_student",
           width: "3%",
