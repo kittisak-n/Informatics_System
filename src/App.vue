@@ -144,6 +144,7 @@
               <span>ข้อมูลส่วนตัว</span>
             </router-link>
           </a-menu-item>
+
           <a-menu-item key="management">
             <router-link :to="{ path: '/permission_manage' }">
               <a-icon type="api" theme="filled" />

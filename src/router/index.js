@@ -6,7 +6,8 @@ import Home from "../views/Home.vue";
 
 //PMS_manage
 import permission_manage from "../views/PMS/permission_manage.vue";
-import adduser from "../views/PMS/add.vue";
+import addposition from "../views/PMS/addposition.vue";
+import adduser from "../views/PMS/adduser.vue";
 import personal_data from "../views/PMS/personal_data.vue";
 
 //MDS_exchequer
@@ -74,6 +75,21 @@ const routes = [{
     ]
     },   
     {
+        path:'/addposition',
+        name:'addposition',
+        meta:{breadCrumb : "เพิ่มตำแหน่งการเข้าถึง"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: addposition
+        },
+    ]
+    },  
+    {
         path:'/permission_manage',
         name:'permission_manage',
         meta:{breadCrumb : "จัดการสิทธิ์การใช้งาน"},
@@ -97,8 +113,9 @@ const routes = [{
             children:[{
                 path: "",
                 component: adduser
-            }]
-        }
+            },]
+        },
+
     ]
     },
     {
