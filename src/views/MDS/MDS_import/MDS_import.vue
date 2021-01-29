@@ -334,9 +334,7 @@
               </div>
             </span>
             <span slot="order_meterail_price" slot-scope="text">
-              <div :style="{ textAlign: 'center' }">
-                {{ text }}.00
-              </div>
+              <div :style="{ textAlign: 'center' }">{{ text }}.00</div>
             </span>
           </a-table>
         </a-col>
@@ -355,9 +353,11 @@ import { Chart } from "highcharts-vue";
 import Highcharts from "highcharts";
 import dataModule from "highcharts/modules/data";
 import drilldown from "highcharts/modules/drilldown";
-
+import loadExporting from "highcharts/modules/exporting";
 drilldown(Highcharts);
 dataModule(Highcharts);
+loadExporting(Highcharts);
+
 import moment from "moment";
 import "moment/locale/th";
 export default {
