@@ -1,22 +1,9 @@
 <template>
   <div class="MDS_export">
     <a-row :gutter="[8, 8]">
-      <a-col :span="14">
-        <a-card>
-          <a-row>
-            <a-col :span="24">
-              <highcharts
-                :options="chartOptions"
-                ref="lineCharts"
-                style="position: relative; height:22.7vh; width:auto"
-              ></highcharts>
-            </a-col>
-          </a-row>
-        </a-card>
-      </a-col>
-      <a-col :span="10">
+      <a-col :span="24">
         <a-row :gutter="[8, 8]">
-          <a-col :span="24">
+          <a-col :span="12">
             <a-card>
               <a-row :gutter="[8, 8]">
                 <a-col :span="4">
@@ -41,7 +28,7 @@
               </a-row>
             </a-card>
           </a-col>
-          <a-col :span="12">
+          <a-col :span="6">
             <a-card>
               <a-row>
                 <a-col :span="4">
@@ -61,7 +48,7 @@
               </a-row>
             </a-card>
           </a-col>
-          <a-col :span="12">
+          <a-col :span="6">
             <a-card>
               <a-row>
                 <a-col :span="4">
@@ -109,18 +96,11 @@
   </div>
 </template>
 <script>
-import { Chart } from "highcharts-vue";
-import Highcharts from "highcharts";
-import dataModule from "highcharts/modules/data";
-import drilldown from "highcharts/modules/drilldown";
 import Approval_list from "../../../components/MDS/MDS_export/approval_list.vue";
 import Disburse_list from "../../../components/MDS/MDS_export/disburse_list.vue";
 
-drilldown(Highcharts);
-dataModule(Highcharts);
 export default {
   components: {
-    highcharts: Chart,
     Approval_list,
     Disburse_list,
   },

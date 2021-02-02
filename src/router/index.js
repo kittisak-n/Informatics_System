@@ -2,20 +2,17 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 
+
 //MDS_exchequer
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
 import MDS_exchequer_adjust_suppiles from "../views/MDS/MDS_exchequer/MDS_exchequer_adjust_suppiles.vue";
 
-//MDS_disbursement_user
-import MDS_disbursement_user from "../views/MDS/MDS_disbursement/user/MDS_disbursement.vue";
-import MDS_disbursement_form_user from "../views/MDS/MDS_disbursement/user/MDS_disbursement_form.vue";
-
-//MDS_disbursement_admin
-import MDS_disbursement_admin from "../views/MDS/MDS_disbursement/admin/MDS_disbursement.vue";
-import MDS_disbursement_form_admin from "../views/MDS/MDS_disbursement/admin/MDS_disbursement_form.vue";
-
 import MDS_import from "../views/MDS/MDS_import/MDS_import.vue";
 import MDS_import_form from "../views/MDS/MDS_import/MDS_import_form.vue";
+import MDS_export from "../views/MDS/MDS_export/MDS_export.vue"
+import MDS_report from "../views/MDS/MDS_report/MDS_report.vue"
+import MDS_disbursement from "../views/MDS/MDS_disbursement/MDS_disbursement.vue";
+import MDS_disbursement_form from "../views/MDS/MDS_disbursement/MDS_disbursement_form.vue";
 
 //WLS
 import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_criteria.vue";
@@ -28,288 +25,300 @@ import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
 Vue.use(VueRouter);
 
-const routes = [
-  {
-    path: "",
-    name: "Home",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    meta: { breadCrumb: "หน้าแรก" },
-    children: [
-      {
+const routes = [{
         path: "",
-        component: Home,
-      },
-      {
-        path: "/home",
-        component: Home,
-      },
-    ],
-  },
-
-
-  // หลักเกณฑ์การคำนวณ
-  {
-    path: "/Calculation_criteria",
-    name: "Calculation_criteria",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    meta: { breadCrumb: "หลักเกณฑ์กำหนดภาระงานสอน" },
-    children: [
-      {
-        path: "",
-        component: Calculation_criteria,
-      },
-      {
-        path: "Add_criteria",
-        name: "Add_criteria",
-        meta: { breadCrumb: "ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน" },
+        name: "Home",
         component: {
-          render(c) {
-            return c("router-view");
-          },
+            render(c) {
+                return c("router-view");
+            },
+        },
+        meta: { breadCrumb: "หน้าแรก" },
+        children: [{
+                path: "",
+                component: Home,
+            },
+            {
+                path: "/home",
+                component: Home,
+            },
+        ],
+    },
+
+
+    // หลักเกณฑ์การคำนวณ
+    {
+        path: "/Calculation_criteria",
+        name: "Calculation_criteria",
+        component: {
+            render(c) {
+                return c("router-view");
+            },
+        },
+        meta: { breadCrumb: "หลักเกณฑ์กำหนดภาระงานสอน" },
+        children: [{
+                path: "",
+                component: Calculation_criteria,
+            },
+            {
+                path: "Add_criteria",
+                name: "Add_criteria",
+                meta: { breadCrumb: "ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน" },
+                component: {
+                    render(c) {
+                        return c("router-view");
+                    },
+                },
+                children: [{
+                    path: "",
+                    component: Add_criteria,
+                }, ],
+            },
+            {
+                path: "Detail_criteria",
+                name: "Detail_criteria",
+                meta: { breadCrumb: "แสดงรายละเอียดหลักเกณฑ์การกำหนดภาระงานสอน" },
+                component: {
+                    render(c) {
+                        return c("router-view");
+                    },
+                },
+                children: [{
+                    path: "",
+                    component: Detail_criteria,
+                }, ],
+            },
+        ],
+    },
+
+
+    // ตรวจสอบภาระงาน
+    {
+        path: "/Inspect_workload",
+        name: "Inspect_workload",
+        component: {
+            render(c) {
+                return c("router-view");
+            },
+        },
+        meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+        children: [{
+            path: "",
+            component: Inspect_workload,
+        }, ],
+    },
+
+    //สรุปภาระงานเพื่อจ่ายค่าตอบแทนอาจารย์ประจำ
+    {
+        path: "/SummaryWorkload",
+        name: "SummaryWorkload",
+        component: {
+            render(c) {
+                return c("router-view");
+            },
+        },
+        meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+        children: [{
+            path: "",
+            component: SummaryWorkload,
+        }, ],
+    },
+    //Show_course ฮาย
+    {
+        path: "/Show_course",
+        name: "Show_course",
+        component: {
+            render(c) {
+                return c("router-view");
+            },
+        },
+        meta: { breadCrumb: "แสดงรายวิชา" },
+        children: [{
+                path: "",
+                component: Show_course,
+            },
+            {
+                meta: { breadCrumb: "เพิ่มรายวิชา" },
+                path: "InsertCourse",
+                component: InsertCourse,
+            }
+        ],
+    },
+
+    //คำนวณภาระงาน Calculation_workload
+    {
+        path: "/Calculation_workload",
+        name: "Calculation_workload",
+        component: {
+            render(c) {
+                return c("router-view");
+            },
+        },
+        meta: { breadCrumb: "คำนวณภาระงาน" },
+        children: [{
+            path: "",
+            component: Calculation_workload,
+        }, ],
+    },
+
+    {
+        path: "/MDS_exchequer",
+        name: "MDS_exchequer",
+        meta: { breadCrumb: "รายการวัสดุในคลัง" },
+        component: {
+            render(c) {
+                return c("router-view");
+            },
+        },
+        children: [{
+                path: "",
+                component: MDS_exchequer,
+            },
+            {
+                path: "MDS_exchequer_adjust_suppiles",
+                name: "MDS_exchequer_adjust_suppiles",
+                meta: { breadCrumb: "ปรับยอดรายการวัสดุ" },
+                component: {
+                    render(c) {
+                        return c("router-view");
+                    },
+                },
+                children: [{
+                    path: "",
+                    component: MDS_exchequer_adjust_suppiles,
+                }, ],
+            },
+        ],
+    },
+    {
+        path: "/MDS_exchequer",
+        name: 'MDS_exchequer',
+        meta: { breadCrumb: 'รายการวัสดุในคลัง' },
+        component: {
+            render(c) {
+                return c("router-view");
+            }
         },
         children: [
-          {
-            path: "",
-            component: Add_criteria,
-          },
-        ],
-      },
-      {
-        path: "Detail_criteria",
-        name: "Detail_criteria",
-        meta: { breadCrumb: "แสดงรายละเอียดหลักเกณฑ์การกำหนดภาระงานสอน" },
-        component: {
-          render(c) {
-            return c("router-view");
-          },
-        },
-        children: [
-          {
-            path: "",
-            component: Detail_criteria,
-          },
-        ],
-      },
-    ],
-  },
 
-
-  // ตรวจสอบภาระงาน
-  {
-    path: "/Inspect_workload",
-    name: "Inspect_workload",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    meta: { breadCrumb: "ตรวจสอบภาระงาน" },
-    children: [
-      {
-        path: "",
-        component: Inspect_workload,
-      },
-    ],
-  },
-
-  //สรุปภาระงานเพื่อจ่ายค่าตอบแทนอาจารย์ประจำ
-  {
-    path: "/SummaryWorkload",
-    name: "SummaryWorkload",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    meta: { breadCrumb: "ตรวจสอบภาระงาน" },
-    children: [
-      {
-        path: "",
-        component: SummaryWorkload,
-      },
-    ],
-  },
-  //Show_course ฮาย
-  {
-    path: "/Show_course",
-    name: "Show_course",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    meta: { breadCrumb: "แสดงรายวิชา" },
-    children: [
-      {
-        path: "",
-        component: Show_course,
-      },
-      {
-        meta: { breadCrumb: "เพิ่มรายวิชา" },
-        path: "InsertCourse",
-        component: InsertCourse,
-      }
-    ],
-  },
-
-  //คำนวณภาระงาน Calculation_workload
-  {
-    path: "/Calculation_workload",
-    name: "Calculation_workload",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    meta: { breadCrumb: "คำนวณภาระงาน" },
-    children: [
-      {
-        path: "",
-        component: Calculation_workload,
-      },
-    ],
-  },
-
-  {
-    path: "/MDS_exchequer",
-    name: "MDS_exchequer",
-    meta: { breadCrumb: "รายการวัสดุในคลัง" },
-    component: {
-      render(c) {
-        return c("router-view");
-      },
-    },
-    children: [
-      {
-        path: "",
-        component: MDS_exchequer,
-      },
-      {
-        path: "MDS_exchequer_adjust_suppiles",
-        name: "MDS_exchequer_adjust_suppiles",
-        meta: { breadCrumb: "ปรับยอดรายการวัสดุ" },
+            {
+                path: '',
+                component: MDS_exchequer
+            },
+            {
+                path: 'MDS_exchequer_adjust_suppiles',
+                name: 'MDS_exchequer_adjust_suppiles',
+                meta: { breadCrumb: 'ปรับยอดรายการวัสดุ' },
+                component: {
+                    render(c) {
+                        return c("router-view");
+                    }
+                },
+                children: [{
+                    path: '',
+                    component: MDS_exchequer_adjust_suppiles
+                }, ]
+            }
+        ]
+    }, {
+        path: "/MDS_disbursement",
+        name: 'MDS_disbursement',
         component: {
-          render(c) {
-            return c("router-view");
-          },
+            render(c) {
+                return c("router-view");
+            }
         },
-        children: [
-          {
-            path: "",
-            component: MDS_exchequer_adjust_suppiles,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/MDS_disbursement_user",
-    name: "MDS_disbursement",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
+        meta: { breadCrumb: 'เบิกวัสดุ' },
+        children: [{
+                path: '',
+                component: MDS_disbursement
+            }, {
+
+                path: 'MDS_disbursement_form',
+                component: {
+                    render(c) {
+                        return c("router-view");
+                    }
+                },
+                meta: { breadCrumb: 'แบบฟอร์มเบิกวัสดุ' },
+                children: [{
+                    path: "",
+                    component: MDS_disbursement_form,
+
+                }]
+
+            },
+
+        ]
     },
-    meta: { breadCrumb: "เบิกวัสดุ" },
-    children: [
-      {
-        path: "",
-        component: MDS_disbursement_user,
-      },
-      {
-        path: "MDS_disbursement_form_user",
+    {
+        path: "/MDS_export",
+        name: 'MDS_export',
         component: {
-          render(c) {
-            return c("router-view");
-          },
+            render(c) {
+                return c("router-view");
+            }
         },
-        meta: { breadCrumb: "แบบฟอร์มเบิกวัสดุ" },
-        children: [
-          {
-            path: "",
-            component: MDS_disbursement_form_user,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/MDS_disbursement_admin",
-    name: "MDS_disbursement",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
+        meta: { breadCrumb: "รายการเบิกจ่ายวัสดุ" },
+        children: [{
+                path: '',
+                component: MDS_export
+            },
+
+        ]
     },
-    meta: { breadCrumb: "เบิกวัสดุ" },
-    children: [
-      {
-        path: "",
-        component: MDS_disbursement_admin,
-      },
-      {
-        path: "MDS_disbursement_form_admin",
+    {
+        path: "/MDS_report",
+        name: 'MDS_report',
         component: {
-          render(c) {
-            return c("router-view");
-          },
+            render(c) {
+                return c("router-view");
+            }
         },
-        meta: { breadCrumb: "แบบฟอร์มเบิกวัสดุ" },
-        children: [
-          {
-            path: "",
-            component: MDS_disbursement_form_admin,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/MDS_import",
-    name: "MDS_import",
-    component: {
-      render(c) {
-        return c("router-view");
-      },
+        meta: { breadCrumb: "รายงานผลการเบิกจ่ายวัสดุ" },
+        children: [{
+                path: '',
+                component: MDS_report
+            },
+
+        ]
     },
-    meta: { breadCrumb: "รายการนำเข้าวัสดุ" },
-    children: [
-      {
-        path: "",
-        component: MDS_import,
-      },
-      {
-        path: "MDS_import_form",
-        name: "MDS_import_form",
+    {
+        path: "/MDS_import",
+        name: 'MDS_import',
         component: {
-          render(c) {
-            return c("router-view");
-          },
+            render(c) {
+                return c("router-view");
+            }
         },
-        meta: { breadCrumb: "ฟอร์มนำข้าวัสดุ" },
-        children: [
-          {
-            path: "",
-            component: MDS_import_form,
-          },
-        ],
-      },
-    ],
-  },
+        meta: { breadCrumb: 'รายการนำเข้าวัสดุ' },
+        children: [{
+                path: '',
+                component: MDS_import
+            },
+            {
+                path: "MDS_import_form",
+                name: 'MDS_import_form',
+                component: {
+                    render(c) {
+                        return c("router-view");
+                    }
+                },
+                meta: { breadCrumb: 'ฟอร์มนำข้าวัสดุ' },
+                children: [{
+                    path: '',
+                    component: MDS_import_form
+                }, ]
+            }
+
+        ]
+    },
 ];
 
 const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes,
+    mode: "history",
+    base: process.env.BASE_URL,
+    routes,
 });
 
 export default router;
