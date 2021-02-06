@@ -1,7 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import PMS_login from "../views/login.vue"
+import PMS_Home from "../views/Home.vue";
 
+
+//PMS_manage
+import permission_manage from "../views/PMS/permission_manage.vue";
+import addposition from "../views/PMS/addposition.vue";
+import adduser from "../views/PMS/adduser.vue";
+import personal_data from "../views/PMS/personal_data.vue";
 
 //MDS_exchequer
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
@@ -26,23 +33,95 @@ import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload
 Vue.use(VueRouter);
 
 const routes = [{
-        path: "",
+        path: "/home",
         name: "Home",
         component: {
             render(c) {
                 return c("router-view");
-            },
+            }
         },
         meta: { breadCrumb: "หน้าแรก" },
         children: [{
                 path: "",
-                component: Home,
+                component: PMS_Home
             },
-            {
-                path: "/home",
-                component: Home,
+            
+        ]
+    },
+    {
+        path: "/personal_data",
+        name: "personal_data",
+        component: {
+            render(c) {
+                return c("router-view");
+            }
+        },
+        meta: { breadCrumb: "ข้อมูลส่วนตัว" },
+        children: [{
+                path: "",
+                component: personal_data
             },
-        ],
+            
+        ]
+    },
+    {
+        path:'',
+        name:'login',
+        meta:{breadCrumb : "เข้าสู่ระบบ"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: PMS_login
+        },
+    ]
+    }, 
+    {
+        path:'/addposition',
+        name:'addposition',
+        meta:{breadCrumb : "เพิ่มตำแหน่งการเข้าถึง"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: addposition
+        },
+    ]
+    }, 
+    {
+        path:'/permission_manage',
+        name:'permission_manage',
+        meta:{breadCrumb : "จัดการสิทธิ์การใช้งาน"},
+        component:{
+            render(c){
+                return c("router-view");
+            }
+        },
+        children: [{
+            path: "",
+            component: permission_manage
+        },
+        {
+            path: "adduser",
+            meta:{breadCrumb : "เพิ่มผู้ใช้งาน"},
+            component:{
+                render(c){
+                    return c("router-view");
+                }
+            },
+            children:[{
+                path: "",
+                component: adduser
+            },]
+        },
+
+    ]
     },
 
 
