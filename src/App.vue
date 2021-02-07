@@ -374,6 +374,9 @@
         </a-layout-content>
       </a-layout>
     </a-layout>
+
+
+    <!-- Bug -->
     <a-layout
       :style="{
         height: '100%',
@@ -386,6 +389,7 @@
         </div>
       </a-layout-content>
     </a-layout>
+  <!-- End [Bug] -->
   </div>
 </template>
 <script>

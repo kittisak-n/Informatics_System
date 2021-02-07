@@ -14,7 +14,8 @@
             <a-col :span="8" style="text-align: end">
               <span style="font-size: 18px">ปีการศึกษา </span>
               <a-select
-                :default-value="2564"
+     
+                v-model="year"
                 style="width: 100px; font-size: 15px"
               >
                 <a-select-option :value="2564"> 2564 </a-select-option>
@@ -22,18 +23,23 @@
               </a-select>
             </a-col>
 
+
             <a-col :span="8" style="text-align: start">
               <span style="font-size: 18px"> ภาคเรียนที่ </span>
 
               <a-select
-                :default-value="1"
+              
+                v-model="semester"
                 style="width: 100px; font-size: 15px"
               >
                 <a-select-option :value="1"> 1 </a-select-option>
                 <a-select-option :value="2"> 2 </a-select-option>
               </a-select>
+
+               
             </a-col>
           </a-row>
+           
           <br />
           <a-row :gutter="[8, 8]">
             <a-col :span="24">
@@ -44,46 +50,71 @@
                 bordered
                 size="small"
               >
-                <span slot="key" slot-scope="text, record, index">
-                  <div :style="{ textAlign: 'center' }">
+       
+
+                <span  slot="key" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }" >
                     {{ index + 1 }}
                   </div>
-                </span>
-                <span slot="name" slot-scope="text">
-                  <div :style="{ textAlign: 'start' }">
-                    {{ text }}
+                  <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
                   </div>
                 </span>
-                <span slot="position" slot-scope="text">
-                  <div :style="{ textAlign: 'start' }">
+         
+
+                <span slot="name" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year"  :style="{ textAlign: 'start' }">
                     {{ text }}
                   </div>
-                </span>
-                <span slot="TeachingJobs" slot-scope="text">
-                  <div :style="{ textAlign: 'center' }">
-                    {{ text }}
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
                   </div>
                 </span>
-                <span slot="LMW" slot-scope="text">
-                  <div :style="{ textAlign: 'center' }">
+                <span  slot="position" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'start' }">
                     {{ text }}
+                  </div>
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
+                  </div>
+                </span>
+                <span  slot="TeachingJobs" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
+                    {{ text }}
+                  </div>
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
+                  </div>
+                </span>
+                <span  slot="LMW" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
+                    {{ text }}
+                  </div>
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
                   </div>
                 </span>
 
-                <span slot="LMWE" slot-scope="text">
-                  <div :style="{ textAlign: 'center' }">
+                <span  slot="LMWE" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
                     {{ text }}
+                  </div>
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
                   </div>
                 </span>
 
-                <span slot="PW" slot-scope="text">
-                  <div :style="{ textAlign: 'center' }">
+                <span  slot="PW" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
                     {{ text }}
+                  </div>
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
                   </div>
                 </span>
 
-                <span slot="action" slot-scope="">
-                  <div :style="{ textAlign: 'center' }">
+                <span  slot="action" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
                     <a-tooltip placement="top">
                       <template slot="title">
                         <span>แสดงรายละเอียด</span>
@@ -115,7 +146,15 @@
                       />
                     </a-tooltip>
                   </div>
+                      <div v-else :style="{ textAlign: 'center' }">
+                     ไม่มีข้อมูล
+                  </div>
                 </span>
+  
+
+
+        
+
               </a-table>
             </a-col>
           </a-row>
@@ -158,7 +197,7 @@ import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import cus
 const data = [
   {
     key: "1",
-    term: 2564,
+    year: 2564,
     name: "อ.ณัฐพร  ภักดี",
     position: "อาจารย์ประจำ",
     TeachingJobs: 32,
@@ -178,6 +217,9 @@ export default {
   data() {
     return {
       data,
+      
+      semester:1,
+      year:   new Date().getFullYear()+543, // 2020,
       searchText: "",
       searchInput: null,
       searchedColumn: "",
