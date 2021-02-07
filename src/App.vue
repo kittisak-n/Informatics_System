@@ -41,6 +41,7 @@
             <a-icon type="home" />
             <span>หน้าแรก</span>
           </a-menu-item>
+
           <a-sub-menu key="cal">
             <span slot="title">
               <a-icon type="calculator" />
@@ -136,13 +137,19 @@
             <span>หน้าแรก</span>
           </a-menu-item>
           <a-menu-item key="user">
-            <a-icon type="user" />
-            <span>ข้อมูลส่วนตัว</span>
+            <router-link :to="{ path: '/personal_data' }">
+              <a-icon type="user" />
+              <span>ข้อมูลส่วนตัว</span>
+            </router-link>
           </a-menu-item>
+
           <a-menu-item key="management">
-            <a-icon type="api" theme="filled" />
-            <span>จัดการสิทธิ์เข้าใช้งาน</span>
+            <router-link :to="{ path: '/permission_manage' }">
+              <a-icon type="api" theme="filled" />
+              <span>จัดการสิทธิ์เข้าใช้งาน</span>
+            </router-link>
           </a-menu-item>
+
           <a-sub-menu key="CWS">
             <span slot="title">
               <a-icon type="calculator" theme="filled" />

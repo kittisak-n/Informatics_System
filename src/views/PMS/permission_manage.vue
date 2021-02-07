@@ -26,7 +26,7 @@
       <a-col :span="24">
         <a-card size="small">
           <a-row :gutter="[8, 8]">
-            <a-col :span="20" style="margin: 0.2em 0px;">
+            <a-col :span="14" style="margin: 0.2em 0px;">
               <a-card-meta title="รายการผู้มีสิทธิ์การใช้งานระบบ">
                 <a-icon
                   slot="avatar"
@@ -37,7 +37,16 @@
                 />
               </a-card-meta>
             </a-col>
-            <a-col :span="4" :style="{ textAlign: 'right' }">
+
+            <a-col :span="5" :style="{ textAlign: 'end' }">
+              <router-link :to="{ path: '/addposition' }">
+                <a-button type="primary" icon="plus">
+                  เพิ่มตำแหน่งการเข้าถึง
+                </a-button>
+              </router-link>
+            </a-col>
+
+            <a-col :span="5" :style="{ textAlign: 'start' }">
               <router-link :to="{ path: '/permission_manage/adduser' }">
                 <a-button type="primary" icon="plus">
                   เพิ่มผู้มีสิทธิ์เข้าใช้ระบบ
@@ -172,6 +181,9 @@
           :pagination="false"
           bordered
         >
+          <p slot="expandedRowRender" slot-scope="record" style="margin: 0">
+            {{ record.description }}
+          </p>
           <template slot="permission" slot-scope="text, record, index">
             <div v-if="index < data_modal_manage.length - 1">
               {{ text }}
@@ -186,19 +198,19 @@
                 @change="handleChange"
               >
                 <a-select-opt-group>
-                  <span slot="label"><a-icon type="user" />Manager</span>
-                  <a-select-option value="jack">
-                    Jack
-                  </a-select-option>
+                  <span slot="label"><a-icon type="user" />ตำแหน่ง</span>
                   <a-select-option value="lucy">
-                    Lucy
+                    อาจารย์ที่ปรึกษา
+                  </a-select-option>
+                  <a-select-option value="jack">
+                    เจ้าหน้าเบิกจ่ายวัสดุ
                   </a-select-option>
                 </a-select-opt-group>
-                <a-select-opt-group label="Engineer">
+                <!-- <a-select-opt-group label="Engineer">
                   <a-select-option value="Yiminghe">
                     yiminghe
                   </a-select-option>
-                </a-select-opt-group>
+                </a-select-opt-group> -->
               </a-select>
             </div>
           </template>
@@ -232,6 +244,72 @@
         @ok="handleOk"
         :footer="null"
       >
+        <a-row :gutter="[8, 8]">
+          <a-col :span="24">
+            <a-card>
+              <a-row :gutter="[8, 8]">
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>ชื่อ : </b>
+                    <span>ประไพพรรณ</span>
+                  </div>
+                </a-col>
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>นามสกุล : </b>
+                    <span>สุ่มทรัพย์</span>
+                  </div>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="[8, 8]">
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>ตำแหน่ง : </b>
+                    <span>เจ้าหน้าที่ฝ่ายธุรการ</span>
+                  </div>
+                </a-col>
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>ที่อยู่ : </b>
+                    <span>199/116 หมู่16</span>
+                  </div>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="[8, 8]">
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>ตำบล : </b>
+                    <span>ศรีราชา</span>
+                  </div>
+                </a-col>
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>อำเภอ : </b>
+                    <span>ศรีราชา</span>
+                  </div>
+                </a-col>
+              </a-row>
+
+              <a-row :gutter="[8, 8]">
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>จังหวัด : </b>
+                    <span>ชลบุรี</span>
+                  </div>
+                </a-col>
+                <a-col :span="12">
+                  <div style="text-align:center">
+                    <b>รหัสไปรษณีย์ : </b>
+                    <span>20000</span>
+                  </div>
+                </a-col>
+              </a-row>
+            </a-card>
+          </a-col>
+        </a-row>
+
         <a-row :gutter="[8, 8]">
           <a-col :span="12">
             <a-card>
@@ -272,6 +350,7 @@
             </a-card>
           </a-col>
         </a-row>
+
         <a-row :gutter="[8, 8]">
           <a-col>
             <a-table
@@ -281,70 +360,6 @@
               size="small"
             >
             </a-table>
-          </a-col>
-        </a-row>
-        <br />
-        <a-row :gutter="[8, 8]">
-          <a-col :span="24">
-            <a-row :gutter="[8, 8]">
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>ชื่อ : </span>
-                  <span>ประไพพรรณ</span>
-                </div>
-              </a-col>
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>นามสกุล : </span>
-                  <span>สุ่มทรัพย์</span>
-                </div>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[8, 8]">
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>ตำแหน่ง : </span>
-                  <span>เจ้าหน้าที่ฝ่ายธุรการ</span>
-                </div>
-              </a-col>
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>ที่อยู่ : </span>
-                  <span>199/116 หมู่16</span>
-                </div>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[8, 8]">
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>ตำบล : </span>
-                  <span>ศรีราชา</span>
-                </div>
-              </a-col>
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>อำเภอ : </span>
-                  <span>ศรีราชา</span>
-                </div>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[8, 8]">
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>จังหวัด : </span>
-                  <span>ชลบุรี</span>
-                </div>
-              </a-col>
-              <a-col :span="12">
-                <div style="text-align:center">
-                  <span>รหัสไปรษณีย์ : </span>
-                  <span>20000</span>
-                </div>
-              </a-col>
-            </a-row>
           </a-col>
         </a-row>
       </a-modal>
@@ -443,14 +458,17 @@ const data = [
 const data_modal_manage = [
   {
     key: "1",
+    description: "ระบบคำนวณภาระงาน",
     permission: "เจ้าหน้าที่ฝ่ายธุรการ",
   },
   {
     key: "2",
+    description: "ระบบเบิกจ่ายวัสดุ",
     permission: "บุคลากรทั่วไป",
   },
   {
     key: "3",
+    description: "ระบบคำนวณภาระงาน",
     permission: "บุคลากรทั่วไป",
   },
 ];
