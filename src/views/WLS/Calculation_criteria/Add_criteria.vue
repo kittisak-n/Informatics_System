@@ -64,6 +64,7 @@
               <span>วันที่เริ่มใช้งาน: </span>
 
               <a-date-picker
+               text-format="String"
                 style="width: 50%"
                 v-model="criteria_start_date"
                 @change="onChangedate"
