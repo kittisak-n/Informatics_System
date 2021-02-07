@@ -2,7 +2,10 @@
   <div id="SummaryWorkload">
     <a-row :gutter="[8, 8]">
       <a-col :span="24">
-        <a-card size="small" title="ตารางแสดงรายละเอียดการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ">
+        <a-card
+          size="small"
+          title="ตารางแสดงรายละเอียดการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ"
+        >
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="24" style="text-align: center">
               <h1>
@@ -84,7 +87,7 @@
 
                 <span slot="action" slot-scope="">
                   <div :style="{ textAlign: 'center' }">
-                    <a-tooltip placement="top">
+                    <!-- <a-tooltip placement="top">
                       <template slot="title">
                         <span>แสดงรายละเอียด</span>
                       </template>
@@ -112,7 +115,17 @@
                         type="success"
                         icon="file-excel"
                         :style="{ marginRight: '3%' }"
-                      />
+                      /> -->
+                    <!-- </a-tooltip> -->
+                    <a-tooltip placement="top">
+                      <template slot="title">
+                        <span>คำนวณ</span>
+                      </template>
+                      <router-link to="/calculator/calculation_workload">
+                        <a-button type="primary" :style="{ marginRight: '3%' }"
+                          >คำนวณ</a-button
+                        ></router-link
+                      >
                     </a-tooltip>
                   </div>
                 </span>
@@ -154,41 +167,38 @@
 import pdfMake from "pdfmake";
 import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fonts
 
-
 const data = [
   {
     key: "1",
-    name: "อ.ณัฐพร  ภักดี",
+    name: "อ.พีระศักดิ์ เพียรประสิทธิ์",
     position: "อาจารย์ประจำ",
-    TeachingJobs: 32,
-    LMW: 3,
-    LMWE: 4.0,
-    PW: 3.5,
+    TeachingJobs: 0,
+    LMW: 0,
+    LMWE: 0,
+    PW: 0,
   },
 
   {
     key: "2",
     name: "อ.ณัฐพร  ภักดี",
     position: "อาจารย์ประจำ",
-    TeachingJobs: 32,
-    LMW: 3,
-    LMWE: 4.0,
-    PW: 3.5,
+    TeachingJobs: 0,
+    LMW: 0,
+    LMWE: 0,
+    PW: 0,
   },
   {
     key: "3",
     name: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
     position: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
-    TeachingJobs: 32,
-    LMW: 3,
-    LMWE: 4.0,
-    PW: 3.5,
+    TeachingJobs: 0,
+    LMW: 0,
+    LMWE: 0,
+    PW: 0,
   },
 ];
 
 export default {
-
-
   name: "SummaryWorkload",
   components: {},
   data() {
@@ -261,8 +271,7 @@ export default {
     };
   },
   methods: {
-
-      exportPDF() {
+    exportPDF() {
       pdfMake.vfs = pdfFonts.pdfMake.vfs; // 2. set vfs pdf font
       pdfMake.fonts = {
         THSarabunPsk: {
@@ -284,5 +293,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
