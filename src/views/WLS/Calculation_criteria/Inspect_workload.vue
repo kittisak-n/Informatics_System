@@ -147,7 +147,7 @@
                     </a-tooltip>
                   </div>
                       <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
+                     ไม่มีข้อมูลs
                   </div>
                 </span>
   
