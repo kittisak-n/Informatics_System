@@ -108,17 +108,17 @@
                   </div>
                 </span>
 
-                <span slot="action" slot-scope="">
-                  <div :style="{ textAlign: 'center' }">
-                    <!-- <a-tooltip placement="top">
+                <span  slot="action" slot-scope="text, record, index">
+                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
+                 
                       <template slot="title">
                         <span>แสดงรายละเอียด</span>
                       </template>
 
                       <a-button type="primary" icon="search"> </a-button>
-                    </a-tooltip>
+          
 
-                    <a-tooltip placement="top">
+             
                       <template slot="title">
                         <span>ส่งออกไฟล์ PDF</span>
                       </template>
@@ -128,9 +128,8 @@
                         :style="{ marginRight: '3%' }"
                         @click="exportPDF()"
                       />
-                    </a-tooltip>
-
-                    <a-tooltip placement="top">
+            
+          
                       <template slot="title">
                         <span>ส่งออกไฟล์ EXCEL</span>
                       </template>
@@ -139,8 +138,8 @@
                         icon="file-excel"
                         :style="{ marginRight: '3%' }"
                       /> -->
-                    <!-- </a-tooltip> -->
-                    <a-tooltip placement="top">
+                  
+          
                       <template slot="title">
                         <span>คำนวณ</span>
                       </template>
@@ -149,7 +148,7 @@
                           >คำนวณ</a-button
                         ></router-link
                       >
-                    </a-tooltip>
+                 
                   </div>
                       <div v-else :style="{ textAlign: 'center' }">
                      ไม่มีข้อมูล
