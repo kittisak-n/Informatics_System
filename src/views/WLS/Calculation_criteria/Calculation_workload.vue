@@ -1,8 +1,8 @@
 <template>
-  <div id="SummaryWorkload">
+  <div id="">
     <a-row :gutter="[8, 8]">
       <a-col :span="24">
-        <a-card size="small" title="ตารางแสดงรายการเบิกจ่ายวัสดุ">
+        <a-card size="small" title="">
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="24" style="text-align: center">
               <h1>
@@ -20,7 +20,6 @@
                 <a-select-option :value="2564"> 2564 </a-select-option>
               </a-select>
             </a-col>
-
             <a-col :span="8" style="text-align: start">
               <span style="font-size: 18px"> ภาคเรียนที่ </span>
               <a-select
@@ -32,18 +31,79 @@
               </a-select>
             </a-col>
           </a-row>
-          <br />
+          <p>อาจารย์ : พีระศักดิ์ เพียรประสิทธิ์</p>
+
           <a-row :gutter="[8, 8]">
             <a-col :span="24">
-              <a-table :columns="columns" :data-source="data" bordered>
-                  
-
-                <!-- <a-table
+              <a-table
+                size="small"
+                :columns="columns"
+                :data-source="data"
+                bordered
+                :pagination="false"
+              >
+                <a-table
+                  size="small"
                   slot="expandedRowRender"
-                  :columns="columns2"
-                  :data-source="data">
-                </a-table> -->
+                  slot-scope="text, record, index"
+                  :columns="sub_columns"
+                  :data-source="data[index].sub_data"
+                  :pagination="false"
+                  
+                >
+                  <span slot="number_group" slot-scope="text">
+                    <div
+                      :style="{
+                        textAlign: 'center',
+                        margin: 'auto',
+                      }"
+                    >
+                      {{ text }}
+                    </div>
+                  </span>
+                  <span slot="count_group_lecture">
+                    <div
+                      :style="{
+                        textAlign: 'center',
+                        margin: 'auto',
+                      }"
+                    >
+                      <a-input style="width:100%" />
+                    </div>
+                  </span>
+                  <span slot="count_group_lab">
+                    <div
+                      :style="{
+                        textAlign: 'center',
+                        margin: 'auto',
+                      }"
+                    >
+                      <a-input style="width:100%" />
+                    </div>
+                  </span>
+                  <span slot="proportion_workload">
+                    <div
+                      :style="{
+                        textAlign: 'center',
+                        margin: 'auto',
+                      }"
+                    >
+                      <a-input style="width:100%" />
+                    </div>
+                  </span>
+                </a-table>
               </a-table>
+
+              <div style="margin-top:50px">
+                <router-link to="/calculator/calculation_subworkload">
+                <a-button type="primary" style="margin-left:720px">
+                  ถัดไป
+                </a-button></router-link>
+
+                 <router-link to="/calculator/SummaryWorkload">
+                <a-button style="margin-left:20px">ย้อนกลับ</a-button>
+                </router-link>
+              </div>
             </a-col>
           </a-row>
         </a-card>
@@ -53,109 +113,171 @@
 </template>
 
 <script>
-const renderContent = (value, row, index) => {
-  var obj = {
+const renderTitleContent = (value, row) => {
+  const obj = {
     children: value,
     attrs: {},
   };
-  if (index === 0) {
-    obj.attrs.colSpan = 1;
+  if (row.species) {
+    obj.attrs.colSpan = 8;
   }
   return obj;
 };
-
+const renderContent = (value, row) => {
+  const obj = {
+    children: value,
+    attrs: {},
+  };
+  if (row.species) {
+    obj.attrs.colSpan = 0;
+  }
+  return obj;
+};
 var data = [
   {
-    groupData: "informatics",
-    type: "lec+lab",
+    code_major: "รายวิชาของคณะ(ระดับปริญญาตรี)",
+    species: true,
+  },
+  {
     key: "1",
-    code_major: "88814259",
+    code_major: "88841759",
     credit: "1(0-3-6)",
-    time: "Lab WE17:00-19:50 IF-3C04",
-    group: "3+4",
-
-    count_credit_lecture: 0,
-    count_credit_lab: 1,
-
-    count_student: "",
-
-    count_group_lecture: 0,
-    count_group_lab: 1,
-
-    std_workload: 1.25,
-    hour_lecture_workload: 0,
-    hour_lab_workload: 0.02,
-
-    sum_workload: 0,
-    proportion_workload: 15,
-    sum_proportion: 0,
+    course_name: "Software Engineering Seminar",
+    group: "1,2,3,4,5",
+    count_credit_lecture: 1,
+    count_credit_lab: 0,
+    count_student: 50,
+    sub_data: [
+      {
+        time: "Lec WE 17:00-19:50 IF-11M280",
+        number_group: "1",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab MO 9:00-12:00 IF-3C04",
+        number_group: "2",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab WE17:00-19:50 IF-3C04",
+        number_group: "3",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab MO 9:00-12:00 IF-3C04",
+        number_group: "4",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab WE17:00-19:50 IF-3C04",
+        number_group: "5",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+    ],
   },
-
   {
-    groupData: "informatics",
-    type: "lec",
     key: "2",
-    code_major: "88832359",
-    credit: "3(3-0-6)",
-    time: "Lecture MO17:00-19:50 IF-3C04",
-    group: "1+2+3",
-
-    count_credit_lecture: 3,
+    code_major: "88510059",
+    credit: "2(1-2-3)",
+    course_name: "Logical Thinking and Problem Solving for Innovation",
+    group: "1,2",
+    count_credit_lecture: 1,
     count_credit_lab: 0,
-
-    count_student: "",
-
-    count_group_lecture: 1,
-    count_group_lab: 0,
-
-    std_workload: 3,
-    hour_lecture_workload: 0.48,
-    hour_lab_workload: 0,
-
-    sum_workload: 0,
-    proportion_workload: 15,
-    sum_proportion: 0,
+    count_student: 92,
+    sub_data: [
+      {
+        time: "Lec WE 17:00-19:50 IF-11M280",
+        number_group: "1",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab MO 9:00-12:00 IF-3C04",
+        number_group: "2",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab WE17:00-19:50 IF-3C04",
+        number_group: "3",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab MO 9:00-12:00 IF-3C04",
+        number_group: "4",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab WE17:00-19:50 IF-3C04",
+        number_group: "5",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+    ],
   },
-
   {
-    groupData: "informatics",
-    type: "lec",
     key: "3",
-    code_major: "88823459",
-    credit: "3(3-0-6)",
-    time: "Lab WE17:00-19:50 IF-3C04",
-    group: "3+4",
-
-    count_credit_lecture: 3,
+    code_major: "88510159",
+    credit: "3(2-2-5)",
+    course_name: "Moving Forward in a Digital Society with ICT",
+    group: "24,25",
+    count_credit_lecture: 1,
     count_credit_lab: 0,
-
-    count_student: "",
-
-    count_group_lecture: 1,
-    count_group_lab: 0,
-
-    std_workload: 6,
-    hour_lecture_workload: 0,
-    hour_lab_workload: 0,
-
-    sum_workload: 0,
-    proportion_workload: 15,
-    sum_proportion: 0,
-  },
-];
-
-var data2 = [
-  {
-    groupType: "รายวิชาของคณะ(ระดับปริญญาตรี)",
-  },
-  // {
-  //   groupType: "Lecture + lab 3 ชั่วโมง",
-  // },
-  // {
-  //   groupType: "Lecture อย่างเดียว",
-  // },
-  {
-    groupType: "รายวิชาศึกษาทั่วไป",
+    count_student: 53,
+    sub_data: [
+      {
+        time: "Lec WE 17:00-19:50 IF-11M280",
+        number_group: "1",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab MO 9:00-12:00 IF-3C04",
+        number_group: "2",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab WE17:00-19:50 IF-3C04",
+        number_group: "3",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab MO 9:00-12:00 IF-3C04",
+        number_group: "4",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+      {
+        time: "Lab WE17:00-19:50 IF-3C04",
+        number_group: "5",
+        count_group_lecture: 0,
+        count_group_lab: 0,
+        proportion_workload: 0,
+      },
+    ],
   },
 ];
 
@@ -163,7 +285,7 @@ const columns = [
   {
     title: "หมวด/รหัสวิชา",
     dataIndex: "code_major",
-    customRender: renderContent,
+    customRender: renderTitleContent,
   }, //หมวด/รหัสวิชา
 
   {
@@ -173,10 +295,10 @@ const columns = [
   }, //หน่วยกิต
 
   {
-    title: "วัน-เวลา",
-    dataIndex: "time",
+    title: "ชื่อรายวิชา",
+    dataIndex: "course_name",
     customRender: renderContent,
-  }, //วัน-เวลา
+  }, //ชื่อรายวิชา
 
   {
     title: "กลุ่ม",
@@ -208,193 +330,87 @@ const columns = [
     title: "จำนวนนิสิตที่ลงทะเบียนในรายวิชา",
     dataIndex: "count_student",
     customRender: renderContent,
+
+    // scopedSlots: { customRender: "count_student" },
   }, //จำนวนนิสิตที่ลงทะเบียนในรายวิชา
 
+  // {
+  //   title: "ภาระงาน",
+  //   children: [
+  //     {
+  //       title: "ภาระงานพื้นฐาน",
+  //       dataIndex: "std_workload",
+  //       key: "std_workload",
+  //
+  //     },
+  //     {
+  //       title: "ภาระงานตรวจสอบ",
+  //       children: [
+  //         {
+  //           title: "ชั่วโมงบรรยาย",
+  //           dataIndex: "hour_lecture_workload",
+  //           key: "hour_lecture_workload",
+  //
+  //         },
+  //         {
+  //           title: "ชั่วโมง lab",
+  //           dataIndex: "hour_lab_workload",
+  //           key: "hour_lab_workload",
+  //
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // }, //ภาระงาน
+  // {
+  //   title: "ภาระงานรวม",
+  //   dataIndex: "sum_workload",
+  //
+  // }, //ภาระงานรวม
+  // {
+  //   title: "ภาระงานรวมที่ได้รับตามสัดส่วนการสอน",
+  //   dataIndex: "sum_proportion",
+  //
+  // }, //ภาระงานรวมที่ได้รับตามสัดส่วนการสอน
+];
+const sub_columns = [
+  {
+    title: "วัน-เวลา",
+    dataIndex: "time",
+    width: 180,
+  }, //วัน-เวลา
+  {
+    title: "กลุ่ม",
+    dataIndex: "number_group",
+    width: "10%",
+    scopedSlots: { customRender: "number_group" },
+  }, //กลุ่มที่
   {
     title: "จำนวนกลุ่มที่สอน",
     children: [
       {
         title: "บรรยาย",
         dataIndex: "count_group_lecture",
-        key: "count_group_lecture",
+        // key: "count_group_lecture",
         width: 90,
-        customRender: renderContent,
+        scopedSlots: { customRender: "count_group_lecture" },
       },
       {
         title: "lab",
         dataIndex: "count_group_lab",
-        key: "count_group_lab",
+        // key: "count_group_lab",
         width: 90,
-        customRender: renderContent,
+        scopedSlots: { customRender: "count_group_lab" },
       },
     ],
   }, //จำนวนกลุ่มที่สอน
-
-  {
-    title: "ภาระงาน",
-    children: [
-      {
-        title: "ภาระงานพื้นฐาน",
-        dataIndex: "std_workload",
-        key: "std_workload",
-        customRender: renderContent,
-      },
-      {
-        title: "ภาระงานตรวจสอบ",
-        children: [
-          {
-            title: "ชั่วโมงบรรยาย",
-            dataIndex: "hour_lecture_workload",
-            key: "hour_lecture_workload",
-            customRender: renderContent,
-          },
-          {
-            title: "ชั่วโมง lab",
-            dataIndex: "hour_lab_workload",
-            key: "hour_lab_workload",
-            customRender: renderContent,
-          },
-        ],
-      },
-    ],
-  }, //ภาระงาน
-
-  {
-    title: "ภาระงานรวม",
-    dataIndex: "sum_workload",
-    customRender: renderContent,
-  }, //ภาระงานรวม
-
   {
     title: "สัดส่วนภาระงานที่สอน(สัปดาห์)",
     dataIndex: "proportion_workload",
-    customRender: renderContent,
+    width: 150,
+    scopedSlots: { customRender: "proportion_workload" },
   }, //สัดส่วนภาระงานที่สอน(สัปดาห์)
-
-  {
-    title: "ภาระงานรวมที่ได้รับตามสัดส่วนการสอน",
-    dataIndex: "sum_proportion",
-    customRender: renderContent,
-  }, //ภาระงานรวมที่ได้รับตามสัดส่วนการสอน
 ];
-const columns2 = [
-  {
-    title: "หมวด/รหัสวิชา",
-    dataIndex: "code_major",
-    colSpan: 0,
-    customRender: renderContent,
-  }, //หมวด/รหัสวิชา
-
-  {
-    title: "หน่วยกิต",
-    dataIndex: "credit",
-    colSpan: 0,
-    customRender: renderContent,
-  }, //หน่วยกิต
-
-  {
-    title: "วัน-เวลา",
-    dataIndex: "time",
-    colSpan: 0,
-    customRender: renderContent,
-  }, //วัน-เวลา
-
-  {
-    title: "กลุ่ม",
-    dataIndex: "group",
-    colSpan: 0,
-    customRender: renderContent,
-  }, //กลุ่ม
-
-  {
-    title: "บรรยาย",
-    dataIndex: "count_credit_lecture",
-    key: "count_credit_lecture",
-    colSpan: 0,
-    width: 90,
-    customRender: renderContent,
-  },
-  {
-    title: "lab",
-    dataIndex: "count_credit_lab",
-    key: "count_credit_lab",
-    colSpan: 0,
-    width: 90,
-    customRender: renderContent,
-  }, //จำนวนหน่วยกิต
-
-  {
-    title: "จำนวนนิสิตที่ลงทะเบียนในรายวิชา",
-    dataIndex: "count_student",
-    colSpan: 0,
-    customRender: renderContent,
-  }, //จำนวนนิสิตที่ลงทะเบียนในรายวิชา
-
-  {
-    title: "บรรยาย",
-    dataIndex: "count_group_lecture",
-    key: "count_group_lecture",
-    colSpan: 0,
-    width: 90,
-    customRender: renderContent,
-  },
-  {
-    title: "lab",
-    dataIndex: "count_group_lab",
-    key: "count_group_lab",
-    colSpan: 0,
-    width: 90,
-    customRender: renderContent,
-  },
-  //จำนวนกลุ่มที่สอน
-
-  {
-    title: "ภาระงานพื้นฐาน",
-    dataIndex: "std_workload",
-    colSpan: 0,
-    key: "std_workload",
-    customRender: renderContent,
-  },
-  {
-    title: "ชั่วโมงบรรยาย",
-    colSpan: 0,
-    dataIndex: "hour_lecture_workload",
-    key: "hour_lecture_workload",
-    customRender: renderContent,
-  },
-  {
-    title: "ชั่วโมง lab",
-    colSpan: 0,
-    dataIndex: "hour_lab_workload",
-    key: "hour_lab_workload",
-    customRender: renderContent,
-  },
-
-  //ภาระงาน
-
-  {
-    title: "ภาระงานรวม",
-    colSpan: 0,
-    dataIndex: "sum_workload",
-    customRender: renderContent,
-  }, //ภาระงานรวม
-
-  {
-    title: "สัดส่วนภาระงานที่สอน(สัปดาห์)",
-    colSpan: 0,
-    dataIndex: "proportion_workload",
-    customRender: renderContent,
-  }, //สัดส่วนภาระงานที่สอน(สัปดาห์)
-
-  {
-    title: "ภาระงานรวมที่ได้รับตามสัดส่วนการสอน",
-    colSpan: 0,
-    dataIndex: "sum_proportion",
-    customRender: renderContent,
-  }, //ภาระงานรวมที่ได้รับตามสัดส่วนการสอน
-];
-
-console.log(data2);
 
 for (let i = 0; i < data.length; i++) {
   if (data[i].type == "lec+lab") {
@@ -423,8 +439,7 @@ export default {
     return {
       data,
       columns,
-      data2,
-      columns2,
+      sub_columns,
     };
   },
 };

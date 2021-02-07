@@ -30,6 +30,8 @@ import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
 import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
+import calculation_subworkload from "../views/WLS/Calculation_criteria/calculation_subworkload.vue";
+import Conclude_workload from "../views/WLS/Calculation_criteria/Conclude_workload.vue";
 Vue.use(VueRouter);
 
 const routes = [{
@@ -239,7 +241,18 @@ const routes = [{
             component: Calculation_workload,
         }, ],
     },
-
+    {
+        path: "Calculation_subworkload",
+        name: "Calculation_subworkload",
+        meta: { breadCrumb: "คำนวณภาระงาน" },
+        component: calculation_subworkload,
+      },
+    {
+        path: "Conclude_workload",
+        name: "Conclude_workload",
+        meta: { breadCrumb: "สรุปรายละเอียดคำนวณภาระงาน" },
+        component: Conclude_workload,
+    },
     {
         path: "/MDS_exchequer",
         name: "MDS_exchequer",
