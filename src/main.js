@@ -7,8 +7,11 @@ import 'ant-design-vue/dist/antd.css';
 import HighchartsVue from "highcharts-vue";
 Vue.config.productionTip = false
 Vue.use(Antd, HighchartsVue);
+
 new Vue({
     router,
     store,
     render: h => h(App)
+
 }).$mount("#app");
+
