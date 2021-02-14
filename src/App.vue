@@ -5,6 +5,7 @@
       :style="{
         height: '100%',
       }"
+      v-if="this.$store.state.status_login"
     >
       <a-drawer
         class="display_mobile"
