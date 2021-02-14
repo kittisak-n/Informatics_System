@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    criteriaId: null,
+    schedule_id: null,
     status_login: false,
   },
   mutations: {},

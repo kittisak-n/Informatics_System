@@ -120,7 +120,7 @@
                    placeholder="เช่น 6"
                 type="number"
                 style="width: 80%"
-                v-model="nmp_minimum"
+                v-model="schedule_general_min"
                 min="1"
               />
             </a-col>
@@ -138,7 +138,7 @@
                 addon-after="หน่วยภาระงานสอน"
                 type="number"
                 style="width: 80%"
-                v-model="nmp_maximum"
+                v-model="schedule_general_max"
                 min="1"
                    placeholder="เช่น 18"
               />
@@ -898,7 +898,7 @@
                   type="number"
                   style="width: 70%"
                   disabled
-                  v-model="nmp_minimum"
+                  v-model="schedule_general_min"
                 />
               </a-col>
 
@@ -915,7 +915,7 @@
                   addon-after="หน่วยภาระงานสอน"
                   type="number"
                   style="width: 70%"
-                  v-model="nmp_maximum"
+                  v-model="schedule_general_max"
                   disabled
                 />
               </a-col>
@@ -1407,8 +1407,8 @@ export default {
       criteria_rate_per_credit: null,
 
       //  กำหนดภาระงานเพื่อการจ่ายค่าตอบแทนสอนเกินของคณาจารย์ประจำที่ไม่ได้ดำรงตำแหน่งบริหาร
-      nmp_minimum: null,
-      nmp_maximum: null,
+      schedule_general_min: null,
+      schedule_general_max: null,
       // วิชาในหลักสูตร
       criteria_Internal: {
         lab: {
@@ -1501,10 +1501,10 @@ export default {
           this.criteria_start_date == "" ||
           this.criteria_rate_per_credit == null ||
           this.criteria_rate_per_credit == "" ||
-          this.nmp_minimum == null ||
-          this.nmp_minimum == "" ||
-          this.nmp_maximum == null ||
-          this.nmp_maximum == ""
+          this.schedule_general_min == null ||
+          this.schedule_general_min == "" ||
+          this.schedule_general_max == null ||
+          this.schedule_general_max == ""
         ) {
           console.log("กรุณากรอกข้อความ");
           check = false;
@@ -1669,11 +1669,11 @@ export default {
           "criteria_rate_per_credit : " +
           this.criteria_rate_per_credit +
           "\n" +
-          "nmp_minimum : " +
-          this.nmp_minimum +
+          "schedule_general_min : " +
+          this.schedule_general_min +
           "\n" +
-          "nmp_maximum : " +
-          this.nmp_maximum +
+          "schedule_general_max : " +
+          this.schedule_general_max +
           "\n"
       );
 

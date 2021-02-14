@@ -48,30 +48,30 @@
               style="text-align: end"
             >
               <a-table
-                :columns="columns_calculation_criteria"
-                :data-source="calculation_criteria"
+                :columns="columns_schedule"
+                :data-source="schedule"
                 :pagination="false"
                 size="small"
                 bordered
                 
               >
-                <span  slot="key" slot-scope="text, record, index">
+                <span  slot="schedule_id" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     {{ index + 1 }}
                   </div>
                 </span>
-                <span slot="cc_name" slot-scope="text">
+                <span slot="schedule_name" slot-scope="text">
                   <div :style="{ textAlign: 'left' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="cc_start_date" slot-scope="text">
+                <span slot="schedule_start_date" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
 
-                <span slot="cc_status" slot-scope="text">
+                <span slot="schedule_status" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     <span v-if="text === 1">
                       <a-tag color="green"> กำลังใช้งาน </a-tag></span
@@ -81,13 +81,13 @@
                     </span>
                   </div>
                 </span>
-                <span slot="action">
+                <span slot="action" slot-scope="record,index">
                   <div :style="{ textAlign: 'center' }">
                     <a-tooltip placement="top">
                       <template slot="title">
                         <span>ดูรายละเอียด</span>
                       </template>
-                      <a-button type="warning" icon="search" @click="go_to_detail()"   >
+                      <a-button type="warning" icon="search" @click="go_to_detail(index)"   >
                       </a-button>
                     </a-tooltip>
                   </div>
@@ -107,41 +107,41 @@ export default {
     return {
 
       
-      columns_calculation_criteria: [
+      columns_schedule: [
         {
           title: "ลำดับ",
-          dataIndex: "key",
-          key: "key",
+          dataIndex: "schedule_id",
+          key: "schedule_id",
           width: "3%",
             scopedSlots: {
-            customRender: "key",
+            customRender: "schedule_id",
           },
         },
         {
           title: "ชื่อหลักเกณฑ์การกำหนดภาระงาน",
-          dataIndex: "cc_name",
-          key: "cc_name",
+          dataIndex: "schedule_name",
+          key: "schedule_name",
           width: "15%",
           scopedSlots: {
-            customRender: "cc_name",
+            customRender: "schedule_name",
           },
         },
         {
           title: "วันที่เริ่มใช้งาน",
-          dataIndex: "cc_start_date",
-          key: "cc_start_date",
+          dataIndex: "schedule_start_date",
+          key: "schedule_start_date",
           width: "5%",
           scopedSlots: {
-            customRender: "cc_start_date",
+            customRender: "schedule_start_date",
           },
         },
         {
           title: "สถานะการใช้งาน",
-          dataIndex: "cc_status",
-          key: "cc_status",
+          dataIndex: "schedule_status",
+          key: "schedule_status",
           width: "5%",
           scopedSlots: {
-            customRender: "cc_status",
+            customRender: "schedule_status",
           },
         },
         {
@@ -154,19 +154,29 @@ export default {
           },
         },
       ],
-      calculation_criteria: [
-        {
-          key: 0,
-          cc_name: "กำหนดการภาระงาน คณะวิทยาการสารสนเทศ",
-          cc_start_date: "1 ธันวาคม 2563",
-          cc_status: 1,
-        },
-        {
-          key: 1,
-          cc_name: "กำหนดการภาระงาน คณะวิทยาการสารสนเทศ / ภาคเรียนที่ 1",
-          cc_start_date: "1 มกราคม 2562",
-          cc_status: 0,
-        },
+      schedule: [
+       {
+                schedule_id: 1,
+                schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์",
+                schedule_start_date: "2021-02-12T17:00:00.000Z",
+                schedule_per_credit: "400",
+                schedule_general_min: 1,
+                schedule_general_max: 18,
+                schedule_status: 0,
+                schedule_create_by: 666,
+                schedule_create_date: "2021-02-12T17:00:00.000Z"
+            },
+            {
+                schedule_id: 2,
+                schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์ ภายนอก",
+                schedule_start_date: "2021-02-19T17:00:00.000Z",
+                schedule_per_credit: "400",
+                schedule_general_min: 6,
+                schedule_general_max: 18,
+                schedule_status: 1,
+                schedule_create_by: 666,
+                schedule_create_date: "2021-02-13T17:00:00.000Z"
+            }
       ],
     };
   },
@@ -174,11 +184,19 @@ export default {
     detail(index) {
       console.log("in methods detail : " + index);
     },
-    go_to_detail() {
-      this.$store.state.criteriaId = 0;
-       this.$router.push("Calculation_criteria/Detail_criteria");
+    go_to_detail(index) {
+      
+   console.log(index)
+       this.$store.state.schedule_id = index.schedule_id;
+      this.$router.push("Calculation_criteria/Detail_criteria");
 
     },
+    get_all_schedule(){
+
+    },
+  },
+  mounted() {
+    this.get_all_schedule();
   },
 };
 </script>
