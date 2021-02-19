@@ -16,10 +16,7 @@
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="8" style="text-align: end">
               <span style="font-size: 18px">ปีการศึกษา </span>
-              <a-select
-               v-model="year"
-                style="width: 100px; font-size: 15px"
-              >
+              <a-select v-model="year" style="width: 100px; font-size: 15px">
                 <a-select-option :value="2564"> 2564 </a-select-option>
                 <a-select-option :value="2563"> 2563 </a-select-option>
               </a-select>
@@ -29,7 +26,7 @@
               <span style="font-size: 18px"> ภาคเรียนที่ </span>
 
               <a-select
-                     v-model="semester"
+                v-model="semester"
                 style="width: 100px; font-size: 15px"
               >
                 <a-select-option :value="1"> 1 </a-select-option>
@@ -47,112 +44,114 @@
                 bordered
                 size="small"
               >
-                     <span  slot="key" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }" >
+                <span slot="key" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'center' }"
+                  >
                     {{ index + 1 }}
                   </div>
-                  <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
-         
 
                 <span slot="name" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year"  :style="{ textAlign: 'start' }">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'start' }"
+                  >
                     {{ text }}
                   </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
-                <span  slot="position" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'start' }">
+                <span slot="position" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'start' }"
+                  >
                     {{ text }}
                   </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
-                <span  slot="TeachingJobs" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
+                <span slot="TeachingJobs" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'center' }"
+                  >
                     {{ text }}
                   </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
-                <span  slot="LMW" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
+                <span slot="LMW" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'center' }"
+                  >
                     {{ text }}
                   </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
-                </span>
-
-                <span  slot="LMWE" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
-                    {{ text }}
-                  </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
 
-                <span  slot="PW" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
+                <span slot="LMWE" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'center' }"
+                  >
                     {{ text }}
                   </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
-                  </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
 
-                <span  slot="action" slot-scope="text, record, index">
-                  <div v-if="year == data[index].year" :style="{ textAlign: 'center' }">
-                 
-                      <template slot="title">
-                        <span>แสดงรายละเอียด</span>
-                      </template>
-
-                      <a-button type="primary" icon="search"> </a-button>
-          
-
-             
-                      <template slot="title">
-                        <span>ส่งออกไฟล์ PDF</span>
-                      </template>
-                      <a-button
-                        type="danger"
-                        icon="file-pdf"
-                        :style="{ marginRight: '3%' }"
-                        @click="exportPDF()"
-                      />
-            
-          
-                      <template slot="title">
-                        <span>ส่งออกไฟล์ EXCEL</span>
-                      </template>
-                      <a-button
-                        type="success"
-                        icon="file-excel"
-                        :style="{ marginRight: '3%' }"
-                      /> -->
-                  
-          
-                      <template slot="title">
-                        <span>คำนวณ</span>
-                      </template>
-                      <router-link to="/calculator/calculation_workload">
-                        <a-button type="primary" :style="{ marginRight: '3%' }"
-                          >คำนวณ</a-button
-                        ></router-link
-                      >
-                 
+                <span slot="PW" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'center' }"
+                  >
+                    {{ text }}
                   </div>
-                      <div v-else :style="{ textAlign: 'center' }">
-                     ไม่มีข้อมูล
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
+                </span>
+
+                <span slot="action" slot-scope="text, record, index">
+                  <div
+                    v-if="year == data[index].year"
+                    :style="{ textAlign: 'center' }"
+                  >
+                    <template slot="title">
+                      <span>แสดงรายละเอียด</span>
+                    </template>
+
+                    <a-button type="primary" icon="search"> </a-button>
+
+                    <template slot="title">
+                      <span>ส่งออกไฟล์ PDF</span>
+                    </template>
+                    <a-button
+                      type="danger"
+                      icon="file-pdf"
+                      :style="{ marginRight: '3%' }"
+                      @click="exportPDF()"
+                    />
+
+                    <template slot="title">
+                      <span>ส่งออกไฟล์ EXCEL</span>
+                    </template>
+                    <a-button
+                      type="success"
+                      icon="file-excel"
+                      :style="{ marginRight: '3%' }"
+                    />
+                    -->
+
+                    <template slot="title">
+                      <span>คำนวณ</span>
+                    </template>
+                    <router-link to="/calculator/calculation_workload">
+                      <a-button type="primary" :style="{ marginRight: '3%' }"
+                        >คำนวณ</a-button
+                      ></router-link
+                    >
                   </div>
+                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
               </a-table>
             </a-col>
@@ -205,7 +204,7 @@ const data = [
   },
   {
     key: "2",
-       year: 2564,
+    year: 2564,
     name: "อ.พีระศักดิ์ เพียรประสิทธิ์",
     position: "อาจารย์ประจำ",
     TeachingJobs: 12,
@@ -215,7 +214,7 @@ const data = [
   },
   {
     key: "3",
-       year: 2563,
+    year: 2563,
     name: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
     position: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
     TeachingJobs: 0,
@@ -230,9 +229,8 @@ export default {
   components: {},
   data() {
     return {
-
-      semester:1,
-      year :new Date().getFullYear()+543, // 2020,
+      semester: 1,
+      year: new Date().getFullYear() + 543, // 2020,
       data,
       searchText: "",
       searchInput: null,
@@ -302,6 +300,7 @@ export default {
   },
   methods: {
     exportPDF() {
+      let text = "60160155 KOMSAN TESANA นาย คมสันต์ เทศนา";
       pdfMake.vfs = pdfFonts.pdfMake.vfs; // 2. set vfs pdf font
       pdfMake.fonts = {
         THSarabunPsk: {
@@ -312,7 +311,18 @@ export default {
         },
       };
       const docDefinition = {
-        content: ["English", "ไทย"],
+        content: ["English", { text, style: "header" }, "ไทย"],
+        styles: {
+          header: {
+            fontSize: 22,
+            bold: true,
+          },
+          anotherStyle: {
+            italics: true,
+            alignment: "right",
+          },
+        },
+
         defaultStyle: {
           font: "THSarabunPsk",
         },
