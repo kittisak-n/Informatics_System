@@ -310,66 +310,19 @@ export default {
         },
       };
       const docDefinition = {
-        canvas: [
-          { type: "line", x1: 190, y1: -80, x2: 510, y2: -80, lineWidth: 2 }, //Up line
-          { type: "line", x1: 290, y1: -35, x2: 510, y2: -35, lineWidth: 2 }, //Bottom line
-          { type: "line", x1: 0, y1: 0, x2: 0, y2: 0, lineWidth: 2 }, //Left line
-          { type: "line", x1: 510, y1: -80, x2: 510, y2: -35, lineWidth: 2 }, //Rigth line
-        ],
+       
 
-        header: { text: "(บ.๑๔)", alignment: "right", pad },
+         header: { text: "(บ.๑๔)", alignment: "right", margin:[0,6,6,0] },
         footer: {
           columns: ["Left part", { text: "Right part", alignment: "right" }],
+          
         },
         content: [
-          { text: "sample", margin: [5, 2, 10, 20] },
-          "This paragraph fills full width, as there are no columns. Next paragraph however consists of three columns",
-          {
-            columns: [
-              {
-                // auto-sized columns have their widths based on their content
-                width: "auto",
-                text: "First column",
-              },
-              {
-                // star-sized columns fill the remaining space
-                // if there's more than one star-column, available width is divided equally
-                width: "*",
-                text: "Second column",
-              },
-              {
-                // fixed width
-                width: 100,
-                text: "Third column",
-              },
-              {
-                // % width
-                width: "20%",
-                text: "Fourth column",
-              },
-            ],
-            // optional space between columns
-            columnGap: 10,
-          },
-          "This paragraph goes below all columns and has full width",
-          {
-            layout: "noBorders", // optional
-            table: {
-              // headers are automatically repeated if the table spans over multiple pages
-              // you can declare how many rows should be treated as headers
-              headerRows: 1,
-              widths: ["*", "auto", 100, "*"],
-
-              body: [
-                ["First", "Second", "Third", "The last one"],
-                ["Value 1", "Value 2", "Value 3", "Value 4"],
-                [{ text: "Bold value", bold: true }, "Val 2", "Val 3", "Val 4"],
-              ],
-            },
-          },
+        
         ],
 
         styles: {
+         
           header: {
             fontSize: 22,
             bold: true,
@@ -383,6 +336,7 @@ export default {
         defaultStyle: {
           font: "THSarabunPsk",
         },
+        
       };
       pdfMake.createPdf(docDefinition).open({}, window.open());
     },
