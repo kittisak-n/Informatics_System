@@ -310,19 +310,187 @@ export default {
         },
       };
       const docDefinition = {
-       
-
-         header: { text: "(บ.๑๔)", alignment: "right", margin:[0,6,6,0] },
+        header: {
+          text: "(บ.๑๔)",
+          style: "tableHeader",
+          alignment: "right",
+          margin: [0, 6, 10, 0],
+        },
         footer: {
-          columns: ["Left part", { text: "Right part", alignment: "right" }],
-          
+          columns: [
+            {
+              text: "หมายเหตุ",
+              decoration: "underline",
+              width: 200,
+              margin: [150, 0, 0, 0],
+            },
+            {
+              text:
+                "การใช้ใบสำคัญรับเงินเป็นไปตามระเบียบมหาวิทยาลัยบูรพาว่าด้วยการจ่ายเงินและวิธีการจ่ายเงิน",
+              alignment: "left",
+              width: 300,
+            },
+          ],
         },
         content: [
-        
+          {
+            table: {
+              // headers are automatically repeated if the table spans over multiple pages
+              // you can declare how many rows should be treated as headers
+              // headerRows: 1,
+              // widths: [505],
+              heights: [
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                250,
+                20,
+                150,
+              ],
+              widths: [355, 80, 50],
+              headerRows: 1,
+
+              body: [
+                [
+                  {
+                    border: [true, true, true, false],
+                    text: "รูป",
+                    style: "images",
+                    colSpan: 3,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    border: [true, false, true, false],
+                    text: "ใบสำคัญรับเงิน",
+                    style: "tableHeader",
+                    colSpan: 3,
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    border: [true, false, true, false],
+                    margin: [5, 5, 5, 15],
+                    text:
+                      "วันที่ ............................................................",
+                    colSpan: 3,
+                    alignment: "right",
+                  },
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    border: [true, false, true, false],
+                     margin: [20,5,5, 0],
+                    text:
+                      "ข้าพเจ้าชื่อ  นายพีระศักดิ์ เพียรประสิทธิ์",
+                    colSpan: 3,
+                    alignment: "left",
+                  },
+                  {},
+                  {},
+                ],
+                 [
+                  {
+                    border: [true, false, true, false],
+                     margin: [0,0,0,5],
+                    text:
+                      "บ้านเลขที่ 40 หมู่ 1 ตำบลสำนักบก อำเภอเมือง จังหวัดชลบุรี",
+                    colSpan: 3,
+                    alignment: "left",
+                  },
+                  {},
+                  {},
+                ],
+                 [
+                  {
+                    border: [true, false, true, false],
+                     margin: [0,0,0,5],
+                    text:
+                      "ได้รับเงินจากมหาวิทยาลัยบูรพา ดังรายการต่อไปนี้",
+                    colSpan: 3,
+                    alignment: "left",
+                  },
+                  {},
+                  {},
+                ],
+
+                [
+                  {
+                    text: "รายการ",
+                    style: "tableHeader",
+                    rowSpan: 2,
+                    alignment: "center",
+                  },
+                  {
+                    text: "จำนวนเงิน",
+                    colSpan: 2,
+                    style: "tableHeader",
+                    alignment: "center",
+                  },
+                  {},
+                ],
+                [
+                  {},
+                  { text: "บาท", style: "tableHeader", alignment: "center" },
+                  { text: "สตางค์", style: "tableHeader", alignment: "center" },
+                ],
+                [
+                  {
+                    text:
+                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา 2563\nงวด 1 (กรกฏาคม 2563)",
+                  },
+                  { text: "5,250", alignment: "center" },
+                  { text: "-", alignment: "center" },
+                ],
+                [
+                  { text: "รวมเงิน", alignment: "right", style: "tableHeader" },
+                  { text: "5,250", alignment: "center", style: "tableHeader" },
+                  { text: "-", alignment: "center", style: "tableHeader" },
+                ],
+                [
+                  {
+                    alignment: "center",
+                    margin: [15, 15],
+                    colSpan: 3,
+                    text:
+                      "จำนวนเงิน (ตัวอักษร)   .....................................................................................\n\n\n(ลงชื่อ) ...................................................................(ผู้รับเงิน)\n\n\n  (ลงชื่อ) ...................................................................(ผู้จ่ายเงิน)",
+                  },
+                  {},
+                  {},
+                ],
+              ],
+            },
+          },
         ],
 
         styles: {
-         
+          images: {
+            margin: [25, 30, 25, 25],
+          },
+          tab: {
+            margin: [15, 0, 0, 0],
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: "black",
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15],
+          },
           header: {
             fontSize: 22,
             bold: true,
@@ -336,7 +504,6 @@ export default {
         defaultStyle: {
           font: "THSarabunPsk",
         },
-        
       };
       pdfMake.createPdf(docDefinition).open({}, window.open());
     },
