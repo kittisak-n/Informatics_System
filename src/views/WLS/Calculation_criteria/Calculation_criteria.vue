@@ -12,7 +12,9 @@
               :xl="10"
               style="margin: 0.2em 0px"
             >
-              <a-card-meta title="หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน">
+              <a-card-meta
+                title="หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน"
+              >
                 <a-icon
                   slot="avatar"
                   type="schedule"
@@ -53,9 +55,8 @@
                 :pagination="false"
                 size="small"
                 bordered
-                
               >
-                <span  slot="schedule_id" slot-scope="text, record, index">
+                <span slot="schedule_id" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     {{ index + 1 }}
                   </div>
@@ -81,13 +82,17 @@
                     </span>
                   </div>
                 </span>
-                <span slot="action" slot-scope="record,index">
+                <span slot="action" slot-scope="record, index">
                   <div :style="{ textAlign: 'center' }">
                     <a-tooltip placement="top">
                       <template slot="title">
                         <span>ดูรายละเอียด</span>
                       </template>
-                      <a-button type="warning" icon="search" @click="go_to_detail(index)"   >
+                      <a-button
+                        type="warning"
+                        icon="search"
+                        @click="go_to_detail(index)"
+                      >
                       </a-button>
                     </a-tooltip>
                   </div>
@@ -102,18 +107,18 @@
 </template>
 
 <script>
+const axios = require("axios");
+
 export default {
   data() {
     return {
-
-      
       columns_schedule: [
         {
           title: "ลำดับ",
           dataIndex: "schedule_id",
           key: "schedule_id",
           width: "3%",
-            scopedSlots: {
+          scopedSlots: {
             customRender: "schedule_id",
           },
         },
@@ -155,28 +160,28 @@ export default {
         },
       ],
       schedule: [
-       {
-                schedule_id: 1,
-                schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์",
-                schedule_start_date: "2021-02-12T17:00:00.000Z",
-                schedule_per_credit: "400",
-                schedule_general_min: 1,
-                schedule_general_max: 18,
-                schedule_status: 0,
-                schedule_create_by: 666,
-                schedule_create_date: "2021-02-12T17:00:00.000Z"
-            },
-            {
-                schedule_id: 2,
-                schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์ ภายนอก",
-                schedule_start_date: "2021-02-19T17:00:00.000Z",
-                schedule_per_credit: "400",
-                schedule_general_min: 6,
-                schedule_general_max: 18,
-                schedule_status: 1,
-                schedule_create_by: 666,
-                schedule_create_date: "2021-02-13T17:00:00.000Z"
-            }
+        {
+          schedule_id: 1,
+          schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์",
+          schedule_start_date: "2021-02-12T17:00:00.000Z",
+          schedule_per_credit: "400",
+          schedule_general_min: 1,
+          schedule_general_max: 18,
+          schedule_status: 0,
+          schedule_create_by: 666,
+          schedule_create_date: "2021-02-12T17:00:00.000Z",
+        },
+        {
+          schedule_id: 2,
+          schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์ ภายนอก",
+          schedule_start_date: "2021-02-19T17:00:00.000Z",
+          schedule_per_credit: "400",
+          schedule_general_min: 6,
+          schedule_general_max: 18,
+          schedule_status: 1,
+          schedule_create_by: 666,
+          schedule_create_date: "2021-02-13T17:00:00.000Z",
+        },
       ],
     };
   },
@@ -185,14 +190,25 @@ export default {
       console.log("in methods detail : " + index);
     },
     go_to_detail(index) {
-      
-   console.log(index)
-       this.$store.state.schedule_id = index.schedule_id;
+      console.log(index);
+      this.$store.state.schedule_id = index.schedule_id;
       this.$router.push("Calculation_criteria/Detail_criteria");
-
     },
-    get_all_schedule(){
+    get_all_schedule() {
+      axios
+        .post(this.$store.state.url + "/WlsTouters/Get_all_schedule", {
+          params: [],
+        })
+        .then(function (response) {
 
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+          // always executed  ถ้าเจอ  Eror ทำไรต่อ
+        });
     },
   },
   mounted() {

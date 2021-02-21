@@ -402,6 +402,7 @@ export default {
       columns2,
     };
   },
+  
 };
 </script>
 

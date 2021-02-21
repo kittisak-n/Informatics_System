@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     schedule_id: null,
     status_login: false,
+    url: "http://localhost:8080",
   },
   mutations: {},
   actions: {},
