@@ -167,12 +167,10 @@ export default {
 
   methods: {
    
-    detail(index) {
-      console.log("in methods detail : " + index);
-    },
+    
     go_to_detail(index) {
       console.log(index);
-      this.$store.state.schedule_id = index.schedule_id;
+      this.$store.state.schedule = index;
       this.$router.push("Calculation_criteria/Detail_criteria");
     },
     get_all_schedule() {
@@ -184,6 +182,7 @@ export default {
         .then(function (response) {
           response.data.results.schedule.forEach((data) => {
               let schedule_data = {
+              schedule_id:data.schedule_id,
               schedule_name: data.schedule_name,
               schedule_start_date: data.schedule_start_date,
               schedule_per_credit: data.schedule_per_credit,

@@ -1358,7 +1358,7 @@
           <a-button
             v-if="current == steps.length - 1"
             type="primary"
-            @click="add_criteria()"
+            @click="Add_schedule()"
           >
             บันทึก
           </a-button></router-link
@@ -1642,11 +1642,8 @@ export default {
       return check;
     },
     // บันทึก ตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอน
-    add_criteria() {
-      this.Add_schedule_and_detail();
-    },
 
-    Add_schedule_and_detail() {
+    Add_schedule() {
       const self = this;
       const today = new Date();
       const date =
@@ -1659,6 +1656,15 @@ export default {
       this.$message.success(
         "บันทึกตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอนเสร็จสิ้น"
       );
+      // Update_status_schedule
+      axios
+        .post("http://localhost:8080/WlsTouters/Update_status_schedule")
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
       let Add_schedules = {
         schedule_name: this.schedule_name,
@@ -1800,7 +1806,7 @@ export default {
               Add_schedule_detail_external_lecture
             )
             .then(function (response) {
-            self.criteria_external.lecture.condition.forEach((data) => {
+              self.criteria_external.lecture.condition.forEach((data) => {
                 let condition = {
                   schedule_detail_id: response.data.results.insertId,
                   schedule_condition_min: data.schedule_condition_min,
@@ -1850,7 +1856,7 @@ export default {
               Add_schedule_detail_external_lab
             )
             .then(function (response) {
-             self.criteria_external.lab.condition.forEach((data) => {
+              self.criteria_external.lab.condition.forEach((data) => {
                 let condition = {
                   schedule_detail_id: response.data.results.insertId,
                   schedule_condition_min: data.schedule_condition_min,
@@ -1888,13 +1894,12 @@ export default {
           // always executed  ถ้าเจอ  Eror ทำไรต่อ
         });
     },
-    Add_detail_condition() {},
+
     next() {
       // this.validate_add()
       if (this.validate_add()) {
         this.current++;
       } else {
-        
         this.$message.error("กรุณากรอกข้อมูลให้ครบก่อนไปลำดับถัดไป");
       }
     },
