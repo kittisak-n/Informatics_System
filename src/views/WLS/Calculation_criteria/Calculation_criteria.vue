@@ -51,7 +51,7 @@
             >
               <a-table
                 :columns="columns_schedule"
-                :data-source="schedule"
+                :data-source="schedule_of_data"
                 :pagination="false"
                 size="small"
                 bordered
@@ -108,8 +108,9 @@
 
 <script>
 const axios = require("axios");
-
+// const JSON = require('json');
 export default {
+ 
   data() {
     return {
       columns_schedule: [
@@ -159,33 +160,13 @@ export default {
           },
         },
       ],
-      schedule: [
-        {
-          schedule_id: 1,
-          schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์",
-          schedule_start_date: "2021-02-12T17:00:00.000Z",
-          schedule_per_credit: "400",
-          schedule_general_min: 1,
-          schedule_general_max: 18,
-          schedule_status: 0,
-          schedule_create_by: 666,
-          schedule_create_date: "2021-02-12T17:00:00.000Z",
-        },
-        {
-          schedule_id: 2,
-          schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์ ภายนอก",
-          schedule_start_date: "2021-02-19T17:00:00.000Z",
-          schedule_per_credit: "400",
-          schedule_general_min: 6,
-          schedule_general_max: 18,
-          schedule_status: 1,
-          schedule_create_by: 666,
-          schedule_create_date: "2021-02-13T17:00:00.000Z",
-        },
-      ],
+     
+      schedule_of_data: [],
     };
   },
+
   methods: {
+   
     detail(index) {
       console.log("in methods detail : " + index);
     },
@@ -195,13 +176,26 @@ export default {
       this.$router.push("Calculation_criteria/Detail_criteria");
     },
     get_all_schedule() {
-      axios
-        .post(this.$store.state.url + "/WlsTouters/Get_all_schedule", {
-          params: [],
-        })
+  
+      const self = this;
+      
+       axios
+        .post(this.$store.state.url + "/WlsTouters/Get_all_schedule")
         .then(function (response) {
-
-          console.log(response);
+          response.data.results.schedule.forEach((data) => {
+              let schedule_data = {
+              schedule_name: data.schedule_name,
+              schedule_start_date: data.schedule_start_date,
+              schedule_per_credit: data.schedule_per_credit,
+              schedule_general_min: data.schedule_general_min,
+              schedule_general_max: data.schedule_general_max,
+              schedule_status: data.schedule_status,
+              schedule_create_by: data.schedule_create_by,
+              schedule_create_date: data.schedule_create_date,
+            };   
+              self.schedule_of_data.push(schedule_data);
+          });
+             console.log(self.schedule_of_data);
         })
         .catch(function (error) {
           console.log(error);
@@ -211,7 +205,7 @@ export default {
         });
     },
   },
-  mounted() {
+  created() {
     this.get_all_schedule();
   },
 };
