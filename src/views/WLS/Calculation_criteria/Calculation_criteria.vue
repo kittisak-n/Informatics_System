@@ -54,9 +54,10 @@
                 :data-source="schedule_of_data"
                 :pagination="false"
                 size="small"
+               
                 bordered
               >
-                <span slot="schedule_id" slot-scope="text, record, index">
+                <span slot="key" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     {{ index + 1 }}
                   </div>
@@ -116,11 +117,11 @@ export default {
       columns_schedule: [
         {
           title: "ลำดับ",
-          dataIndex: "schedule_id",
-          key: "schedule_id",
+          dataIndex: "key",
+          key: "key",
           width: "3%",
           scopedSlots: {
-            customRender: "schedule_id",
+            customRender: "key",
           },
         },
         {
@@ -180,8 +181,9 @@ export default {
        axios
         .post(this.$store.state.url + "/WlsTouters/Get_all_schedule")
         .then(function (response) {
-          response.data.results.schedule.forEach((data) => {
+          response.data.results.schedule.forEach((data,index) => {
               let schedule_data = {
+              ket:index+1,
               schedule_id:data.schedule_id,
               schedule_name: data.schedule_name,
               schedule_start_date: data.schedule_start_date,
