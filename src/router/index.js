@@ -22,8 +22,8 @@ import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_
 import Detail_criteria from "../views/WLS/Calculation_criteria/Detail_criteria.vue";
 import Add_criteria from "../views/WLS/Calculation_criteria/Add_criteria.vue";
 import SummaryWorkload from "../views/WLS/Calculation_criteria/SummaryWorkload.vue";
-// import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
-import Show_course from "../views/WLS/Show_course/test_upload.vue"; //test
+import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
+// import Show_course from "../views/WLS/Show_course/test_upload.vue"; //test
 import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";

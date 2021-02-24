@@ -71,8 +71,7 @@
                 bordered
               >
                 <span slot="Action">
-                  <a-button type="warning" :size="size">
-                    <a-icon type="edit" /> </a-button
+                  <a-button type="warning"> <a-icon type="edit" /> </a-button
                 ></span>
               </a-table>
             </a-col>
@@ -95,12 +94,7 @@
                 <a-select-option value="100"> 100 </a-select-option>
               </a-select>
 
-              <a-pagination
-                :style="{ display: 'inline' }"
-                v-model="current"
-                :total="total"
-                :page-size="10"
-              />
+              <a-pagination :style="{ display: 'inline' }" :page-size="10" />
             </a-col>
           </a-row>
         </a-card>
@@ -111,13 +105,24 @@
         title="เพิ่มรายวิชา"
         :visible="modal_insert"
         :confirm-loading="confirmLoading"
-        @ok="handleOk"
-        @cancel="handleCancel"
       >
+        <template slot="footer">
+          <a-button key="back" @click="handleCancel"> ยกเลิก </a-button>
+          <a-button
+            key="submit"
+            type="success"
+            v-if="import_status"
+            @click="Insert_course"
+          >
+            Submit
+          </a-button>
+        </template>
         <a-row :gutter="[10, 50]">
           <a-col :span="24" :style="{ textAlign: 'center' }">
             <router-link :to="{ path: '/Show_course/InsertCourse' }">
-              <a-button type="primary" style="width:80%"> เพิ่มรายวิชาด้วยตนเอง </a-button>
+              <a-button type="primary" style="width: 80%">
+                เพิ่มรายวิชาด้วยตนเอง
+              </a-button>
             </router-link>
           </a-col>
         </a-row>
@@ -131,7 +136,6 @@
           <a-col :span="3">
             <a-select
               label-in-value
-              @change="DatehandleChange"
               style="width: 60px"
               :default-value="{ key: '1' }"
             >
@@ -145,7 +149,6 @@
           <a-col :span="6">
             <a-select
               label-in-value
-              @change="DatehandleChange"
               style="width: 100%"
               :default-value="{ key: '1' }"
             >
@@ -156,27 +159,48 @@
         </a-row>
         <a-row :gutter="[10, 10]">
           <a-col :span="24" :style="{ textAlign: 'center' }">
-              <a-button  style="width:80%;" icon="upload" type="file"> Upload file Csv </a-button>
+            <input
+              type="file"
+              name="import_csv_file"
+              id="import_csv_file"
+              ref="import_csv_file"
+              accept=".xlsx"
+              @change="importExcel"
+              hidden
+            />
+            <a-button
+              style="width: 80%"
+              icon="upload"
+              type="file"
+              @click="upload_file_click"
+            >
+              Upload file Csv
+            </a-button>
           </a-col>
         </a-row>
-        <!-- <a-row :gutter="[10, 10]">
-          <a-col :span="24">
-            <a-upload :default-file-list="fileList" >
-              <a-button block 
-                ><a-icon type="upload" /> เพิ่มแบบ Upload file Csv
-              </a-button>
-            </a-upload>
+        <a-row :gutter="[10, 10]">
+          <a-col :span="24" :style="{ textAlign: 'center' }">
+            <p>{{ import_filename }}</p>
           </a-col>
-        </a-row> -->
+        </a-row>
       </a-modal>
     </div>
   </div>
 </template>
 
 <script>
+import xlsx from "xlsx";
+import Axios from "axios";
+
 export default {
   data() {
     return {
+      self: this,
+      import_status: false,
+
+      import_filename: "",
+      data_course_import: {},
+
       modal_insert: false,
       confirmLoading: false,
       course_columns: [
@@ -336,16 +360,57 @@ export default {
     handleCancel() {
       console.log("Clicked cancel button");
       this.modal_insert = false;
+      this.import_status = false;
+      this.import_filename = "";
+      this.$refs.import_csv_file.value = null;
     },
-    handleChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+    upload_file_click() {
+      this.$refs.import_csv_file.click();
+    },
+    importExcel(e) {
+      const files = e.target.files;
+      console.log(files);
+      console.log(files[0].name);
+
+      if (!files.length) {
+        return;
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        return alert(
+          "The upload format is incorrect. Please upload xls or xlsx format"
+        );
       }
-      if (info.file.status === "done") {
-        this.$message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        this.$message.error(`${info.file.name} file upload failed.`);
-      }
+      const fileReader = new FileReader();
+      fileReader.onload = (ev) => {
+        try {
+          const data = ev.target.result;
+          const XLSX = xlsx;
+          const workbook = XLSX.read(data, {
+            type: "binary",
+          });
+          const wsname = workbook.SheetNames[0]; // Take the first sheet，wb.SheetNames[0] :Take the name of the first sheet in the sheets
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); // Generate JSON table content，wb.Sheets[Sheet名]    Get the data of the first sheet
+          const excellist = []; // Clear received data
+          // Edit data
+          for (var i = 0; i < ws.length; i++) {
+            excellist.push(ws[i]);
+          }
+          console.log("Read results", excellist); // At this point, you get an array containing objects that need to be processed
+          self.data_course_import = excellist;
+          this.import_filename = files[0].name;
+          this.import_status = true;
+          console.log(typeof self.import_filename);
+        } catch (e) {
+          return alert("Read failure!");
+        }
+      };
+      fileReader.readAsBinaryString(files[0]);
+      var input = document.getElementById("upload");
+      input.value = "";
+    },
+    Insert_course() {
+      Axios.post("http://localhost:8080/WlsInsert/insertcourse")
+        .then(alert("Pass"))
+        .catch((err) => alert(err));
     },
   },
 };

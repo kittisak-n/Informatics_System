@@ -5,8 +5,14 @@ import store from "./store";
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import HighchartsVue from "highcharts-vue";
+import XLSX from 'xlsx'
+import VueAxios from "vue-axios";
+import axios from "axios";
+
 Vue.config.productionTip = false
+Vue.use(VueAxios, axios);
 Vue.use(Antd, HighchartsVue);
+Vue.use(XLSX)
 
 new Vue({
     router,
