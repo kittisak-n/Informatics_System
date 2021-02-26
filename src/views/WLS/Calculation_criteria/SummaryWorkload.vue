@@ -190,6 +190,7 @@
 <script>
 import pdfMake from "pdfmake";
 import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fonts
+// const path = require("path");
 
 const data = [
   {
@@ -309,29 +310,74 @@ export default {
           bolditalics: "THSarabun-Bold-Italic.ttf",
         },
       };
-      const docDefinition = {
-        header: {
-          text: "(บ.๑๔)",
-          style: "tableHeader",
-          alignment: "right",
-          margin: [0, 6, 10, 0],
+      // const Memorandum = {
+      //   info: {
+      //     title: "ใบบันทึกข้อความ",
+      //     author: "666",
+      //     subject: "Memorandum",
+      //     keywords: "Memorandum",
+      //   },
+      //   content: [
+      //     {
+      //       columns: [
+      //         {
+      //           width: "auto",
+      //           text: "รูป",
+      //           style: "images",
+      //         },
+      //         {
+      //           width: "500px",
+      //           text: "บันทึกข้อความ",
+      //           style: "header",
+      //         },
+      //       ],
+      //     },
+
+      //   ],
+      //   styles: {
+      //     images: {
+      //       margin: [25, 30, 25, 25],
+      //     },
+      //     tab: {
+      //       margin: [15, 0, 0, 0],
+      //     },
+      //     tableHeader: {
+      //       bold: true,
+      //       fontSize: 13,
+      //       color: "black",
+      //     },
+      //     tableExample: {
+      //       margin: [0, 5, 0, 15],
+      //     },
+      //     header: {
+      //       fontSize: 22,
+      //       bold: true,
+      //     },
+      //     anotherStyle: {
+      //       italics: true,
+      //       alignment: "right",
+      //     },
+      //   },
+
+      //   defaultStyle: {
+      //     font: "THSarabunPsk",
+      //   },
+      // };
+      const Receipt = {
+        pageSize: "A4",
+        // header: {
+        //   text: "(บ.๑๔)",
+        //   style: "tableHeader",
+        //   alignment: "right",
+        //   margin: [0, 6, 10, 0],
+        // },
+        info: {
+          title: "บ.๑๔",
+          author: "666",
+          subject: "Receipt",
+          keywords: "Receipt",
         },
-        footer: {
-          columns: [
-            {
-              text: "หมายเหตุ",
-              decoration: "underline",
-              width: 200,
-              margin: [150, 0, 0, 0],
-            },
-            {
-              text:
-                "การใช้ใบสำคัญรับเงินเป็นไปตามระเบียบมหาวิทยาลัยบูรพาว่าด้วยการจ่ายเงินและวิธีการจ่ายเงิน",
-              alignment: "left",
-              width: 300,
-            },
-          ],
-        },
+
         content: [
           {
             table: {
@@ -358,20 +404,31 @@ export default {
               body: [
                 [
                   {
-                    border: [true, true, true, false],
-                    text: "รูป",
+                    border: [true, true, false, false],
+                    // if you specify width, image will scale proportionally
+                    text:
+                      "https://www.informatics.buu.ac.th/2020/wp-content/uploads/2018/11/buu_logo_thai.jpg",
+                    width: 150,
+                    opacity: 0.5,
+
                     style: "images",
-                    colSpan: 3,
                     alignment: "center",
+                    colSpan: 2,
                   },
                   {},
-                  {},
+                  {
+                    border: [false, true, true, false],
+                    text: "(บ.๑๔)",
+                    style: "tableHeader",
+                    alignment: "right",
+                    margin: [0, 6, 10, 0],
+                  },
                 ],
                 [
                   {
                     border: [true, false, true, false],
                     text: "ใบสำคัญรับเงิน",
-                    style: "tableHeader",
+                    style: "header",
                     colSpan: 3,
                     alignment: "center",
                   },
@@ -393,19 +450,18 @@ export default {
                 [
                   {
                     border: [true, false, true, false],
-                     margin: [20,5,5, 0],
-                    text:
-                      "ข้าพเจ้าชื่อ  นายพีระศักดิ์ เพียรประสิทธิ์",
+                    margin: [20, 5, 5, 0],
+                    text: "ข้าพเจ้าชื่อ  นายพีระศักดิ์ เพียรประสิทธิ์",
                     colSpan: 3,
                     alignment: "left",
                   },
                   {},
                   {},
                 ],
-                 [
+                [
                   {
                     border: [true, false, true, false],
-                     margin: [0,0,0,5],
+                    margin: [0, 0, 0, 5],
                     text:
                       "บ้านเลขที่ 40 หมู่ 1 ตำบลสำนักบก อำเภอเมือง จังหวัดชลบุรี",
                     colSpan: 3,
@@ -414,12 +470,11 @@ export default {
                   {},
                   {},
                 ],
-                 [
+                [
                   {
                     border: [true, false, true, false],
-                     margin: [0,0,0,5],
-                    text:
-                      "ได้รับเงินจากมหาวิทยาลัยบูรพา ดังรายการต่อไปนี้",
+                    margin: [0, 0, 0, 5],
+                    text: "ได้รับเงินจากมหาวิทยาลัยบูรพา ดังรายการต่อไปนี้",
                     colSpan: 3,
                     alignment: "left",
                   },
@@ -474,9 +529,812 @@ export default {
               ],
             },
           },
+          {
+            margin: [0, 50, 0, 0],
+            columns: [
+              {
+                text: "หมายเหตุ",
+                decoration: "underline",
+                width: 160,
+                margin: [110, 0, 0, 0],
+              },
+              {
+                text:
+                  "การใช้ใบสำคัญรับเงินเป็นไปตามระเบียบมหาวิทยาลัยบูรพาว่าด้วยการจ่ายเงินและวิธีการจ่ายเงิน",
+                alignment: "left",
+
+                width: 300,
+              },
+              {},
+            ],
+            pageBreak: "after",
+          },
+          // หน้าใหม่
+          {
+            columns: [
+              {
+                text: "รูป",
+                margin: [20, 0, 0, 0],
+                width: 160,
+              },
+              {
+                text: "บันทึกข้อความ",
+                style: "header",
+                alignment: "left",
+                margin: [50, 0, 0, 0],
+              },
+            ],
+          },
+          {
+            margin: [0, 50, 0, 0],
+            columns: [
+              {
+                text: "ส่วนงาน",
+                style: "bold",
+                width: 50,
+              },
+              {
+                text: "คณะวิทยาการสารสนเทศ สำนักงานคณบดี โทร 3060",
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                text: "ที่",
+                style: "bold",
+                width: 50,
+              },
+              {
+                text: "อว 8113.1/",
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+                width: 305,
+              },
+              {
+                text: "วันที่",
+                style: "bold",
+                width: 50,
+              },
+              {
+                text: "26 ตุลาคม พ.ศ 2563",
+                alignment: "left",
+                margin: [8, 0, 0, 0],
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                text: "เรื่อง",
+                style: "bold",
+                width: 50,
+              },
+              {
+                text:
+                  "ขออนุมัติเบิกค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ประจำภาคต้น ปีการศึกษา 2563",
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+              },
+            ],
+          },
+          {
+            margin: [0, 20, 0, 0],
+            columns: [
+              {
+                text: "เรียน",
+                style: "bold",
+                width: 50,
+              },
+              {
+                text: "คณบดีคณะวิทยาการสารสนเทศ",
+                alignment: "left",
+                margin: [10, 0, 0, 0],
+              },
+            ],
+          },
+
+          {
+            margin: [0, 35, 0, 0],
+            text:
+              "ตามที่ นายพีระศักดิ์ เพียรประสิทธ    ส่งภาระงานเพื่อประกอบการเบิกจ่ายค่าตอบแทนสอนเกินเกณฑ์\n ประจำภาคต้น ปีการศึกษา 2563 นั้น ดังนั้นเพื่อให้การเบิกจ่ายค่าตอบแทนสอนเกินเกณฑ์เป็นไปด้วยความเรียบร้อยงานการเงินคณะวิทยาการสารสนเทศ \nจึงเรียนมาเพื่อขออนุมัติเบิกค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ประจำภาคต้น ปีการศึกษา 2563 งวดที่ 4 (เดือน ตุลาคม 2563) ตามประกาศคณะวิทยาการสารสนเทศ เรื่อง หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ\n พ.ศ. 2561 และที่แก้ไขเพิ่มเติม รายละเอียดดังนี้",
+            alignment: "left",
+          },
+          {
+            margin: [0, 25, 0, 0],
+            table: {
+              heights: [
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+                "auto",
+              ],
+              widths: [30, 200, 55, 60, 65, 62],
+              body: [
+                [
+                  {
+                    text: "ลำดับ",
+                    style: "tableHeader",
+                  },
+                  {
+                    text: "ชื่อ-สกุล",
+                    style: "tableHeader",
+                  },
+                  {
+                    text: "จำนวนที่เบิกได้\n(หน่วยกิต)",
+                    style: "tableHeader",
+                  },
+                  {
+                    text: "อัตรา/\n(หน่วยกิต)",
+                    style: "tableHeader",
+                  },
+                  {
+                    text: "รวมเป็นเงิน\n15 สัปดาห์",
+                    style: "tableHeader",
+                  },
+                  {
+                    text: "จำนวนเงิกที่เบิกแบ่งจ่าย4งวด\n(งวด4)",
+                    style: "tableHeader",
+                  },
+                ],
+                [
+                  { text: "1", alignment: "center" },
+                  "นายพีระศักดิ์ เพียรประสิทธิ์",
+                  { text: "3.50", style: "number" },
+                  { text: "400", style: "number" },
+                  { text: "21,000.00", style: "number" },
+                  { text: "5,250.00", style: "number" },
+                ],
+                [
+                  {
+                    colSpan: 2,
+                    text: "รวมเป็นเงิน",
+                    style: "tableHeader",
+                    alignment: "right",
+                  },
+                  {},
+
+                  {
+                    text: "3.50",
+                    style: ["tableHeader", "number"],
+                  },
+                  {
+                    text: "400",
+                    style: ["tableHeader", "number"],
+                  },
+                  {
+                    text: "21,000.00",
+                    style: ["tableHeader", "number"],
+                  },
+                  {
+                    text: "5,250.00",
+                    style: ["tableHeader", "number"],
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            margin: [0, 35, 0, 0],
+            alignment: "center",
+            text:
+              "จึงเรียนมาเพื่อโปรดพิจารณาอนุมัติ โดยเบิกจากเงินรายได้ แผนงานจัดการจัดศึกษาอุดมศึกษา งานจัดการศึกษาระดับปริญญาตรีด้านวิทยาศาสตร์และเทคโนโลยี ",
+          },
+          {
+            margin: [0, 5, 0, 0],
+            text:
+              "งบดำเนินงาน หมวดค่าตอบแทนใช้สอยและวัสดุ เป็นเงิน 5,250.00 บาท",
+          },
+   {
+            margin: [0, 70, 70, 0],
+            text: "................................................................",
+            alignment: "right",
+          },
+          {
+            margin: [0, 5, 90, 0],
+            alignment: "right",
+            text: "(นางสาวหรรษา รอดเงิน)",
+          },
+             {
+            margin: [0, 5, 90, 0],
+            alignment: "right",
+            text: "นักวิชาการเงินและบัญชี",
+          },
+          {
+            margin: [65, 70, 0, 0],
+            text: "อนุมัติ",
+            alignment: "left",
+          },
+             {
+            margin: [25, 40, 0, 0],
+            text: "..............................................................",
+            alignment: "left",
+          },
+          {
+            margin: [28, 5, 0, 0],
+            text: "(ผู้ช่วยศาสตราจารย์กฤษณะ ชินสาร)",
+            alignment: "left",
+          },
+           {
+            margin: [30, 5, 0, 0],
+            text: "คณบดีคณะวิทยาการสารสนเทศ",
+            alignment: "left",
+          },
+          {
+            pageOrientation: "landscape",
+            pageBreak: "before",
+            alignment: "center",
+            text:
+              "สรุปภาระงานสอนเพื่อการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ\nภาคต้น ปีการศึกษา 2563",
+          },
+          {
+            alignment: "left",
+            text: "ชื่อ - สกุล อาจารย์พีระศักดิ์ เพียรประสิทธิ์",
+          },
+          {
+            style: "bold",
+            text:
+              ".................................................................................................................................................................................................................................................................................................................................................................................",
+          },
+          {
+            margin: [0, 10, 0, 0],
+            table: {
+              widths: [
+                100,
+                25,
+                100,
+                40,
+                30,
+                30,
+                60,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                30,
+                // 15 col
+              ],
+              headerRows: 3,
+              // keepWithHeaderRows: 1,
+              body: [
+                [
+                  {
+                    text: "หมวดวิชา / รหัสวิชา",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+
+                  {
+                    text: "หน่วยกิต",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                  {
+                    text: "วัน-เวลา",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                  {
+                    text: "กลุ่ม",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                  {
+                    text: "จำนวนหน่วยกิต",
+                    style: "headersmall",
+                    alignment: "center",
+                    colSpan: 2,
+                  },
+                  {},
+                  {
+                    text: "จำนวนนิสิตที่ลงทะเบียน\nเรียนในรายวิชา",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                  {
+                    text: "จำนวนกลุ่มที่สอน",
+                    style: "headersmall",
+                    alignment: "center",
+                    colSpan: 2,
+                  },
+                  {},
+                  {
+                    text: "ภาระงาน",
+                    style: "headersmall",
+                    alignment: "center",
+                    colSpan: 3,
+                  },
+                  {},
+                  {},
+                  {
+                    text: "ภาระงานรวม(นก)",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                  {
+                    text: "สัดส่วน\nภาระงาน\nที่สอน\n(สัปดาห์)",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                  {
+                    text: "ภาระงาน\nรวมที่ได้\nตามสัดส่วน\nการสอน(นก)",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 3,
+                  },
+                ],
+                // row 2
+                [
+                  {},
+                  {},
+                  {},
+                  {},
+                  {
+                    text: "บรรยาย",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 2,
+                  },
+                  {
+                    text: "lab",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 2,
+                  },
+                  {},
+                  {
+                    text: "บรรยาย",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 2,
+                  },
+                  {
+                    text: "lab",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 2,
+                  },
+                  {
+                    text: "ภาระงานพื้นฐาน",
+                    style: "headersmall",
+                    alignment: "center",
+                    rowSpan: 2,
+                  },
+                  {
+                    text: "ภาระงานตรวจงาน",
+                    style: "headersmall",
+                    alignment: "center",
+                    colSpan: 2,
+                  },
+
+                  {
+                    text: "ภาระงาน",
+                    style: "headersmall",
+                    alignment: "center",
+                  },
+                  {},
+                  {
+                    text: "สัดส่วนภาระงานที่สอน(สัปดาห์)",
+                    style: "headersmall",
+                    alignment: "center",
+                  },
+                  {
+                    text: "ภาระงานรวมที่ได้ตามสัดส่วนการสอน(นก)",
+                    style: "headersmall",
+                    alignment: "center",
+                  },
+                ],
+                // ROw3
+                [
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {
+                    text: "ชั่วโมง\nบรรยาย",
+                    style: "headersmall",
+                    alignment: "center",
+                  },
+                  {
+                    text: "ชั่วโมง \nlab",
+                    style: "headersmall",
+                    alignment: "center",
+                  },
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "รายวิชาของคณะ(ระดับปริญญาตรี)",
+                    style: "headersmall",
+                    alignment: "left",
+                    colSpan: 15,
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "Lecture + lab 3 ชั่วโมง",
+                    style: "headersmall",
+                    alignment: "left",
+                    colSpan: 15,
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                ],
+                [
+                  {
+                    text: "88814259",
+                    style: "fontsmall",
+                    alignment: "center",
+                  },
+                  { text: "1(0-3-6)", style: "fontsmall", alignment: "center" },
+                  {
+                    text: "Lab WE 17:00-19:50 IF-3C04",
+                    style: "fontsmall",
+                    alignment: "center",
+                  },
+                  { text: "3+4", style: "fontsmall", alignment: "center" },
+                  { text: "-", style: "fontsmall", alignment: "center" },
+                  { text: "1", style: "fontsmall", alignment: "center" },
+                  { text: "31", style: "fontsmall", alignment: "center" },
+                  { text: "-", style: "fontsmall", alignment: "center" },
+                  { text: "1", style: "fontsmall", alignment: "center" },
+                  { text: "1.25", style: "fontsmall", alignment: "center" },
+                  { text: "0", style: "fontsmall", alignment: "center" },
+                  { text: "0.02", style: "fontsmall", alignment: "center" },
+                  { text: "1.27", style: "fontsmall", alignment: "center" },
+                  { text: "1.5", style: "fontsmall", alignment: "center" },
+                  { text: "1.27", style: "fontsmall", alignment: "center" },
+                ],
+                [
+                  {
+                    border: [false, true, true, false],
+                    text: "รวมภาระงานสอน",
+                    style: "headersmall",
+                    alignment: "left",
+                    colSpan: 12,
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  { text: "13.71", style: "headersmall", alignment: "center" },
+                  {},
+                  { text: "13.71", style: "headersmall", alignment: "center" },
+                ],
+                [
+                  {
+                    border: [false, false, true, false],
+                    text: "รวมภาระงานสอน(ปัดเศษ) ข้อ 8",
+                    style: "headersmall",
+                    alignment: "left",
+                    colSpan: 12,
+                  },
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  {},
+                  { text: "13.50", style: "headersmall", alignment: "center" },
+                  {},
+                  { text: "13.50", style: "headersmall", alignment: "center" },
+                ],
+              ],
+            },
+          },
+          {
+            pageBreak: "before",
+            text: "สรุปภาระงาน",
+            bold: true,
+            alignment: "left",
+            decoration: "underline",
+          },
+          {
+            margin: [0, 15, 0, 0],
+            text: "ตามประกาศคณะวิทยาการสารสนเทศ ที่ 0045/2563",
+            bold: true,
+            alignment: "left",
+          },
+          {
+            margin: [0, 15, 0, 0],
+            text:
+              "เรื่อง หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ พ.ศ. 2563",
+            bold: true,
+            alignment: "left",
+          },
+          {
+            margin: [0, 15, 0, 0],
+            columns: [
+              {
+                // auto-sized columns have their widths based on their content
+                width: 50,
+                text: "1)",
+                alignment: "right",
+              },
+              {
+                margin: [10, 0, 0, 0],
+                width: 250,
+                text: "รวมภาระงานสอบ(ปัดเศษ) ข้อ 8",
+                alignment: "left",
+              },
+              {
+                width: 100,
+                text: "13.50",
+                alignment: "center",
+              },
+              {
+                width: 100,
+                text: "หน่วยกิต",
+                alignment: "left",
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                // auto-sized columns have their widths based on their content
+                width: 50,
+                text: "2)",
+                alignment: "right",
+              },
+              {
+                margin: [10, 0, 0, 0],
+                width: 250,
+                text: "หัก ภาระงานขั้นต่ำ",
+                alignment: "left",
+              },
+              {
+                width: 100,
+                text: "6.00",
+                alignment: "center",
+                decoration: "underline",
+              },
+              {
+                width: 100,
+                text: "หน่วยกิต",
+                alignment: "left",
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                // auto-sized columns have their widths based on their content
+                width: 50,
+                text: "3)",
+                alignment: "right",
+              },
+              {
+                margin: [10, 0, 0, 0],
+                width: 250,
+                text: "หัก ภาระงาน Extra workload",
+                alignment: "left",
+              },
+              {
+                width: 100,
+                text: "4.00",
+                alignment: "center",
+                decoration: "underline",
+              },
+              {
+                width: 100,
+                text: "หน่วยกิต",
+                alignment: "left",
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                // auto-sized columns have their widths based on their content
+                width: 50,
+                text: "4)",
+                alignment: "right",
+              },
+              {
+                margin: [10, 0, 0, 0],
+                width: 250,
+                text: "รวมภาระงานที่สามารถเบิกค่าตอบแทน",
+                alignment: "left",
+              },
+              {
+                width: 100,
+                text: "3.50",
+                alignment: "center",
+                decoration: "underline",
+              },
+              {
+                width: 100,
+                text: "หน่วยกิต",
+                alignment: "left",
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                width: 50,
+                text: "",
+              },
+              {
+                width: 250,
+                text: "ค่าสอน หน่วยกิตละ 400 บาท จำนวน 15 สัปดาห์ เป็นเงิน  ",
+              },
+              {
+                width: 100,
+                text: "21,000.00  บาท ",
+                alignment: "center",
+              },
+              {
+                width: 100,
+                text: "แบ่งจ่ายเป็น 4 งวด ",
+                alignment: "left",
+              },
+              {
+                text: "5,250.00 บาท",
+                alignment: "center",
+              },
+            ],
+          },
+          {
+            margin: [0, 10, 0, 0],
+            columns: [
+              {
+                width: 50,
+                text: "",
+              },
+              {
+                text:
+                  "ข้าพเจ้าขอรับรองว่าได้ตรวจสอบข้อมูลข้างต้นแล้วและขอรับรองว่าข้อมูลดังกล่าวเป็นจริง",
+              },
+            ],
+          },
+          {
+            margin: [0, 25, 100, 0],
+            alignment: "right",
+            text:
+              "ลงชื่อ   ....................................................................................",
+          },
+          {
+            margin: [0, 5, 125, 0],
+            alignment: "right",
+            text: "(       อาจารย์พีระศักดิ์ เพียรประสิทธิ์       )",
+          },
+          {
+            margin: [0, 25, 100, 0],
+            alignment: "right",
+            text:
+              "ลงชื่อ   ....................................................................................",
+          },
+          {
+            margin: [0, 5, 135, 0],
+            alignment: "right",
+            text: "(       นางสาวหรรษา รอดเงิน       )",
+          },
+          {
+            margin: [0, 25, 100, 0],
+            alignment: "right",
+            text:
+              "ลงชื่อ   ....................................................................................",
+          },
+          {
+            margin: [0, 5, 125, 0],
+            alignment: "right",
+            text:
+              "(       อาจารย์เบญจภรณ์ จันทรกองกุล       )",
+          },
+             {
+            margin: [360, 5, 0, 0],
+            alignment: "center",
+            text:
+              "รองคณบดี\nผู้รับรอง",
+          },
+          {
+             alignment: "left",
+                 margin: [45, 10, 0, 0],
+            text:
+              "อนุมัติ",
+          },
+          { margin: [0, 20, 0, 0],
+             alignment: "left",
+            text:
+              "...............................................................",
+          },
+          {margin: [0, 5, 0, 0],
+             alignment: "left",
+            text:
+              "(ผู้ช่วยศาสตราจารย์กฤษณะ ชินสาร)",
+          },  {margin: [10, 5, 0, 0],
+             alignment: "left",
+            text:
+              "คณบดีคณะวิทยาการสารสนเทศ",
+          }
+            
         ],
 
         styles: {
+          fontsmall: {
+            fontSize: 8,
+            color: "black",
+            alignment: "center",
+          },
+          headersmall: {
+            bold: true,
+            fontSize: 8,
+            color: "black",
+            alignment: "center",
+          },
+          number: {
+            alignment: "right",
+          },
           images: {
             margin: [25, 30, 25, 25],
           },
@@ -487,12 +1345,16 @@ export default {
             bold: true,
             fontSize: 13,
             color: "black",
+            alignment: "center",
           },
           tableExample: {
             margin: [0, 5, 0, 15],
           },
           header: {
-            fontSize: 22,
+            fontSize: 20,
+            bold: true,
+          },
+          bold: {
             bold: true,
           },
           anotherStyle: {
@@ -505,7 +1367,8 @@ export default {
           font: "THSarabunPsk",
         },
       };
-      pdfMake.createPdf(docDefinition).open({}, window.open());
+
+      pdfMake.createPdf(Receipt).open({});
     },
   },
 };

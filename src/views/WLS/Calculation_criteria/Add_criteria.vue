@@ -2,17 +2,16 @@
   <div id="Add_criteria">
     <a-card size="small">
       <a-row :gutter="[8, 8]">
-        <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-          <a-steps :current="current + 1">
-            >
-            <a-step v-for="item in steps" :key="item.key" :title="item.title">
-              {{ index }}
-            </a-step>
-          </a-steps>
+        <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin: 1px 0px 15px;">
+          <a-steps :current="current">
+      <a-step v-for="item in steps" :key="item.title" :title="item.title" />
+    </a-steps>
+
+            
         </a-col>
       </a-row>
 
-      <div class="steps-content">
+      
         <!-- STEP 0 -->
         <div v-if="current == 0">
           <a-card size="small">
@@ -159,6 +158,9 @@
                   <a-col :span="24" style="margin: 0.2em 0p">
                     <a-card-meta title="วิชาในหลักสูตร"> </a-card-meta>
                   </a-col>
+
+
+                
                 </a-row>
               </a-card>
 
@@ -648,7 +650,7 @@
                   </a-col>
                 </a-row>
               </a-card>
-              <!-- เงื่อนไขค่าน้ำหนัก -->
+              <!-- สิ้นสุดเงื่อนไขค่าน้ำหนัก -->
               <a-card size="small">
                 <a-row :gutter="[8, 8]">
                   <a-col
@@ -933,6 +935,104 @@
                   </a-col>
                 </a-row>
               </a-card>
+                         <a-card size="small">
+                <a-row :gutter="[8, 8]">
+                  <a-col
+                    :span="24"
+                    style="margin: 0.2em 0px; text-align: center"
+                  >
+                    <h1>การสอนแบบบรรยาย</h1>
+                  </a-col>
+                </a-row>
+                <a-row :gutter="[8, 8]">
+                  <a-col
+                    :span="24"
+                    style="margin: 0.2em 0px; text-align: start"
+                  >
+                    <h1>จำนวนนิสิตต่อกลุ่ม</h1>
+                  </a-col>
+                </a-row>
+                <a-row :gutter="[8, 8]">
+                  <a-col
+                    :span="6"
+                    style="margin: 0.2em 0px; text-align: center"
+                  >
+                    <span> ระดับปริญญาตรี :</span>
+                  </a-col>
+                  <a-col
+                    :span="6"
+                    style="margin: 0.2em 0px; text-align: center"
+                  >
+                    <a-input
+                      style="width: 100%"
+                      disabled
+                      v-model="criteria_Internal.lecture.Bachelor"
+                      addon-after="คน"
+                      type="number"
+                    />
+                  </a-col>
+                  <a-col
+                    :span="6"
+                    style="margin: 0.2em 0px; text-align: center"
+                  >
+                    <span> ระดับบัณฑิตศึกษา :</span>
+                  </a-col>
+                  <a-col
+                    :span="6"
+                    style="margin: 0.2em 0px; text-align: center"
+                  >
+                    <a-input
+                      style="width: 100%"
+                      disabled
+                      v-model="criteria_Internal.lecture.Graduate"
+                      addon-after="คน"
+                      type="number"
+                    />
+                  </a-col>
+                </a-row>
+
+                <a-row :gutter="[8, 8]">
+                  <a-col
+                    :span="12"
+                    style="margin: 0.2em 0px; text-align: start"
+                  >
+                    <h1>เงื่อนไขค่าน้ำหนัก</h1>
+                  </a-col>
+                </a-row>
+
+                <a-row
+                  :gutter="[8, 8]"
+                  v-for="data in criteria_Internal.lecture.condition"
+                  :key="data.key"
+                >
+                  <a-col
+                    :span="24"
+                    style="margin: 0.2em 0px; text-align: center"
+                  >
+                    <span>จำนวนนิสิตที่เกิน: </span>
+                    <a-input
+                      disabled
+                      style="width: 15%"
+                      v-model="data.schedule_condition_min"
+                      addon-after="คน"
+                    />
+                    <span> ถึง </span>
+                    <a-input
+                      disabled
+                      style="width: 15%"
+                      v-model="data.schedule_condition_max"
+                      addon-after="คน"
+                    />
+                    <span> เท่ากับ </span
+                    ><a-input
+                      disabled
+                      style="width: 15%"
+                      v-model="data.schedule_condition_weight_per_credit"
+                    />
+                    <span> ค่าน้ำหนักต่อหน่วยกิต</span>
+                  </a-col>
+                </a-row>
+              </a-card>
               <a-card size="small">
                 <a-row :gutter="[8, 8]">
                   <a-col
@@ -1031,7 +1131,13 @@
                   </a-col>
                 </a-row>
               </a-card>
-              <a-card size="small">
+   
+            </a-col>
+            <!-- สิ้นสุด วิชาในหลักสูตร -->
+
+            <!-- วิชาศึกษาทั่วไป -->
+            <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
+                  <a-card size="small">
                 <a-row :gutter="[8, 8]">
                   <a-col
                     :span="24"
@@ -1062,7 +1168,7 @@
                     <a-input
                       style="width: 100%"
                       disabled
-                      v-model="criteria_Internal.lecture.Bachelor"
+                      v-model="criteria_external.lecture.Bachelor"
                       addon-after="คน"
                       type="number"
                     />
@@ -1080,7 +1186,7 @@
                     <a-input
                       style="width: 100%"
                       disabled
-                      v-model="criteria_Internal.lecture.Graduate"
+                      v-model="criteria_external.lecture.Graduate"
                       addon-after="คน"
                       type="number"
                     />
@@ -1098,7 +1204,7 @@
 
                 <a-row
                   :gutter="[8, 8]"
-                  v-for="data in criteria_Internal.lecture.condition"
+                  v-for="data in criteria_external.lecture.condition"
                   :key="data.key"
                 >
                   <a-col
@@ -1129,11 +1235,6 @@
                   </a-col>
                 </a-row>
               </a-card>
-            </a-col>
-            <!-- สิ้นสุด วิชาในหลักสูตร -->
-
-            <!-- วิชาศึกษาทั่วไป -->
-            <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
               <a-card size="small">
                 <a-row :gutter="[8, 8]">
                   <a-col :span="24" style="margin: 0.2em 0p">
@@ -1239,110 +1340,13 @@
                   </a-col>
                 </a-row>
               </a-card>
-              <a-card size="small">
-                <a-row :gutter="[8, 8]">
-                  <a-col
-                    :span="24"
-                    style="margin: 0.2em 0px; text-align: center"
-                  >
-                    <h1>การสอนแบบบรรยาย</h1>
-                  </a-col>
-                </a-row>
-                <a-row :gutter="[8, 8]">
-                  <a-col
-                    :span="24"
-                    style="margin: 0.2em 0px; text-align: start"
-                  >
-                    <h1>จำนวนนิสิตต่อกลุ่ม</h1>
-                  </a-col>
-                </a-row>
-                <a-row :gutter="[8, 8]">
-                  <a-col
-                    :span="6"
-                    style="margin: 0.2em 0px; text-align: center"
-                  >
-                    <span> ระดับปริญญาตรี :</span>
-                  </a-col>
-                  <a-col
-                    :span="6"
-                    style="margin: 0.2em 0px; text-align: center"
-                  >
-                    <a-input
-                      style="width: 100%"
-                      disabled
-                      v-model="criteria_external.lecture.Bachelor"
-                      addon-after="คน"
-                      type="number"
-                    />
-                  </a-col>
-                  <a-col
-                    :span="6"
-                    style="margin: 0.2em 0px; text-align: center"
-                  >
-                    <span> ระดับบัณฑิตศึกษา :</span>
-                  </a-col>
-                  <a-col
-                    :span="6"
-                    style="margin: 0.2em 0px; text-align: center"
-                  >
-                    <a-input
-                      style="width: 100%"
-                      disabled
-                      v-model="criteria_external.lecture.Graduate"
-                      addon-after="คน"
-                      type="number"
-                    />
-                  </a-col>
-                </a-row>
-
-                <a-row :gutter="[8, 8]">
-                  <a-col
-                    :span="12"
-                    style="margin: 0.2em 0px; text-align: start"
-                  >
-                    <h1>เงื่อนไขค่าน้ำหนัก</h1>
-                  </a-col>
-                </a-row>
-
-                <a-row
-                  :gutter="[8, 8]"
-                  v-for="data in criteria_external.lecture.condition"
-                  :key="data.key"
-                >
-                  <a-col
-                    :span="24"
-                    style="margin: 0.2em 0px; text-align: center"
-                  >
-                    <span>จำนวนนิสิตที่เกิน: </span>
-                    <a-input
-                      disabled
-                      style="width: 15%"
-                      v-model="data.schedule_condition_min"
-                      addon-after="คน"
-                    />
-                    <span> ถึง </span>
-                    <a-input
-                      disabled
-                      style="width: 15%"
-                      v-model="data.schedule_condition_max"
-                      addon-after="คน"
-                    />
-                    <span> เท่ากับ </span
-                    ><a-input
-                      disabled
-                      style="width: 15%"
-                      v-model="data.schedule_condition_weight_per_credit"
-                    />
-                    <span> ค่าน้ำหนักต่อหน่วยกิต</span>
-                  </a-col>
-                </a-row>
-              </a-card>
+          
             </a-col>
           </a-row>
           <!-- สิ้นสุด วิชาศึกษาทั่วไป -->
         </div>
         <!-- END STEP 2-->
-      </div>
+     
       <div class="steps-action" style="text-align: end">
         <a-button v-if="current > 0" style="margin-right: 91%" @click="prev">
           ย้อนกลับ
@@ -1474,7 +1478,7 @@ export default {
         },
       },
 
-      value: undefined,
+      
       current: 0,
       steps: [
         {
@@ -1542,7 +1546,7 @@ export default {
             this.criteria_Internal.lecture.condition[i]
               .schedule_condition_weight_per_credit == ""
           ) {
-            console.log("กรุณากรอกข้อความ วิชาใน บรรยาย");
+            console.log("กรุณากรอกข้อความ");
             check = false;
           } else {
             check = true;
@@ -1602,7 +1606,7 @@ export default {
             this.criteria_external.lecture.condition[i]
               .schedule_condition_weight_per_credit == ""
           ) {
-            console.log("กรุณากรอกข้อความ วิชานอก บรรยาย");
+           
             check = false;
           } else {
             check = true;
@@ -1630,7 +1634,7 @@ export default {
             this.criteria_external.lab.condition[i]
               .schedule_condition_weight_per_credit == ""
           ) {
-            console.log("กรุณากรอกข้อความ วิชานอก ปฏิบัติ");
+            
             check = false;
           } else {
             check = true;
@@ -1898,13 +1902,14 @@ export default {
     next() {
       // this.validate_add()
       if (this.validate_add()) {
-        this.current++;
+        console.log(this.current)
+         this.current++;
       } else {
         this.$message.error("กรุณากรอกข้อมูลให้ครบก่อนไปลำดับถัดไป");
       }
     },
     prev() {
-      this.current--;
+        this.current--;
     },
     onChange(e) {
       console.log(e);
