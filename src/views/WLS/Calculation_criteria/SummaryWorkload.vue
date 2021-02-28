@@ -44,7 +44,7 @@
                 bordered
                 size="small"
               >
-                <span slot="key" slot-scope="text, record, index">
+                <span slot="summary_id" slot-scope="text, record, index">
                   <div
                     v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
@@ -54,7 +54,7 @@
                   <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
 
-                <span slot="name" slot-scope="text, record, index">
+                <span slot="person_lastname_TH" slot-scope="text, record, index">
                   <div
                     v-if="year == test[index].year"
                     :style="{ textAlign: 'start' }"
@@ -63,7 +63,7 @@
                   </div>
                   <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
-                <span slot="position" slot-scope="text, record, index">
+                <span slot="positition_name" slot-scope="text, record, index">
                   <div
                     v-if="year == test[index].year"
                     :style="{ textAlign: 'start' }"
@@ -201,30 +201,30 @@ export default {
     return {
       test: [
         {
-          key: "1",
+          summary_id: "1",
           year: 2564,
-          name: "อ.ณัฐพร  ภักดี",
-          position: "อาจารย์ประจำ",
+          person_lastname_TH: "อ.ณัฐพร  ภักดี",
+          positition_name: "อาจารย์ประจำ",
           TeachingJobs: 0,
           LMW: 0,
           LMWE: 0,
           PW: 0,
         },
         {
-          key: "2",
+          summary_id: "2",
           year: 2564,
-          name: "อ.พีระศักดิ์ เพียรประสิทธิ์",
-          position: "อาจารย์ประจำ",
+          person_lastname_TH: "อ.พีระศักดิ์ เพียรประสิทธิ์",
+          positition_name: "อาจารย์ประจำ",
           TeachingJobs: 12,
           LMW: 5,
           LMWE: 4.0,
           PW: 3.5,
         },
         {
-          key: "3",
+          summary_id: "3",
           year: 2563,
-          name: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
-          position: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
+          person_lastname_TH: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
+          positition_name: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
           TeachingJobs: 0,
           LMW: 0,
           LMWE: 0,
@@ -240,26 +240,26 @@ export default {
       columns: [
         {
           title: "ลำดับ",
-          dataIndex: "key",
-          key: "key",
+          dataIndex: "summary_id",
+          key: "summary_id",
           width: "5%",
-          scopedSlots: { customRender: "key" },
+          scopedSlots: { customRender: "summary_id" },
         },
 
         {
           title: "ชื่อ-สกุล",
-          dataIndex: "name",
-          key: "name",
+          dataIndex: "person_lastname_TH",
+          key: "person_lastname_TH",
           width: "15%",
-          scopedSlots: { customRender: "name" },
+          scopedSlots: { customRender: "person_lastname_TH" },
         },
 
         {
           title: "ตำแหน่ง",
-          dataIndex: "position",
-          key: "position",
+          dataIndex: "positition_name",
+          key: "positition_name",
           width: "15%",
-          scopedSlots: { customRender: "position" },
+          scopedSlots: { customRender: "positition_name" },
         },
 
         {
@@ -324,67 +324,10 @@ export default {
           bolditalics: "THSarabun-Bold-Italic.ttf",
         },
       };
-      // const Memorandum = {
-      //   info: {
-      //     title: "ใบบันทึกข้อความ",
-      //     author: "666",
-      //     subject: "Memorandum",
-      //     keywords: "Memorandum",
-      //   },
-      //   content: [
-      //     {
-      //       columns: [
-      //         {
-      //           width: "auto",
-      //           text: "รูป",
-      //           style: "images",
-      //         },
-      //         {
-      //           width: "500px",
-      //           text: "บันทึกข้อความ",
-      //           style: "header",
-      //         },
-      //       ],
-      //     },
-
-      //   ],
-      //   styles: {
-      //     images: {
-      //       margin: [25, 30, 25, 25],
-      //     },
-      //     tab: {
-      //       margin: [15, 0, 0, 0],
-      //     },
-      //     tableHeader: {
-      //       bold: true,
-      //       fontSize: 13,
-      //       color: "black",
-      //     },
-      //     tableExample: {
-      //       margin: [0, 5, 0, 15],
-      //     },
-      //     header: {
-      //       fontSize: 22,
-      //       bold: true,
-      //     },
-      //     anotherStyle: {
-      //       italics: true,
-      //       alignment: "right",
-      //     },
-      //   },
-
-      //   defaultStyle: {
-      //     font: "THSarabunPsk",
-      //   },
-      // };
+   
       const Receipt = {
         pageSize: "A4",
-        // header: {
-        //   text: "(บ.๑๔)",
-        //   style: "tableHeader",
-        //   alignment: "right",
-        //   margin: [0, 6, 10, 0],
-        // },
+
         info: {
           title: "บ.๑๔",
           author: "666",
