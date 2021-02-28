@@ -39,14 +39,14 @@
             <a-col :span="24">
               <a-table
                 :columns="columns"
-                :data-source="data"
+                :data-source="test"
                 :pagination="false"
                 bordered
                 size="small"
               >
                 <span slot="key" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
                   >
                     {{ index + 1 }}
@@ -56,7 +56,7 @@
 
                 <span slot="name" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'start' }"
                   >
                     {{ text }}
@@ -65,7 +65,7 @@
                 </span>
                 <span slot="position" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'start' }"
                   >
                     {{ text }}
@@ -74,7 +74,7 @@
                 </span>
                 <span slot="TeachingJobs" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
                   >
                     {{ text }}
@@ -83,7 +83,7 @@
                 </span>
                 <span slot="LMW" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
                   >
                     {{ text }}
@@ -93,7 +93,7 @@
 
                 <span slot="LMWE" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
                   >
                     {{ text }}
@@ -103,7 +103,7 @@
 
                 <span slot="PW" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
                   >
                     {{ text }}
@@ -113,7 +113,7 @@
 
                 <span slot="action" slot-scope="text, record, index">
                   <div
-                    v-if="year == data[index].year"
+                    v-if="year == test[index].year"
                     :style="{ textAlign: 'center' }"
                   >
                     <template slot="title">
@@ -188,51 +188,52 @@
 </template>
 
 <script>
+const axios = require("axios");
+
 import pdfMake from "pdfmake";
 import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fonts
 // const path = require("path");
-
-const data = [
-  {
-    key: "1",
-    year: 2564,
-    name: "อ.ณัฐพร  ภักดี",
-    position: "อาจารย์ประจำ",
-    TeachingJobs: 0,
-    LMW: 0,
-    LMWE: 0,
-    PW: 0,
-  },
-  {
-    key: "2",
-    year: 2564,
-    name: "อ.พีระศักดิ์ เพียรประสิทธิ์",
-    position: "อาจารย์ประจำ",
-    TeachingJobs: 12,
-    LMW: 5,
-    LMWE: 4.0,
-    PW: 3.5,
-  },
-  {
-    key: "3",
-    year: 2563,
-    name: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
-    position: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
-    TeachingJobs: 0,
-    LMW: 0,
-    LMWE: 0,
-    PW: 0,
-  },
-];
 
 export default {
   name: "SummaryWorkload",
   components: {},
   data() {
     return {
+      test: [
+        {
+          key: "1",
+          year: 2564,
+          name: "อ.ณัฐพร  ภักดี",
+          position: "อาจารย์ประจำ",
+          TeachingJobs: 0,
+          LMW: 0,
+          LMWE: 0,
+          PW: 0,
+        },
+        {
+          key: "2",
+          year: 2564,
+          name: "อ.พีระศักดิ์ เพียรประสิทธิ์",
+          position: "อาจารย์ประจำ",
+          TeachingJobs: 12,
+          LMW: 5,
+          LMWE: 4.0,
+          PW: 3.5,
+        },
+        {
+          key: "3",
+          year: 2563,
+          name: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
+          position: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
+          TeachingJobs: 0,
+          LMW: 0,
+          LMWE: 0,
+          PW: 0,
+        },
+      ],
       semester: 1,
       year: new Date().getFullYear() + 543, // 2020,
-      data,
+
       searchText: "",
       searchInput: null,
       searchedColumn: "",
@@ -300,6 +301,19 @@ export default {
     };
   },
   methods: {
+    get_summary() {
+      axios
+        .post(this.$store.state.url + "/summaryRouters/get_summary")
+        .then((res) => {
+          console.log(res);
+
+          
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+        
+    },
     exportPDF() {
       pdfMake.vfs = pdfFonts.pdfMake.vfs; // 2. set vfs pdf font
       pdfMake.fonts = {
@@ -733,9 +747,10 @@ export default {
             text:
               "งบดำเนินงาน หมวดค่าตอบแทนใช้สอยและวัสดุ เป็นเงิน 5,250.00 บาท",
           },
-   {
+          {
             margin: [0, 70, 70, 0],
-            text: "................................................................",
+            text:
+              "................................................................",
             alignment: "right",
           },
           {
@@ -743,7 +758,7 @@ export default {
             alignment: "right",
             text: "(นางสาวหรรษา รอดเงิน)",
           },
-             {
+          {
             margin: [0, 5, 90, 0],
             alignment: "right",
             text: "นักวิชาการเงินและบัญชี",
@@ -753,9 +768,10 @@ export default {
             text: "อนุมัติ",
             alignment: "left",
           },
-             {
+          {
             margin: [25, 40, 0, 0],
-            text: "..............................................................",
+            text:
+              "..............................................................",
             alignment: "left",
           },
           {
@@ -763,7 +779,7 @@ export default {
             text: "(ผู้ช่วยศาสตราจารย์กฤษณะ ชินสาร)",
             alignment: "left",
           },
-           {
+          {
             margin: [30, 5, 0, 0],
             text: "คณบดีคณะวิทยาการสารสนเทศ",
             alignment: "left",
@@ -1288,36 +1304,34 @@ export default {
           {
             margin: [0, 5, 125, 0],
             alignment: "right",
-            text:
-              "(       อาจารย์เบญจภรณ์ จันทรกองกุล       )",
-          },
-             {
-            margin: [360, 5, 0, 0],
-            alignment: "center",
-            text:
-              "รองคณบดี\nผู้รับรอง",
+            text: "(       อาจารย์เบญจภรณ์ จันทรกองกุล       )",
           },
           {
-             alignment: "left",
-                 margin: [45, 10, 0, 0],
-            text:
-              "อนุมัติ",
+            margin: [360, 5, 0, 0],
+            alignment: "center",
+            text: "รองคณบดี\nผู้รับรอง",
           },
-          { margin: [0, 20, 0, 0],
-             alignment: "left",
+          {
+            alignment: "left",
+            margin: [45, 10, 0, 0],
+            text: "อนุมัติ",
+          },
+          {
+            margin: [0, 20, 0, 0],
+            alignment: "left",
             text:
               "...............................................................",
           },
-          {margin: [0, 5, 0, 0],
-             alignment: "left",
-            text:
-              "(ผู้ช่วยศาสตราจารย์กฤษณะ ชินสาร)",
-          },  {margin: [10, 5, 0, 0],
-             alignment: "left",
-            text:
-              "คณบดีคณะวิทยาการสารสนเทศ",
-          }
-            
+          {
+            margin: [0, 5, 0, 0],
+            alignment: "left",
+            text: "(ผู้ช่วยศาสตราจารย์กฤษณะ ชินสาร)",
+          },
+          {
+            margin: [10, 5, 0, 0],
+            alignment: "left",
+            text: "คณบดีคณะวิทยาการสารสนเทศ",
+          },
         ],
 
         styles: {
@@ -1370,7 +1384,11 @@ export default {
 
       pdfMake.createPdf(Receipt).open({});
     },
+ 
   },
+     created(){
+      this.get_summary();
+    },
 };
 </script>
 

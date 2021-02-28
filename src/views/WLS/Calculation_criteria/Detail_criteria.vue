@@ -465,7 +465,7 @@ export default {
       axios
         .post(
           this.$store.state.url +
-            "/WlsTouters/Get_schedule_detail_by_scheduleID",
+            "/WlsRouters/Get_schedule_detail_by_scheduleID",
           this.schedule
         )
         .then((res) => {
@@ -487,7 +487,7 @@ export default {
  
                 axios
                   .post(
-                    "http://localhost:8080/WlsTouters/Get_condition_by_schedule_detail_id",
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
                     data
                   )
                   .then((res) => {
@@ -506,7 +506,7 @@ export default {
 
                 axios
                   .post(
-                    "http://localhost:8080/WlsTouters/Get_condition_by_schedule_detail_id",
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
                     data
                   )
                   .then((res) => {
@@ -531,7 +531,7 @@ export default {
 
                 axios
                   .post(
-                    "http://localhost:8080/WlsTouters/Get_condition_by_schedule_detail_id",
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
                     data
                   )
                   .then((res) => {
@@ -552,7 +552,7 @@ export default {
 
                 axios
                   .post(
-                    "http://localhost:8080/WlsTouters/Get_condition_by_schedule_detail_id",
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
                     data
                   )
                   .then((res) => {
