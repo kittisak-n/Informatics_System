@@ -135,6 +135,7 @@
           </a-col>
           <a-col :span="3">
             <a-select
+              v-model="course_year"
               label-in-value
               style="width: 60px"
               :default-value="{ key: '1' }"
@@ -148,6 +149,7 @@
           </a-col>
           <a-col :span="6">
             <a-select
+              v-model="course_term"
               label-in-value
               style="width: 100%"
               :default-value="{ key: '1' }"
@@ -174,7 +176,7 @@
               type="file"
               @click="upload_file_click"
             >
-              Upload file Csv
+              Upload file Excel
             </a-button>
           </a-col>
         </a-row>
@@ -407,9 +409,11 @@ export default {
       var input = document.getElementById("upload");
       input.value = "";
     },
-    Insert_course() {
-      Axios.post("http://localhost:8080/WlsInsert/insertcourse")
-        .then(alert("Pass"))
+    async Insert_course() {
+      await Axios.post("http://localhost:8080/WlsInsert/insertcourse", {
+        course: self.data_course_import,
+      })
+        .then(console.log("Insert Pass", self.data_course_import))
         .catch((err) => alert(err));
     },
   },
