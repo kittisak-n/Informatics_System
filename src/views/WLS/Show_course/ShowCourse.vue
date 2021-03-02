@@ -70,9 +70,13 @@
                 :scroll="{ y: 500 }"
                 bordered
               >
-                <span slot="Action">
-                  <a-button type="warning"> <a-icon type="edit" /> </a-button
-                ></span>
+                <span slot="Action" slot-scope="record">
+                  <a-button
+                    type="primary"
+                    @click="get_section_course(record.course_id)"
+                    ><a-icon type="search" />
+                  </a-button>
+                </span>
               </a-table>
             </a-col>
           </a-row>
@@ -93,13 +97,14 @@
                 <a-select-option value="50"> 50 </a-select-option>
                 <a-select-option value="100"> 100 </a-select-option>
               </a-select>
-
               <a-pagination :style="{ display: 'inline' }" :page-size="10" />
             </a-col>
           </a-row>
         </a-card>
       </a-col>
     </a-row>
+
+    <!-- Start Modal Insert-->
     <div id="modal">
       <a-modal
         title="เพิ่มรายวิชา"
@@ -112,12 +117,12 @@
             key="submit"
             type="success"
             v-if="import_status"
-            @click="Insert_course"
+            @click="handleSubmit"
           >
             Submit
           </a-button>
         </template>
-        <a-row :gutter="[10, 50]">
+        <!-- <a-row :gutter="[10, 50]">
           <a-col :span="24" :style="{ textAlign: 'center' }">
             <router-link :to="{ path: '/Show_course/InsertCourse' }">
               <a-button type="primary" style="width: 80%">
@@ -128,14 +133,13 @@
         </a-row>
         <br />
         <hr />
-        <br />
+        <br /> -->
         <a-row :gutter="[10, 10]">
           <a-col :span="6" :style="{ textAlign: 'end' }">
             <p style="margin-top: 5px">ภาคเรียนที่ :</p>
           </a-col>
           <a-col :span="3">
             <a-select
-              v-model="course_year"
               label-in-value
               style="width: 60px"
               :default-value="{ key: '1' }"
@@ -149,7 +153,6 @@
           </a-col>
           <a-col :span="6">
             <a-select
-              v-model="course_term"
               label-in-value
               style="width: 100%"
               :default-value="{ key: '1' }"
@@ -186,6 +189,8 @@
           </a-col>
         </a-row>
       </a-modal>
+      <!-- End Modal Insert -->
+
     </div>
   </div>
 </template>
@@ -200,6 +205,8 @@ export default {
       self: this,
       import_status: false,
 
+      course_year: 1,
+      course_term: 1,
       import_filename: "",
       data_course_import: {},
 
@@ -249,110 +256,13 @@ export default {
           align: "center",
         },
         {
-          title: "กลุ่ม",
-          dataIndex: "course_sec",
-          key: "course_sec",
-          width: "3%",
-          scopedSlots: {
-            customRender: "course_sec",
-          },
-          type: "flex",
-          align: "center",
-        },
-        {
-          title: "จำนวนลงทะเบียน",
-          dataIndex: "course_student",
-          key: "course_student",
-          width: "3%",
-          scopedSlots: {
-            customRender: "course_student",
-          },
-          type: "flex",
-          align: "center",
-        },
-        {
-          title: "วันที่สอน",
-          dataIndex: "course_day",
-          key: "course_day",
-          width: "3%",
-          scopedSlots: {
-            customRender: "course_day",
-          },
-          type: "flex",
-          align: "center",
-        },
-        {
-          title: "เวลาเรียน",
-          dataIndex: "course_time",
-          key: "course_time",
-          width: "4%",
-          scopedSlots: {
-            customRender: "course_time",
-          },
-          type: "flex",
-          align: "center",
-        },
-        {
-          title: "ห้องเรียน",
-          dataIndex: "course_room",
-          key: "course_room",
-          width: "4%",
-          scopedSlots: {
-            customRender: "course_room",
-          },
-          type: "flex",
-          align: "center",
-        },
-        {
-          title: "อาจารย์ผู้สอน",
-          dataIndex: "course_teacher",
-          key: "course_teacher",
-          width: "5%",
-          scopedSlots: {
-            customRender: "course_teacher",
-          },
-          type: "flex",
-          align: "center",
-        },
-        {
           title: "ดำเนินการ",
-          width: "5%",
-          scopedSlots: {
-            customRender: "Action",
-          },
-          type: "flex",
+          width: "3%",
+          scopedSlots: { customRender: "Action" },
           align: "center",
         },
       ],
-      course_record: [
-        {
-          key: 1,
-          course_code: 88510059,
-          course_year: 59,
-          course_name: "Logical Thinking and Problem Solving for Innovation",
-          course_credit: "2 (1-2-3)",
-          course_sec: 1,
-          course_student: 92,
-          course_day: "TH",
-          course_time: "17:00-17:50",
-          course_room: "ARR-เรียนออนไลน์",
-          course_teacher: "อาจารย์ ดร.พิเชษ วะยะลุน",
-        },
-        {
-          key: 2,
-          course_code: 88510159,
-          course_year: 59,
-          course_name: "Moving Forward in a Digital Society with ICT",
-          course_credit: "3 (2-2-5)",
-          course_sec: 25,
-          course_student: 53,
-          course_day: "FR",
-          course_time: "13:00-14:50",
-          course_room: "ARR-เรียนออนไลน์",
-          course_teacher:
-            "อาจารย์ ดร.พนิตนาฎ ยิ้มแย้ม, อาจารย์กิตติพา คลังวิสาร",
-        },
-      ],
+      course_record: [],
     };
   },
   methods: {
@@ -361,6 +271,13 @@ export default {
     },
     handleCancel() {
       console.log("Clicked cancel button");
+      this.modal_insert = false;
+      this.import_status = false;
+      this.import_filename = "";
+      this.$refs.import_csv_file.value = null;
+    },
+    handleSubmit() {
+      this.Insert_course();
       this.modal_insert = false;
       this.import_status = false;
       this.import_filename = "";
@@ -400,7 +317,6 @@ export default {
           self.data_course_import = excellist;
           this.import_filename = files[0].name;
           this.import_status = true;
-          console.log(typeof self.import_filename);
         } catch (e) {
           return alert("Read failure!");
         }
@@ -413,9 +329,42 @@ export default {
       await Axios.post("http://localhost:8080/WlsInsert/insertcourse", {
         course: self.data_course_import,
       })
-        .then(console.log("Insert Pass", self.data_course_import))
+        .then(console.log("Insert Pass"))
         .catch((err) => alert(err));
     },
+    async get_all_sourse() {
+      var thisself = this;
+      await Axios.post("http://localhost:8080/WlsInsert/getallcourse")
+        .then((response) => {
+          response.data.results.forEach((element) => {
+            let course = {
+              course_id: element.course_id,
+              course_code: element.course_code,
+              course_year: element.course_year,
+              course_name: element.course_name,
+              course_credit:
+                element.course_unit +
+                "(" +
+                element.course_lecture_unit +
+                "-" +
+                element.course_lab_unit +
+                "-" +
+                element.course_learning_unit +
+                ")",
+            };
+            thisself.course_record.push(course);
+          });
+
+          console.log(self.course_record);
+        })
+        .catch((err) => alert(err));
+    },
+    get_section_course(id) {
+      console.log(id);
+    },
+  },
+  created() {
+    this.get_all_sourse();
   },
 };
 </script>
