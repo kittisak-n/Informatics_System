@@ -73,7 +73,7 @@
                 <span slot="Action" slot-scope="record">
                   <a-button
                     type="primary"
-                    @click="get_section_course(record.course_id)"
+                    @click="get_course_detail(record.course_id)"
                     ><a-icon type="search" />
                   </a-button>
                 </span>
@@ -119,7 +119,7 @@
             v-if="import_status"
             @click="handleSubmit"
           >
-            Submit
+            บันทึก
           </a-button>
         </template>
         <!-- <a-row :gutter="[10, 50]">
@@ -191,6 +191,16 @@
       </a-modal>
       <!-- End Modal Insert -->
 
+      <!-- Start Modal Detail -->
+      <a-modal v-model="modal_detail" title="รายละเอียดวิชา" on-ok="handleOk">
+        <template slot="footer">
+          <a-button key="back" type="danger" @click="handleCancel">
+            ปิด
+          </a-button>
+        </template>
+        <p>Some contents...</p>
+      </a-modal>
+      <!-- End Modal Detail -->
     </div>
   </div>
 </template>
@@ -203,15 +213,19 @@ export default {
   data() {
     return {
       self: this,
-      import_status: false,
+
+      modal_detail: false,
+      modal_insert: false,
+      confirmLoading: false,
 
       course_year: 1,
       course_term: 1,
       import_filename: "",
+      import_status: false,
       data_course_import: {},
 
-      modal_insert: false,
-      confirmLoading: false,
+      course_detail_record: [],
+      course_record: [],
       course_columns: [
         {
           title: "รหัสวิชา",
@@ -257,12 +271,11 @@ export default {
         },
         {
           title: "ดำเนินการ",
-          width: "3%",
+          width: "5%",
           scopedSlots: { customRender: "Action" },
           align: "center",
         },
       ],
-      course_record: [],
     };
   },
   methods: {
@@ -271,7 +284,10 @@ export default {
     },
     handleCancel() {
       console.log("Clicked cancel button");
+
+      this.modal_detail = false;
       this.modal_insert = false;
+
       this.import_status = false;
       this.import_filename = "";
       this.$refs.import_csv_file.value = null;
@@ -344,7 +360,7 @@ export default {
               course_name: element.course_name,
               course_credit:
                 element.course_unit +
-                "(" +
+                " (" +
                 element.course_lecture_unit +
                 "-" +
                 element.course_lab_unit +
@@ -359,8 +375,10 @@ export default {
         })
         .catch((err) => alert(err));
     },
-    get_section_course(id) {
-      console.log(id);
+    get_course_detail(id) {
+      console.log("ID Button :",id);
+      console.log("Course Detail :",this.course_detail_record)
+      this.modal_detail = true;
     },
   },
   created() {
