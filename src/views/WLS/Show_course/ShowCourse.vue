@@ -59,6 +59,7 @@
             </a-col>
           </a-row>
           <!-- End panel -->
+
           <!-- Table -->
           <a-row :gutter="[8, 8]">
             <a-col :span="24">
@@ -139,11 +140,7 @@
             <p style="margin-top: 5px">ภาคเรียนที่ :</p>
           </a-col>
           <a-col :span="3">
-            <a-select
-              label-in-value
-              style="width: 60px"
-              :default-value="{ key: '1' }"
-            >
+            <a-select v-model="select_course_term" style="width: 100%">
               <a-select-option value="1"> 1 </a-select-option>
               <a-select-option value="2"> 2 </a-select-option>
             </a-select>
@@ -153,12 +150,14 @@
           </a-col>
           <a-col :span="6">
             <a-select
-              label-in-value
+              default-value=""
               style="width: 100%"
-              :default-value="{ key: '1' }"
+              v-model="select_course_year"
             >
-              <a-select-option value="1"> 2564 </a-select-option>
-              <a-select-option value="2"> 2563 </a-select-option>
+              <a-select-option value=""> โปรดเลือก </a-select-option>
+              <a-select-option v-for="item in course_years" :key="item">
+                {{ item }}
+              </a-select-option>
             </a-select>
           </a-col>
         </a-row>
@@ -192,13 +191,45 @@
       <!-- End Modal Insert -->
 
       <!-- Start Modal Detail -->
-      <a-modal v-model="modal_detail" title="รายละเอียดวิชา" on-ok="handleOk">
+      <a-modal
+        v-model="modal_detail"
+        title="รายละเอียดวิชา"
+        on-ok="handleOk"
+        width="900px"
+      >
         <template slot="footer">
-          <a-button key="back" type="danger" @click="handleCancel">
-            ปิด
-          </a-button>
+          <a-button key="back" @click="handleCanceldetail"> ยกเลิก </a-button>
         </template>
-        <p>Some contents...</p>
+        <a-table
+          :columns="course_detail_columns"
+          :data-source="course_detail_data"
+        >
+          <span slot="expandedRowRender" slot-scope="record">
+            <a-row
+              :gutter="[8, 8]"
+              v-for="(item, index) in record.section_date"
+              :key="index"
+            >
+              <a-col :span="8" :offset="2">
+                ห้องเรียน : {{ item.section_detail_room }}
+              </a-col>
+              <a-col :span="5">
+                วันที่เรียน : {{ item.section_detail_day }}
+              </a-col>
+              <a-col :span="7">
+                เวลาเรียน : {{ item.section_detail_start_time }} -
+                {{ item.section_detail_end_time }}
+              </a-col>
+            </a-row>
+          </span>
+          <span slot="Action" slot-scope="record">
+            <a-button
+              type="danger"
+              @click="showDeleteConfirm(record.section_id)"
+              ><a-icon type="close" />
+            </a-button>
+          </span>
+        </a-table>
       </a-modal>
       <!-- End Modal Detail -->
     </div>
@@ -218,12 +249,14 @@ export default {
       modal_insert: false,
       confirmLoading: false,
 
-      course_year: 1,
-      course_term: 1,
+      select_course_year: "", //Select Import file
+      select_course_term: 1, //Select Import file
+
       import_filename: "",
       import_status: false,
-      data_course_import: {},
+      data_course_import: [],
 
+      course_years: [],
       course_detail_record: [],
       course_record: [],
       course_columns: [
@@ -276,16 +309,77 @@ export default {
           align: "center",
         },
       ],
+      course_detail_columns: [
+        {
+          title: "กลุ่ม",
+          dataIndex: "section_number",
+          key: "section_number",
+          width: "20%",
+          scopedSlots: {
+            customRender: "section_number",
+          },
+          type: "flex",
+          align: "center",
+        },
+        {
+          title: "รายละเอียดกลุ่ม",
+          dataIndex: "section_name",
+          key: "section_name",
+          width: "30%",
+          scopedSlots: {
+            customRender: "section_name",
+          },
+          type: "flex",
+          align: "center",
+        },
+        {
+          title: "จำนวนนักศึกษา",
+          dataIndex: "section_student",
+          key: "section_student",
+          width: "20%",
+          scopedSlots: {
+            customRender: "section_student",
+          },
+          type: "flex",
+          align: "center",
+        },
+        {
+          title: "ดำเนินการ",
+          width: "20%",
+          scopedSlots: { customRender: "Action" },
+          align: "center",
+        },
+      ],
+      course_detail_data: [],
     };
   },
   methods: {
+    showDeleteConfirm(id) {
+      let self = this;
+      this.$confirm({
+        title: "ต้องการลบกลุ่มเรียนที่ " + id + " ใช่หรือไม่ ?",
+        // content: "Some descriptions",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk() {
+          console.log("OK");
+          self.RemoveSection(id);
+        },
+        onCancel() {
+          console.log("Cancel");
+        },
+      });
+    },
     showModal() {
       this.modal_insert = true;
+    },
+    handleCanceldetail() {
+      this.modal_detail = false;
     },
     handleCancel() {
       console.log("Clicked cancel button");
 
-      this.modal_detail = false;
       this.modal_insert = false;
 
       this.import_status = false;
@@ -293,16 +387,38 @@ export default {
       this.$refs.import_csv_file.value = null;
     },
     handleSubmit() {
-      this.Insert_course();
-      this.modal_insert = false;
-      this.import_status = false;
-      this.import_filename = "";
-      this.$refs.import_csv_file.value = null;
+      var self = this;
+      if (self.select_course_year == "" || self.select_course_term == "") {
+        this.$warning({
+          title: "โปรดเลือกปีการศึกษา",
+        });
+      } else {
+        this.Insert_course();
+        this.modal_insert = false;
+        this.import_status = false;
+        this.import_filename = "";
+        this.$refs.import_csv_file.value = null;
+      }
     },
     upload_file_click() {
+      console.log(123);
       this.$refs.import_csv_file.click();
     },
+    Years_course() {
+      var j = 0;
+
+      for (var i = 10; i > -1; i--) {
+        if (i == 10) {
+          this.course_years.push(new Date().getFullYear() + 543);
+        } else {
+          this.course_years.push(new Date().getFullYear() - j + 543);
+        }
+        j++;
+      }
+      console.log(this.course_years);
+    },
     importExcel(e) {
+      const self = this;
       const files = e.target.files;
       console.log(files);
       console.log(files[0].name);
@@ -315,6 +431,7 @@ export default {
         );
       }
       const fileReader = new FileReader();
+      self.data_course_import = [];
       fileReader.onload = (ev) => {
         try {
           const data = ev.target.result;
@@ -324,13 +441,50 @@ export default {
           });
           const wsname = workbook.SheetNames[0]; // Take the first sheet，wb.SheetNames[0] :Take the name of the first sheet in the sheets
           const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); // Generate JSON table content，wb.Sheets[Sheet名]    Get the data of the first sheet
-          const excellist = []; // Clear received data
+          console.log(ws);
           // Edit data
-          for (var i = 0; i < ws.length; i++) {
-            excellist.push(ws[i]);
-          }
-          console.log("Read results", excellist); // At this point, you get an array containing objects that need to be processed
-          self.data_course_import = excellist;
+          ws.forEach((ele) => {
+            if (ele.รหัสวิชา) {
+              self.data_course_import.push({
+                course_id: 0,
+                section_number: ele.กลุ่ม,
+                section_student: ele.จำนวนที่ลงทะเบียน,
+                course_name: ele.ชื่อวิชา,
+                course_type: ele.ประเภทรายวิชา,
+                course_year: ele.ปีหลักสูตร,
+                course_code: ele.รหัสวิชา,
+                section_unit: ele.หน่วยกิต,
+                section_lac_unit: ele.หน่วยกิต,
+                section_lab_unit: ele.หน่วยกิต,
+                section_self_unit: ele.หน่วยกิตเรียนรู้ด้วยตัวเอง,
+                section_detail: ele.รายละเอียดกลุ่มเรียน,
+                date: [
+                  {
+                    section_id: 0,
+                    section_date: ele.วัน,
+                    section_room: ele.ห้อง,
+                    section_start: ele.เวลาเริ่มเรียน,
+                    section_end: ele.เวลาเลิกเรียน,
+                    course_person: ele.ผู้สอน,
+                    course_person_position: 0,
+                  },
+                ],
+              });
+            } else {
+              self.data_course_import[
+                self.data_course_import.length - 1
+              ].date.push({
+                section_id: 0,
+                section_date: ele.วัน,
+                section_room: ele.ห้อง,
+                section_start: ele.เวลาเริ่มเรียน,
+                section_end: ele.เวลาเลิกเรียน,
+                course_person: ele.ผู้สอน,
+                course_person_position: 0,
+              });
+            }
+          });
+          console.log(self.data_course_import);
           this.import_filename = files[0].name;
           this.import_status = true;
         } catch (e) {
@@ -339,17 +493,26 @@ export default {
       };
       fileReader.readAsBinaryString(files[0]);
       var input = document.getElementById("upload");
-      input.value = "";
+      input.value = undefined;
     },
     async Insert_course() {
+      var self = this;
+      console.log("Year :", self.select_course_year);
+      console.log("Term :", self.select_course_term);
+
       await Axios.post("http://localhost:8080/WlsInsert/insertcourse", {
         course: self.data_course_import,
+        course_term: self.select_course_term,
+        course_year: self.select_course_year,
       })
-        .then(console.log("Insert Pass"))
+        .then(function (result) {
+          console.log(result);
+        })
         .catch((err) => alert(err));
     },
+
     async get_all_sourse() {
-      var thisself = this;
+      var self = this;
       await Axios.post("http://localhost:8080/WlsInsert/getallcourse")
         .then((response) => {
           response.data.results.forEach((element) => {
@@ -368,24 +531,69 @@ export default {
                 element.course_learning_unit +
                 ")",
             };
-            thisself.course_record.push(course);
+            self.course_record.push(course);
           });
-
           console.log(self.course_record);
         })
         .catch((err) => alert(err));
     },
-    get_course_detail(id) {
-      console.log("ID Button :",id);
-      console.log("Course Detail :",this.course_detail_record)
-      this.modal_detail = true;
+
+    async get_course_detail(id) {
+      const self = this;
+      console.log("ID Button :", id);
+      console.log("Course Detail :", this.course_detail_record);
+
+      await Axios.post("http://localhost:8080/WlsInsert/getcoursedetail", {
+        course_id: id,
+      })
+        .then((response) => {
+          console.log(response.data.results);
+          if (response.data.results == 0) {
+            console.log("nodata");
+            this.$info({
+              title: "ไม่พบข้อมูลกลุ่มเรียน",
+              onOk() {},
+            });
+          } else {
+            self.course_detail_data = [];
+            response.data.results.forEach(function (ele) {
+              console.log(
+                "Section Des :",
+                ele.section_date[0].section_detail_description
+              );
+              self.course_detail_data.push({
+                section_id: ele.section_id,
+                section_number: ele.section_number,
+                section_student: ele.section_student,
+                section_name: ele.section_name,
+                section_date: ele.section_date,
+              });
+            });
+
+            console.log("Data Detail : ", self.course_detail_data);
+            self.modal_detail = true;
+          }
+        })
+        .catch((err) => alert(err));
+    },
+    async RemoveSection(id) {
+      console.log(id);
+      await Axios.post("http://localhost:8080/WlsInsert/changestatus", {
+        section_id: id,
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => alert(err));
     },
   },
   created() {
     this.get_all_sourse();
+    this.Years_course();
   },
 };
 </script>
 
 <style>
 </style>
+
