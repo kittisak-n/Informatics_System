@@ -301,13 +301,52 @@
     </a-card>
 
     <!-- modal edit unit -->
-    <a-modal v-model="edit_unit_modal" title="แก้ไขหน่วยกิต" on-ok="handleOk">
+    <a-modal
+      v-model="edit_unit_modal"
+      title="แก้ไขหน่วยกิต"
+      on-ok="handleOk"
+      width="900px"
+    >
       <template slot="footer">
-        <a-button key="back"> Return </a-button>
+        <a-button @click="close_modal_edit"> ยกเลิก </a-button>
+        <a-button
+          type="success"
+          v-if="
+            edit_unit != 0 &&
+            edit_lecture_unit != 0 &&
+            edit_lab_unit != 0 &&
+            edit_learning_unit != 0
+          "
+          @click="EditUnitPerson()"
+        >
+          ยืนยัน
+        </a-button>
       </template>
       <a-row :gutter="[8, 8]">
-        <a-col :span="4">หน่วยกิต : </a-col>
-        <a-col :span="4"><a-input placeholder="Basic usage" /></a-col>
+        <a-col :span="2" :style="{ textAlign: 'end', marginTop: '3px' }"
+          >หน่วยกิต :
+        </a-col>
+        <a-col :span="3"
+          ><a-input-number v-model="edit_unit" :min="0" :max="10"
+        /></a-col>
+        <a-col :span="2" :style="{ textAlign: 'end', marginTop: '3px' }"
+          >บรรยาย :
+        </a-col>
+        <a-col :span="3"
+          ><a-input-number v-model="edit_lecture_unit" :min="0" :max="10"
+        /></a-col>
+        <a-col :span="2" :style="{ textAlign: 'end', marginTop: '3px' }"
+          >ปฏิบัติ :
+        </a-col>
+        <a-col :span="3"
+          ><a-input-number v-model="edit_lab_unit" :min="0" :max="10"
+        /></a-col>
+        <a-col :span="4" :style="{ textAlign: 'end', marginTop: '3px' }"
+          >เรียนรู้ด้วยตนเอง :
+        </a-col>
+        <a-col :span="3"
+          ><a-input-number v-model="edit_learning_unit" :min="0" :max="10"
+        /></a-col>
       </a-row>
     </a-modal>
     <!-- end modal edit unit -->
@@ -321,7 +360,7 @@ export default {
     return {
       edit_unit_modal: false, // modal edit unit
       edit_unit: 0,
-      edit_lecture_unit : 0,
+      edit_lecture_unit: 0,
       edit_lab_unit: 0,
       edit_learning_unit: 0,
 
@@ -363,13 +402,17 @@ export default {
         },
       ],
       subject_data: [],
+      subject_edit_data: [],
     };
   },
   methods: {
+    close_modal_edit() {
+      this.edit_unit_modal = false;
+    },
     GetSubject() {
       let self = this;
       Axios.post("http://localhost:8080/WlsInsert/getsubject", {
-        person_id: 1,
+        person_id: 1, //รอ User
       })
         .then(function (result) {
           console.log(result.data.results);
@@ -396,11 +439,44 @@ export default {
         })
         .catch((err) => alert(err));
     },
+    EditUnitPerson() {
+      let self = this;
+      Axios.post("http://localhost:8080/WlsInsert/editpersonsection", {
+        person_id: self.subject_edit_data[0].person_id,
+        section_id: self.subject_edit_data[0].section_id,
+        unit: self.edit_unit,
+        lecture_unit: self.edit_lecture_unit,
+        lab_unit: self.edit_lab_unit,
+        learning_unit: self.edit_learning_unit,
+      });
+
+      self.close_modal_edit();
+      location.reload();
+    },
     ModalEditUnit(person, section) {
       var self = this;
       self.edit_unit_modal = true;
       console.log("Person :", person);
       console.log("Section :", section);
+      Axios.post("http://localhost:8080/WlsInsert/getsubjectunit", {
+        person_id: person,
+        section_id: section,
+      })
+        .then(function (result) {
+          console.log(result.data.results);
+          result.data.results.forEach((element) => {
+            let data = {
+              person_id: element.person_id,
+              section_id: element.section_id,
+            };
+            (self.edit_unit = element.section_person_unit),
+              (self.edit_lecture_unit = element.section_person_lecture_unit),
+              (self.edit_lab_unit = element.section_person_lab_unit),
+              (self.edit_learning_unit = element.section_person_learning_unit),
+              self.subject_edit_data.push(data);
+          });
+        })
+        .catch((err) => alert(err));
     },
   },
   created() {
