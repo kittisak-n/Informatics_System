@@ -179,7 +179,7 @@ export default {
       const self = this;
       
        axios
-        .post(this.$store.state.url + "/WlsTouters/Get_all_schedule")
+        .post(this.$store.state.url + "/WlsRouters/Get_all_schedule")
         .then(function (response) {
           response.data.results.schedule.forEach((data,index) => {
               let schedule_data = {
