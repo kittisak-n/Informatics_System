@@ -7,114 +7,8 @@
       }"
       v-if="this.$store.state.status_login"
     >
-      <a-drawer
-        class="display_mobile"
-        :width="250"
-        :placement="placement"
-        :closable="false"
-        :visible="visible"
-        @close="onClose"
-      >
-        <div
-          @click="() => (visible = !visible)"
-          :style="{
-            paddingLeft: '24px',
-            paddingTop: '40px',
-            paddingBottom: '20px',
-            height: 'auto',
-          }"
-        >
-          <div class="logo">
-            <img
-              class="img-logo"
-              src="https://www.informatics.buu.ac.th/2020/wp-content/uploads/2018/11/iclub-noGradient-CircleBk.png"
-            />
-          </div>
-        </div>
-        <hr />
-        <a-menu
-          class="menu"
-          mode="inline"
-          theme="dark"
-          :default-selected-keys="['home']"
-        >
-          <a-menu-item key="home">
-            <a-icon type="home" />
-            <span>หน้าแรก</span>
-          </a-menu-item>
-
-          <a-sub-menu key="cal">
-            <span slot="title">
-              <a-icon type="calculator" />
-              <span>คำนวณภาระงาน</span>
-            </span>
-            <a-menu-item key="cal_1" @click="() => (visible = !visible)">
-              cal_1
-            </a-menu-item>
-            <a-menu-item key="cal_2" @click="() => (visible = !visible)">
-              cal_2
-            </a-menu-item>
-            <a-menu-item key="cal_3" @click="() => (visible = !visible)">
-              cal_3
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="report">
-            <span slot="title">
-              <a-icon type="area-chart" />
-              <span>รายงานการเงิน</span>
-            </span>
-            <a-menu-item key="report_1" @click="() => (visible = !visible)">
-              report_1
-            </a-menu-item>
-            <a-menu-item key="report_2" @click="() => (visible = !visible)">
-              report_2
-            </a-menu-item>
-            <a-menu-item key="report_3" @click="() => (visible = !visible)">
-              report_3
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="payment">
-            <span slot="title">
-              <a-icon type="form" />
-              <span>เบิกจ่ายเงินสวัสดิการ</span>
-            </span>
-            <a-menu-item key="payment_1" @click="() => (visible = !visible)">
-              payment_1
-            </a-menu-item>
-            <a-menu-item key="payment_2" @click="() => (visible = !visible)">
-              payment_2
-            </a-menu-item>
-            <a-menu-item key="payment_3" @click="() => (visible = !visible)">
-              payment_3
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="stock">
-            <span slot="title">
-              <a-icon type="gift" />
-              <span>รายการพัสดุ</span>
-            </span>
-            <a-menu-item
-              key="MDS_exchequer"
-              @click="() => (visible = !visible)"
-            >
-              stock_1
-            </a-menu-item>
-            <a-menu-item key="stock_2" @click="() => (visible = !visible)">
-              stock_2
-            </a-menu-item>
-            <a-menu-item key="stock_3" @click="() => (visible = !visible)">
-              stock_3
-            </a-menu-item>
-          </a-sub-menu>
-          <a-menu-item key="poweroff" @click="() => (visible = !visible)">
-            <a-icon type="poweroff" />
-            <span>ออกจากระบบ</span>
-          </a-menu-item>
-        </a-menu>
-      </a-drawer>
       <a-layout-sider
         width="220"
-        class="display_web"
         v-model="collapsed"
         :trigger="null"
         collapsible
@@ -133,119 +27,36 @@
           :style="{ Background: '#035096' }"
           :default-selected-keys="['home']"
         >
-          <a-menu-item key="home">
-            <a-icon type="home" theme="filled" />
-            <span>หน้าแรก</span>
-          </a-menu-item>
-          <a-menu-item key="user">
-            <router-link :to="{ path: '/personal_data' }">
-              <a-icon type="user" />
-              <span>ข้อมูลส่วนตัว</span>
+          <a-menu-item
+            v-for="system in this.$store.state.user_menu"
+            :key="system.system_key"
+            v-show="system.subSystem.length == 0"
+          >
+            <router-link :to="{ path: '/' + system.Path }">
+              <a-icon :type="system.icon" theme="filled" />
+              <span>{{ system.Name }}</span>
             </router-link>
           </a-menu-item>
-
-          <a-menu-item key="management">
-            <router-link :to="{ path: '/permission_manage' }">
-              <a-icon type="api" theme="filled" />
-              <span>จัดการสิทธิ์เข้าใช้งาน</span>
-            </router-link>
-          </a-menu-item>
-
-          <a-sub-menu key="CWS">
+          <a-sub-menu
+            v-for="system in this.$store.state.user_menu"
+            :key="system.system_key"
+            v-show="system.subSystem.length != 0"
+          >
             <span slot="title">
-              <a-icon type="calculator" theme="filled" />
-              <span>ระบบคำนวณภาระงาน</span>
+              <a-icon :type="system.icon" theme="filled" />
+              <span>{{ system.Name }}</span>
             </span>
-            <a-menu-item key="CWS_show">
-              <router-link :to="{ path: '/Show_course' }">
-              <a-icon type="folder-open" theme="filled" />ข้อมูลรายวิชา
+            <a-menu-item
+              v-for="subsystem in system.subSystem"
+              :key="subsystem.sub_system_key"
+            >
+              <router-link :to="{ path: '/' + subsystem.Path }">
+                <a-icon :type="subsystem.icon" theme="filled" />
+                <span> {{ subsystem.Name }}</span>
               </router-link>
-            </a-menu-item>
-            <a-menu-item key="CWS_setting">
-              <a-tooltip placement="right">
-        <template slot="title">
-          <span>หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน</span>
-        </template>
-          <router-link :to="{ path: '/Calculation_criteria' }">
-              <a-icon type="file-sync" />หลักเกณฑ์กำหนดภาระงาน.
-              </router-link>
-      </a-tooltip>
-
-          
-            </a-menu-item>
-            <a-menu-item key="CWS_calculation">
-              <router-link :to="{ path: '/Calculation_workload' }">
-              <a-icon type="calculator" theme="filled" />คำนวณภาระงาน
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="CWS_conclution">
-             
-                           <a-tooltip placement="right">
-        <template slot="title">
-          <span>สรุปภาระงานเพื่อการจ่ายค่าตอบแทน</span>
-        </template>
-        <router-link :to="{ path: '/SummaryWorkload' }">
-              <a-icon type="area-chart"  />สรุปภาระงานเพื่อการจ่าย. </router-link>
-      </a-tooltip>
-
-             
-               
-            </a-menu-item>
-            <a-menu-item key="CWS_check">
-
-
-
-
-                <router-link :to="{ path: '/Inspect_workload' }">
-                 <a-icon type="search" />ตรวจสอบภาระงาน</router-link>
-
-          
             </a-menu-item>
           </a-sub-menu>
-          <a-sub-menu key="MDS">
-            <span slot="title">
-              <a-icon type="switcher" theme="filled" />
-              <span>ระบบเบิกจ่ายวัสดุ</span>
-            </span>
-            <a-menu-item key="MDS_exchequer">
-              <router-link :to="{ path: '/MDS_exchequer' }">
-                <a-icon type="folder-open" theme="filled" />รายการวัสดุในคลัง
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="MDS_import">
-              <router-link :to="{ path: '/MDS_import' }">
-                <a-icon type="file-done" />รายการนำเข้าวัสดุ
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="MDS_export">
-              <router-link :to="{ path: '/MDS_export' }">
-                <a-icon type="file-sync" />รายการเบิกจ่ายวัสดุ
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="MDS_report">
-              <router-link :to="{ path: '/MDS_report' }">
-                <a-icon type="area-chart" />รายงานผลเบิกจ่ายวัสดุ
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="MDS_setting">
-              <router-link :to="{ path: '/MDS_disbursement_user' }">
-                <a-icon type="setting" theme="filled" />ตั้งต่าระบบเบิกจ่าย
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="MDS_disbursement">
-              <router-link :to="{ path: '/MDS_disbursement' }">
-                <a-icon type="block" />เบิกจ่ายวัสดุ
-              </router-link>
-            </a-menu-item>
-
-            <!-- <a-menu-item key="MDS_report">
-              <router-link :to="{ path: '/stock/reveal_report' }">
-                รายงานผลการเบิกพัสดุ
-              </router-link>
-            </a-menu-item> -->
-          </a-sub-menu>
-
-          <a-menu-item key="poweroff">
+          <a-menu-item key="poweroff" @click="Userlogout()">
             <a-icon type="poweroff" />
             <span>ออกจากระบบ</span>
           </a-menu-item>
@@ -284,7 +95,7 @@
                     fontSize: '16px',
                   }"
                 >
-                  นายกิตติศักดิ์ น้อยดอนไพร
+                  {{ this.$store.state.user.user_name }}
                 </span>
                 <a-icon
                   slot="count"
@@ -316,14 +127,18 @@
                         lineHeight: '2',
                       }"
                     >
-                      <a-icon type="user" />
-                      <span>ข้อมูลส่วนตัว</span>
+                      <router-link :to="{ path: '/personal_data' }">
+                        <a-icon type="user" />
+                        <span> ข้อมูลส่วนตัว</span>
+                      </router-link>
                     </a-menu-item>
+
                     <a-menu-item
                       :style="{
                         fontSize: '16px',
                         lineHeight: '2',
                       }"
+                      @click="Userlogout()"
                     >
                       <a-icon type="poweroff" /><span>ออกจากระบบ</span>
                     </a-menu-item>
@@ -383,7 +198,6 @@
       </a-layout>
     </a-layout>
 
-
     <!-- Bug -->
     <a-layout
       :style="{
@@ -397,7 +211,7 @@
         </div>
       </a-layout-content>
     </a-layout>
-  <!-- End [Bug] -->
+    <!-- End [Bug] -->
   </div>
 </template>
 <script>
@@ -411,14 +225,37 @@ export default {
     };
   },
   methods: {
-    showDrawer() {
-      this.visible = true;
+    checkUser() {
+      const self = this;
+      if (
+        sessionStorage.getItem("person_name") &&
+        sessionStorage.getItem("person_id") &&
+        sessionStorage.getItem("person_menu")
+      ) {
+        self.$store.state.status_login = true;
+        self.$store.state.user.user_name = sessionStorage.getItem(
+          "person_name"
+        );
+        self.$store.state.user.user_id = sessionStorage.getItem("person_id");
+        self.$store.state.user_menu = JSON.parse(
+          sessionStorage.getItem("person_menu")
+        );
+      } else {
+        self.$store.state.status_login = false;
+        self.$router.push({ path: "login" });
+      }
     },
-    onClose() {
-      this.visible = false;
+    Userlogout() {
+      const self = this;
+      sessionStorage.clear();
+      self.$store.state.status_login = false;
+      self.$router.push({ path: "login" });
     },
-    onChange(e) {
-      this.placement = e.target.value;
+    clearSession() {
+      window.onbeforeunload = function() {
+        const storage = window.localStorage;
+        storage.clear();
+      };
     },
   },
   computed: {
@@ -438,6 +275,12 @@ export default {
       console.log(breadcrumbs);
       return breadcrumbs;
     },
+  },
+  created() {
+    this.checkUser();
+  },
+  mounted() {
+    this.clearSession();
   },
 };
 </script>

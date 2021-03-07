@@ -962,6 +962,13 @@ export default {
       return isJpgOrPng && isLt2M;
     },
     exportPDF() {
+      let body = [["First", "Second", "Third", "The last one"]];
+      let table_row = [];
+      for (let i = 1; i <= 4; i++) {
+        table_row.push(i);
+      }
+      body.push(table_row);
+      console.log(body);
       pdfMake.vfs = pdfFonts.pdfMake.vfs; // 2. set vfs pdf font
       pdfMake.fonts = {
         THSarabunPsk: {
@@ -972,7 +979,18 @@ export default {
         },
       };
       const docDefinition = {
-        content: ["English", "ไทย"],
+        content: [
+          {
+            layout: "lightHorizontalLines", // optional
+            table: {
+              // headers are automatically repeated if the table spans over multiple pages
+              // you can declare how many rows should be treated as headers
+              headerRows: 1,
+              widths: ["*", "auto", 100, "*"],
+              body: body,
+            },
+          },
+        ],
         defaultStyle: {
           font: "THSarabunPsk",
         },

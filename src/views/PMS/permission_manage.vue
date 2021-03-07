@@ -16,7 +16,9 @@
             <a-col :span="20" style="text-align:end">
               <br />
               <div class="text-head">จำนวนบุคลากรที่มีอยู่ในระบบ</div>
-              <div><span class="text-number ">3 </span>คน</div>
+              <div>
+                <span class="text-number ">{{ numPerson }} </span>คน
+              </div>
             </a-col>
           </a-row>
         </a-card>
@@ -26,7 +28,7 @@
       <a-col :span="24">
         <a-card size="small">
           <a-row :gutter="[8, 8]">
-            <a-col :span="14" style="margin: 0.2em 0px;">
+            <a-col :span="16" style="margin: 0.2em 0px;">
               <a-card-meta title="รายการผู้มีสิทธิ์การใช้งานระบบ">
                 <a-icon
                   slot="avatar"
@@ -38,17 +40,17 @@
               </a-card-meta>
             </a-col>
 
-            <a-col :span="5" :style="{ textAlign: 'end' }">
+            <a-col :span="4" :style="{ textAlign: 'end' }">
               <router-link :to="{ path: '/addposition' }">
-                <a-button type="primary" icon="plus">
-                  เพิ่มตำแหน่งการเข้าถึง
+                <a-button type="primary" icon="plus" style="width:100%">
+                  เพิ่มสิทธิ์การเข้าถึง
                 </a-button>
               </router-link>
             </a-col>
 
-            <a-col :span="5" :style="{ textAlign: 'start' }">
+            <a-col :span="4" :style="{ textAlign: 'start' }">
               <router-link :to="{ path: '/permission_manage/adduser' }">
-                <a-button type="primary" icon="plus">
+                <a-button type="success" icon="user-add" style="width:100%">
                   เพิ่มผู้มีสิทธิ์เข้าใช้ระบบ
                 </a-button>
               </router-link>
@@ -60,7 +62,7 @@
             <a-col :span="24">
               <a-table
                 :columns="columns"
-                :data-source="data"
+                :data-source="dataPerson"
                 :pagination="false"
                 size="small"
               >
@@ -87,22 +89,29 @@
                   </div>
                 </span>
 
-                <span slot="test" slot-scope="text">
+                <span slot="permission" slot-scope="text">
                   <div style="text-align:center">
                     {{ text }}
                   </div>
                 </span>
 
-                <span slot="status">
+                <span slot="status" slot-scope="text, record, index">
                   <div style="text-align:center">
-                    <a-switch default-checked>
+                    <a-switch
+                      :checked="dataPerson[index].status"
+                      @click="
+                        () =>
+                          (dataPerson[index].status = !dataPerson[index].status)
+                      "
+                      @change="closePersonId(record.person_id)"
+                    >
                       <a-icon slot="checkedChildren" type="check" />
                       <a-icon slot="unCheckedChildren" type="close" />
                     </a-switch>
                   </div>
                 </span>
 
-                <span slot="action">
+                <span slot="action" slot-scope="record">
                   <div style="text-align:center">
                     <a-tooltip placement="top" title="จัดการสิทธิ์">
                       <a-button
@@ -112,14 +121,21 @@
                       >
                       </a-button>
                     </a-tooltip>
-                    <a-tooltip placement="top" title="ปิดการใช้งาน">
-                      <a-button type="danger" icon="close"> </a-button>
-                    </a-tooltip>
+                    <!-- <a-tooltip placement="top" title="ปิดการใช้งาน">
+                      <a-button
+                        type="danger"
+                        icon="close"
+                        @click="
+                          showDeleteConfirm(record.person_id, record.name)
+                        "
+                      >
+                      </a-button>
+                    </a-tooltip> -->
                     <a-tooltip placement="top" title="ตรวจสอบข้อมูล">
                       <a-button
                         type="primary"
-                        @click="showModal_info"
                         icon="search"
+                        @click="getByIdPerson(record.person_id)"
                       >
                       </a-button>
                     </a-tooltip>
@@ -248,61 +264,61 @@
           <a-col :span="24">
             <a-card>
               <a-row :gutter="[8, 8]">
-                <a-col :span="12">
+                <a-col :span="12" v-model="nameInfo">
                   <div style="text-align:center">
                     <b>ชื่อ : </b>
-                    <span>ประไพพรรณ</span>
+                    <span>{{ nameInfo }}</span>
                   </div>
                 </a-col>
-                <a-col :span="12">
+                <a-col :span="12" v-model="lastnameInfo">
                   <div style="text-align:center">
                     <b>นามสกุล : </b>
-                    <span>สุ่มทรัพย์</span>
+                    <span>{{ lastnameInfo }}</span>
                   </div>
                 </a-col>
               </a-row>
 
               <a-row :gutter="[8, 8]">
-                <a-col :span="12">
+                <a-col :span="12" v-model="positionInfo">
                   <div style="text-align:center">
                     <b>ตำแหน่ง : </b>
-                    <span>เจ้าหน้าที่ฝ่ายธุรการ</span>
+                    <span>{{ positionInfo }}</span>
                   </div>
                 </a-col>
-                <a-col :span="12">
+                <a-col :span="12" v-model="addressInfo">
                   <div style="text-align:center">
                     <b>ที่อยู่ : </b>
-                    <span>199/116 หมู่16</span>
+                    <span>{{ addressInfo }}</span>
                   </div>
                 </a-col>
               </a-row>
 
               <a-row :gutter="[8, 8]">
-                <a-col :span="12">
+                <a-col :span="12" v-model="districtInfo">
                   <div style="text-align:center">
                     <b>ตำบล : </b>
-                    <span>ศรีราชา</span>
+                    <span>{{ districtInfo }}</span>
                   </div>
                 </a-col>
-                <a-col :span="12">
+                <a-col :span="12" v-model="amphurInfo">
                   <div style="text-align:center">
                     <b>อำเภอ : </b>
-                    <span>ศรีราชา</span>
+                    <span>{{ amphurInfo }}</span>
                   </div>
                 </a-col>
               </a-row>
 
               <a-row :gutter="[8, 8]">
-                <a-col :span="12">
+                <a-col :span="12" v-model="provinceInfo">
                   <div style="text-align:center">
                     <b>จังหวัด : </b>
-                    <span>ชลบุรี</span>
+                    <span>{{ provinceInfo }}</span>
                   </div>
                 </a-col>
-                <a-col :span="12">
+                <a-col :span="12" v-model="zipcodeInfo">
                   <div style="text-align:center">
                     <b>รหัสไปรษณีย์ : </b>
-                    <span>20000</span>
+                    <span>{{ zipcodeInfo }}</span>
                   </div>
                 </a-col>
               </a-row>
@@ -311,7 +327,7 @@
         </a-row>
 
         <a-row :gutter="[8, 8]">
-          <a-col :span="12">
+          <a-col :span="24">
             <a-card>
               <a-row>
                 <a-col :span="4">
@@ -325,12 +341,15 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">จำนวนระบบ</div>
-                  <div><span class="text-number ">2 </span>ระบบ</div>
+                  <div>
+                    <span class="text-number ">{{ numSystemPermission }} </span
+                    >ระบบ
+                  </div>
                 </a-col>
               </a-row>
             </a-card>
           </a-col>
-          <a-col :span="12">
+          <!-- <a-col :span="12">
             <a-card>
               <a-row>
                 <a-col :span="4">
@@ -348,17 +367,22 @@
                 </a-col>
               </a-row>
             </a-card>
-          </a-col>
+          </a-col> -->
         </a-row>
 
         <a-row :gutter="[8, 8]">
           <a-col>
             <a-table
               :columns="columns_modal_info"
-              :data-source="data_modal_info"
+              :data-source="personSystem"
               :pagination="false"
               size="small"
             >
+              <span slot="key" slot-scope="text">
+                <div style="text-align:center">
+                  {{ text }}
+                </div>
+              </span>
             </a-table>
           </a-col>
         </a-row>
@@ -367,6 +391,7 @@
   </div>
 </template>
 <script>
+const axios = require("axios");
 const columns = [
   {
     dataIndex: "key",
@@ -379,7 +404,7 @@ const columns = [
     dataIndex: "name",
     key: "name",
     title: "ชื่อ - นามสกุล",
-    width: "20%",
+    width: "30%",
     scopedSlots: { customRender: "name" },
   },
   {
@@ -390,6 +415,14 @@ const columns = [
     scopedSlots: { customRender: "position" },
   },
   // {
+  //   title: "สิทธิ์การเข้าถึง",
+  //   dataIndex: "permission",
+  //   width: "20%",
+  //   key: "",
+  //   scopedSlots: { customRender: "permission" },
+  // },
+
+  // {
   //   title: "ไว้ก่อน",
   //   dataIndex: "address",
   //   width: "20%",
@@ -398,15 +431,15 @@ const columns = [
   // },
   {
     title: "สถานะ",
-    key: "tags",
-    dataIndex: "tags",
+    key: "status",
+    dataIndex: "status",
     width: "20%",
     scopedSlots: { customRender: "status" },
   },
   {
     title: "ดำเนินการ",
     key: "action",
-    width: "30%",
+    width: "20%",
     scopedSlots: { customRender: "action" },
   },
 ];
@@ -425,35 +458,45 @@ const columns_modal_manage = [
 
 const columns_modal_info = [
   {
-    title: "ระบบที่มีสิทธิ์เข้าถึง",
-    dataIndex: "permission_activate",
-    scopedSlots: { customRender: "" },
+    title: "สิทธิ์การใช้งาน",
+    key: "key",
+    dataIndex: "system_name_TH",
   },
 ];
 
-const data = [
-  {
-    key: "1",
-    name: "ประไพพรรณ สุ่มทรัพย์",
-    position: "เจ้าหน้าที่ฝ่ายธุรการ",
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "นันทิกานต์ คุ้มเพชร",
-    position: "เจ้าหน้าที่เบิกวัสดุ",
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "ปุณณานันท์ มีเงินมาก",
-    position: "อาจารย์ที่ปรึกษา",
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+// const data = [
+//   {
+//     key: "1",
+//     name: "ประไพพรรณ สุ่มทรัพย์",
+//     position: "เจ้าหน้าที่ฝ่ายธุรการ",
+//     address: "New York No. 1 Lake Park",
+//     tags: ["nice", "developer"],
+//   },
+//   {
+//     key: "2",
+//     name: "นันทิกานต์ คุ้มเพชร",
+//     position: "เจ้าหน้าที่เบิกวัสดุ",
+//     address: "London No. 1 Lake Park",
+//     tags: ["loser"],
+//   },
+//   {
+//     key: "3",
+//     name: "ปุณณานันท์ มีเงินมาก",
+//     position: "อาจารย์ที่ปรึกษา",
+//     address: "Sidney No. 1 Lake Park",
+//     tags: ["cool", "teacher"],
+//   },
+// ];
+
+// const dataPerson = [
+//   {
+//     key: dataPerson.results.person_id,
+//     name: dataPerson.person_firstname_TH + " " + dataPerson.person_lastname_TH,
+//     position: "เจ้าหน้าที่ฝ่ายธุรการ",
+//     address: "New York No. 1 Lake Park",
+//     tags: ["nice", "developer"],
+//   },
+// ];
 
 const data_modal_manage = [
   {
@@ -487,7 +530,22 @@ const data_modal_info = [
 export default {
   data() {
     return {
-      data,
+      dataPerson: [],
+      personSystem: [],
+      // dataPersonId: {
+      //   person_id: "",
+      //   person_username: "",
+      //   prefix_id: "",
+      //   person_firstname_TH: "",
+      //   person_lastname_TH: "",
+      //   person_address: "",
+      //   person_province: "",
+      //   person_amphur: "",
+      //   person_district: "",
+      //   person_position: "",
+      //   person_status: "",
+      // },
+      // data,
       columns,
       data_modal_manage,
       columns_modal_manage,
@@ -495,20 +553,173 @@ export default {
       columns_modal_info,
       visible_manage: false,
       visible_info: false,
+      nameInfo: "",
+      lastnameInfo: "",
+      positionInfo: "",
+      addressInfo: "",
+      provinceInfo: "",
+      amphurInfo: "",
+      districtInfo: "",
+      zipcodeInfo: "",
+      nameDeleteFirm: "",
+      numPerson: 0,
+      numSystemPermission: 0,
     };
   },
   methods: {
+    getAllPerson() {
+      const self = this;
+      self.numPerson = 0;
+      axios
+        .post("http://localhost:8080/personRouters/getAllPerson")
+        .then(function(res) {
+          const data = res.data;
+          // console.log(data.results);
+          data.results.forEach(function(ele, index) {
+            self.numPerson += 1;
+            let data = {
+              key: index + 1,
+              person_id: ele.person_id,
+              name:
+                ele.pf_name_abbr == null
+                  ? ele.person_firstname_TH + " " + ele.person_lastname_TH
+                  : ele.pf_name_abbr +
+                    ele.person_firstname_TH +
+                    " " +
+                    ele.person_lastname_TH,
+              position: ele.postition_name,
+              // permission: ele.person_status,
+              status: ele.person_status == 1 ? true : false,
+            };
+            self.dataPerson.push(data);
+          });
+          console.log(self.dataPerson);
+        });
+    },
+
+    getByIdPerson(id) {
+      this.visible_info = true;
+      console.log(id);
+      const self = this;
+      self.numSystemPermission = 0;
+      self.personSystem = [];
+      axios
+        .post("http://localhost:8080/personRouters/getByIdPerson", {
+          person_id: id,
+        })
+        .then(function(res) {
+          const data = res.data;
+
+          if (data.results[0].pf_name_abbr == null) {
+            data.results[0].pf_name_abbr = "";
+          }
+
+          self.nameInfo =
+            data.results[0].pf_name_abbr + data.results[0].person_firstname_TH;
+          self.lastnameInfo = data.results[0].person_lastname_TH;
+          self.positionInfo = data.results[0].postition_name;
+          self.addressInfo = data.results[0].person_address;
+          self.provinceInfo = data.results[0].province;
+          self.amphurInfo = data.results[0].amphures;
+          self.districtInfo = data.results[0].districts;
+          self.zipcodeInfo = data.results[0].zipcode;
+        });
+
+      axios
+        .post("http://localhost:8080/personRouters/getSystemByIdPerson", {
+          person_id: id,
+        })
+        .then(function(res) {
+          const data = res.data;
+
+          data.results.forEach(function(ele, index) {
+            self.numSystemPermission += 1;
+            let data = {
+              key: index + 1,
+              system_name_TH: ele.system_name_TH,
+            };
+            self.personSystem.push(data);
+          });
+        });
+    },
+
+    closePersonId(data) {
+      const self = this;
+      axios
+        .post("http://localhost:8080/personRouters/closePersonId", {
+          person_id: data,
+        })
+        .then(function(res) {
+          const data = res.data;
+          if (data.results) {
+            self.$notification["success"]({
+              message: "การแจ้งเตือน",
+              description: "เปลี่ยนสถานะสำเร็จ",
+              duration: 3,
+            });
+          }
+        });
+    },
+
+    // showDeleteConfirm(id, name) {
+    //   console.log(id);
+
+    //   this.$confirm({
+    //     title: "คุณการต้องลบใช่หรือไม่",
+    //     content: name,
+    //     okText: "ยืนยัน",
+    //     okType: "danger",
+    //     cancelText: "ยกเลิก",
+    //     onOk() {
+    //       console.log("OK");
+
+    //       axios
+    //         .post("http://localhost:8080/personRouters/deletePrepair", {
+    //           person_id: id,
+    //         })
+    //         .then(function(res) {
+    //           const data = res.data;
+    //           console.log(data.results);
+    //         });
+
+    //       axios
+    //         .post("http://localhost:8080/personRouters/deletePerson", {
+    //           person_id: id,
+    //         })
+    //         .then(function(res) {
+    //           const data = res.data;
+    //           console.log(data.results);
+    //           this.getAllPerson();
+    //         });
+
+    //       this.$notification["success"]({
+    //         message: "การแจ้งเตือน",
+    //         description: "ลบสำเร็จ",
+    //         duration: 3,
+    //       });
+    //     },
+    //     onCancel() {
+    //       console.log("Cancel");
+    //     },
+    //   });
+    // },
     showModal_manage() {
       this.visible_manage = true;
-    },
-    showModal_info() {
-      this.visible_info = true;
     },
     handleOk(e) {
       console.log(e);
       this.visible_manage = false;
       this.visible_info = false;
     },
+    // test(data) {
+    //   console.log(data);
+    // },
+  },
+  created() {
+    this.getAllPerson();
+    console.log(this.$store.state.user.user_name);
+    console.log(this.$store.state.user.user_id);
+    // console.log(this.$store.state.user_menu);
   },
 };
 </script>

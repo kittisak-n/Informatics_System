@@ -67,7 +67,7 @@ const routes = [{
         ]
     },
     {
-        path:'',
+        path:'/login',
         name:'login',
         meta:{breadCrumb : "เข้าสู่ระบบ"},
         component:{
@@ -84,7 +84,7 @@ const routes = [{
     {
         path:'/addposition',
         name:'addposition',
-        meta:{breadCrumb : "เพิ่มตำแหน่งการเข้าถึง"},
+        meta:{breadCrumb : "เพิ่มสิทธิ์การเข้าถึง"},
         component:{
             render(c){
                 return c("router-view");
