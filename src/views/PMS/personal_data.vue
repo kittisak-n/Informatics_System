@@ -305,14 +305,18 @@
     <br>
     <a-card>
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        
+         <a-col :span="24" style="text-align:center">
+          <h3>รายละเอียดรายวิชาที่สอน</h3>
+          
+        </a-col>
       </a-row>
     </a-card>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+};
 </script>
 
 <style></style>
