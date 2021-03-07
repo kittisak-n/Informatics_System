@@ -288,10 +288,29 @@
       <a-row :gutter="[8, 8]" type="flex" justify="center">
         <a-col :span="24" style="text-align: end">
           <a-table :columns="subject_columns" :data-source="subject_data">
+            <span slot="action" slot-scope="record">
+              <a-button
+                type="warning"
+                @click="ModalEditUnit(record.person_id, record.section_id)"
+                ><a-icon type="edit"
+              /></a-button>
+            </span>
           </a-table>
         </a-col>
       </a-row>
     </a-card>
+
+    <!-- modal edit unit -->
+    <a-modal v-model="edit_unit_modal" title="แก้ไขหน่วยกิต" on-ok="handleOk">
+      <template slot="footer">
+        <a-button key="back"> Return </a-button>
+      </template>
+      <a-row :gutter="[8, 8]">
+        <a-col :span="4">หน่วยกิต : </a-col>
+        <a-col :span="4"><a-input placeholder="Basic usage" /></a-col>
+      </a-row>
+    </a-modal>
+    <!-- end modal edit unit -->
   </div>
 </template>
 
@@ -300,6 +319,12 @@ import Axios from "axios";
 export default {
   data() {
     return {
+      edit_unit_modal: false, // modal edit unit
+      edit_unit: 0,
+      edit_lecture_unit : 0,
+      edit_lab_unit: 0,
+      edit_learning_unit: 0,
+
       subject_columns: [
         {
           title: "รหัสวิชา",
@@ -330,6 +355,11 @@ export default {
           dataIndex: "section_unit",
           key: "section_unit",
           scopedSlots: { customRender: "section_unit" },
+        },
+        {
+          title: "ดำเนินการ",
+          key: "action",
+          scopedSlots: { customRender: "action" },
         },
       ],
       subject_data: [],
@@ -365,6 +395,12 @@ export default {
           });
         })
         .catch((err) => alert(err));
+    },
+    ModalEditUnit(person, section) {
+      var self = this;
+      self.edit_unit_modal = true;
+      console.log("Person :", person);
+      console.log("Section :", section);
     },
   },
   created() {
