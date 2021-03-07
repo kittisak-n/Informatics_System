@@ -140,12 +140,13 @@
                       icon="file-excel"
                       :style="{ marginRight: '3%' }"
                     />
-                    -->
 
-                    <template slot="title">
-                      <span>คำนวณ</span>
-                    </template>
-                    <router-link to="/calculator/calculation_workload">
+                    <router-link
+                      :to="{
+                        path:
+                          '/Calculation_workload?person_id=' + record.person_id,
+                      }"
+                    >
                       <a-button type="primary" :style="{ marginRight: '3%' }"
                         >คำนวณ</a-button
                       ></router-link
@@ -190,39 +191,70 @@
 <script>
 import pdfMake from "pdfmake";
 import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fonts
+const axios = require("axios");
+const columns = [
+  {
+    title: "ลำดับ",
+    dataIndex: "key",
+    key: "key",
+    width: "5%",
+    scopedSlots: { customRender: "key" },
+  },
 
-const data = [
   {
-    key: "1",
-    year: 2564,
-    name: "อ.ณัฐพร  ภักดี",
-    position: "อาจารย์ประจำ",
-    TeachingJobs: 0,
-    LMW: 0,
-    LMWE: 0,
-    PW: 0,
+    title: "ชื่อ-สกุล",
+    dataIndex: "name",
+    key: "name",
+    width: "15%",
+    scopedSlots: { customRender: "name" },
+  },
+
+  {
+    title: "ตำแหน่ง",
+    dataIndex: "position",
+    key: "position",
+    width: "15%",
+    scopedSlots: { customRender: "position" },
+  },
+
+  {
+    title: "ภาระงานสอน",
+    dataIndex: "summary_total",
+    key: "summary_total",
+    width: "5%",
+    scopedSlots: { customRender: "summary_total" },
   },
   {
-    key: "2",
-    year: 2564,
-    name: "อ.พีระศักดิ์ เพียรประสิทธิ์",
-    position: "อาจารย์ประจำ",
-    TeachingJobs: 12,
-    LMW: 5,
-    LMWE: 4.0,
-    PW: 3.5,
+    title: "หักภาระงานขั้นต่ำ",
+    dataIndex: "summary_total_around", //Less minimum workload
+    key: "summary_total_around",
+    width: "5%",
+    scopedSlots: { customRender: "summary_total_around" },
   },
   {
-    key: "3",
-    year: 2563,
-    name: "ผศ.ดร.จักริน  สุขสวัสดิ์ชน",
-    position: "รองผู้อำนวยการสำนักคอมพิวเตอร์",
-    TeachingJobs: 0,
-    LMW: 0,
-    LMWE: 0,
-    PW: 0,
+    title: "หักภาระงาน Extraworkload",
+    dataIndex: "summary_total_extra", // Less minimum workload Extraworkload
+    key: "summary_total_extra",
+    width: "5%",
+    scopedSlots: { customRender: "summary_total_extra" },
+  },
+  {
+    title: "ภาระงานที่เบิกได้",
+    dataIndex: "summary_bonus", //Payable workload
+    key: "summary_bonus",
+    width: "5%",
+    scopedSlots: { customRender: "summary_bonus" },
+  },
+  {
+    title: "ดำเนินการ",
+    dataIndex: "action",
+    key: "action",
+    width: "5%",
+    scopedSlots: { customRender: "action" },
   },
 ];
+
+var data = [];
 
 export default {
   name: "SummaryWorkload",
@@ -232,70 +264,7 @@ export default {
       semester: 1,
       year: new Date().getFullYear() + 543, // 2020,
       data,
-      searchText: "",
-      searchInput: null,
-      searchedColumn: "",
-      columns: [
-        {
-          title: "ลำดับ",
-          dataIndex: "key",
-          key: "key",
-          width: "5%",
-          scopedSlots: { customRender: "key" },
-        },
-
-        {
-          title: "ชื่อ-สกุล",
-          dataIndex: "name",
-          key: "name",
-          width: "15%",
-          scopedSlots: { customRender: "name" },
-        },
-
-        {
-          title: "ตำแหน่ง",
-          dataIndex: "position",
-          key: "position",
-          width: "15%",
-          scopedSlots: { customRender: "position" },
-        },
-
-        {
-          title: "ภาระงานสอน",
-          dataIndex: "TeachingJobs",
-          key: "TeachingJobs",
-          width: "5%",
-          scopedSlots: { customRender: "TeachingJobs" },
-        },
-        {
-          title: "หักภาระงานขั้นต่ำ",
-          dataIndex: "LMW", //Less minimum workload
-          key: "LMW",
-          width: "5%",
-          scopedSlots: { customRender: "LMW" },
-        },
-        {
-          title: "หักภาระงาน Extraworkload",
-          dataIndex: "LMWE", // Less minimum workload Extraworkload
-          key: "LMWE",
-          width: "5%",
-          scopedSlots: { customRender: "LMWE" },
-        },
-        {
-          title: "ภาระงานที่เบิกได้",
-          dataIndex: "PW", //Payable workload
-          key: "PW",
-          width: "5%",
-          scopedSlots: { customRender: "PW" },
-        },
-        {
-          title: "ดำเนินการ",
-          dataIndex: "action",
-          key: "action",
-          width: "5%",
-          scopedSlots: { customRender: "action" },
-        },
-      ],
+      columns,
     };
   },
   methods: {
@@ -393,19 +362,18 @@ export default {
                 [
                   {
                     border: [true, false, true, false],
-                     margin: [20,5,5, 0],
-                    text:
-                      "ข้าพเจ้าชื่อ  นายพีระศักดิ์ เพียรประสิทธิ์",
+                    margin: [20, 5, 5, 0],
+                    text: "ข้าพเจ้าชื่อ  นายพีระศักดิ์ เพียรประสิทธิ์",
                     colSpan: 3,
                     alignment: "left",
                   },
                   {},
                   {},
                 ],
-                 [
+                [
                   {
                     border: [true, false, true, false],
-                     margin: [0,0,0,5],
+                    margin: [0, 0, 0, 5],
                     text:
                       "บ้านเลขที่ 40 หมู่ 1 ตำบลสำนักบก อำเภอเมือง จังหวัดชลบุรี",
                     colSpan: 3,
@@ -414,12 +382,11 @@ export default {
                   {},
                   {},
                 ],
-                 [
+                [
                   {
                     border: [true, false, true, false],
-                     margin: [0,0,0,5],
-                    text:
-                      "ได้รับเงินจากมหาวิทยาลัยบูรพา ดังรายการต่อไปนี้",
+                    margin: [0, 0, 0, 5],
+                    text: "ได้รับเงินจากมหาวิทยาลัยบูรพา ดังรายการต่อไปนี้",
                     colSpan: 3,
                     alignment: "left",
                   },
@@ -507,6 +474,37 @@ export default {
       };
       pdfMake.createPdf(docDefinition).open({}, window.open());
     },
+    Get_detail_summary() {
+      const self = this;
+      axios
+        .post(self.$store.state.url + "/Wlssummary/Get_detail_summary", {})
+        .then(function(response) {
+          self.data = [];
+          const data = response.data.results;
+          data.forEach(function(ele, index) {
+            let subject = {
+              key: index + 1,
+              year: 2564,
+              name: ele.person_firstname_TH + " " + ele.person_lastname_TH,
+              position: ele.postition_name,
+              summary_total: ele.summary_total,
+              summary_total_around: ele.summary_total_around,
+              summary_total_extra: ele.summary_total_extra,
+              summary_bonus: ele.summary_bonus,
+              person_id: ele.person_id,
+            };
+            self.data.push(subject);
+          });
+          // console.log(self.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    
+  },
+  created() {
+    this.Get_detail_summary();
   },
 };
 </script>
