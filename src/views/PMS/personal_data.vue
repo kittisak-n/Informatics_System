@@ -302,6 +302,12 @@
         </a-col>
       </a-row>
     </a-card>
+    <br>
+    <a-card>
+      <a-row :gutter="[8, 8]" type="flex" justify="center">
+        
+      </a-row>
+    </a-card>
   </div>
 </template>
 
