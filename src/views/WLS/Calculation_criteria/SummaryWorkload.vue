@@ -39,67 +39,62 @@
             <a-col :span="24">
               <a-table
                 :columns="columns"
-                :data-source="test"
+                :data-source="summary_data"
                 :pagination="false"
                 bordered
                 size="small"
               >
-                <span slot="summary_id" slot-scope="text, record, index">
-                  <div
-                    v-if="year == test[index].year"
-                    :style="{ textAlign: 'center' }"
-                  >
+
+  <span slot="key"  slot-scope="text, record, index">
+
+                <div style="text-align: center;">
                     {{ index + 1 }}
-                  </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
+                </div>
+                   </span>
 
-                <span slot="person_lastname_TH" slot-scope="text, record, index">
+
+
+  <span slot="name"  slot-scope="text, record">
+
+                <div style="text-align: center;">
+                    {{ record.person_firstname_TH +' '+record.person_lastname_TH }}
+                </div>
+                   </span>
+
+                <span slot="position_name" slot-scope="text,">
                   <div
-                    v-if="year == test[index].year"
+                    
                     :style="{ textAlign: 'start' }"
                   >
                     {{ text }}
                   </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
-                <span slot="positition_name" slot-scope="text, record, index">
+                   </span>
+                <span slot="summary_total" slot-scope="text">
                   <div
-                    v-if="year == test[index].year"
-                    :style="{ textAlign: 'start' }"
-                  >
-                    {{ text }}
-                  </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
-                <span slot="TeachingJobs" slot-scope="text, record, index">
-                  <div
-                    v-if="year == test[index].year"
+                  
                     :style="{ textAlign: 'center' }"
                   >
                     {{ text }}
                   </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
-                <span slot="LMW" slot-scope="text, record, index">
-                  <div
-                    v-if="year == test[index].year"
-                    :style="{ textAlign: 'center' }"
-                  >
-                    {{ text }}
-                  </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
+                    </span>
 
-                <span slot="LMWE" slot-scope="text, record, index">
+
+                <span slot="summary_total_around" slot-scope="text">
                   <div
-                    v-if="year == test[index].year"
+                  
                     :style="{ textAlign: 'center' }"
                   >
                     {{ text }}
                   </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
+                    </span>
+
+                <span slot="summary_total_extra" slot-scope="text">
+                  <div
+                    :style="{ textAlign: 'center' }"
+                  >
+                    {{ text }}
+                  </div>
+                 </span>
 
                 <span slot="PW" slot-scope="text, record, index">
                   <div
@@ -111,9 +106,9 @@
                   <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
                 </span>
 
-                <span slot="action" slot-scope="text, record, index">
+                <span slot="action" slot-scope="text, record">
                   <div
-                    v-if="year == test[index].year"
+                 
                     :style="{ textAlign: 'center' }"
                   >
                     <template slot="title">
@@ -152,8 +147,7 @@
                       ></router-link
                     >
                   </div>
-                  <div v-else :style="{ textAlign: 'center' }">ไม่มีข้อมูล</div>
-                </span>
+                      </span>
               </a-table>
             </a-col>
           </a-row>
@@ -202,7 +196,6 @@ const columns = [
     width: "5%",
     scopedSlots: { customRender: "key" },
   },
-
   {
     title: "ชื่อ-สกุล",
     dataIndex: "name",
@@ -213,10 +206,10 @@ const columns = [
 
   {
     title: "ตำแหน่ง",
-    dataIndex: "position",
-    key: "position",
+    dataIndex: "position_name",
+    key: "position_name",
     width: "15%",
-    scopedSlots: { customRender: "position" },
+    scopedSlots: { customRender: "position_name" },
   },
 
   {
@@ -263,9 +256,7 @@ export default {
   components: {},
   data() {
     return {
-      summary_data: [
-      
-      ],
+      summary_data: [],
       semester: 1,
       year: new Date().getFullYear() + 543, // 2020,
       data,
@@ -274,13 +265,14 @@ export default {
   },
   methods: {
     get_summary() {
-      const self = this;
+       const self = this;
       axios
         .post(this.$store.state.url + "/summaryRouters/get_summary")
-        .then((res) => {
-          console.log(res);
+        .then((res ) => {
+     
+        self.summary_data = res.data.results
+        console.log(self.summary_data);
 
-      
         })
         .catch((err) => {
           console.error(err);
