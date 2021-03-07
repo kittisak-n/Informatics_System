@@ -283,10 +283,11 @@
     <br />
     <a-card>
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="24" style="text-align: center">
-          <h3>รายละเอียดรายวิชาที่สอน</h3>
+        <h3>รายละเอียดรายวิชาที่สอน</h3>
+      </a-row>
+      <a-row :gutter="[8, 8]" type="flex" justify="center">
+        <a-col :span="24" style="text-align: end">
           <a-table :columns="subject_columns" :data-source="subject_data">
-
           </a-table>
         </a-col>
       </a-row>
@@ -295,59 +296,80 @@
 </template>
 
 <script>
-import Axios from 'axios'
+import Axios from "axios";
 export default {
   data() {
     return {
       subject_columns: [
         {
           title: "รหัสวิชา",
-          dataIndex: "name",
-          key: "name",
-          scopedSlots: { customRender: "name" },
+          dataIndex: "course_code",
+          key: "course_code",
+          scopedSlots: { customRender: "course_code" },
         },
         {
           title: "ชื่อวิชา",
-          dataIndex: "name",
-          key: "name",
-          scopedSlots: { customRender: "name" },
+          dataIndex: "course_name",
+          key: "course_name",
+          scopedSlots: { customRender: "course_name" },
         },
         {
           title: "กลุ่มเรียน",
-          dataIndex: "name",
-          key: "name",
-          scopedSlots: { customRender: "name" },
+          dataIndex: "section_number",
+          key: "section_number",
+          scopedSlots: { customRender: "section_number" },
         },
         {
           title: "รายละเอียดกลุ่มเรียน",
-          dataIndex: "name",
-          key: "name",
-          scopedSlots: { customRender: "name" },
+          dataIndex: "section_name",
+          key: "section_name",
+          scopedSlots: { customRender: "section_name" },
         },
         {
           title: "หน่วยกิต",
-          dataIndex: "name",
-          key: "name",
-          scopedSlots: { customRender: "name" },
-        }
+          dataIndex: "section_unit",
+          key: "section_unit",
+          scopedSlots: { customRender: "section_unit" },
+        },
       ],
       subject_data: [],
     };
   },
   methods: {
-    GetSubject(){
-       Axios.post("http://localhost:8080/WlsInsert/getsubject", {
-        person_id: 1
+    GetSubject() {
+      let self = this;
+      Axios.post("http://localhost:8080/WlsInsert/getsubject", {
+        person_id: 1,
       })
         .then(function (result) {
-          console.log(result);
+          console.log(result.data.results);
+          result.data.results.forEach((element) => {
+            let data = {
+              section_id: element.section_id,
+              person_id: element.person_id,
+              course_code: element.course_code,
+              course_name: element.course_name,
+              section_number: element.section_number,
+              section_name: element.section_name,
+              section_unit:
+                element.section_person_unit +
+                " (" +
+                element.section_person_lecture_unit +
+                "-" +
+                element.section_person_learning_unit +
+                "-" +
+                element.section_person_lab_unit +
+                ")",
+            };
+            self.subject_data.push(data);
+          });
         })
         .catch((err) => alert(err));
-    }
+    },
   },
-  created:{
-    GetSubject()
-  }
+  created() {
+    this.GetSubject();
+  },
 };
 </script>
 
