@@ -311,12 +311,7 @@
         <a-button @click="close_modal_edit"> ยกเลิก </a-button>
         <a-button
           type="success"
-          v-if="
-            edit_unit != 0 &&
-            edit_lecture_unit != 0 &&
-            edit_lab_unit != 0 &&
-            edit_learning_unit != 0
-          "
+          v-if="edit_unit != 0"
           @click="EditUnitPerson()"
         >
           ยืนยัน
@@ -441,9 +436,9 @@ export default {
                 " (" +
                 element.section_person_lecture_unit +
                 "-" +
-                element.section_person_learning_unit +
+                element.section_person_lab_unit  +
                 "-" +
-                element.section_person_lab_unit +
+                element.section_person_learning_unit +
                 ")",
             };
             self.subject_data.push(data);
