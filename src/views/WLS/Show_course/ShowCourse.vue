@@ -438,7 +438,7 @@ export default {
           const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); // Generate JSON table content，wb.Sheets[Sheet名]    Get the data of the first sheet
           console.log(ws);
           // Edit data
-          let course_code = [];
+          let course_code = []; //จัดข้อมูล
           ws.forEach(function (ele, index) {
             if (
               (course_code.find((element) => element != ele.รหัสวิชา) &&
@@ -452,7 +452,8 @@ export default {
             } else {
               self.setSectionDate(ele);
             }
-          });
+          });//สิ้นสุดจัดข้อมูล
+
           console.log(self.data_course_import);
           this.import_filename = files[0].name;
           this.import_status = true;
