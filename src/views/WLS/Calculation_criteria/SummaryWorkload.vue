@@ -186,7 +186,7 @@
 const axios = require("axios");
 
 import pdfMake from "pdfmake";
-import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fonts
+import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fontss
 
 const columns = [
   {
@@ -1061,7 +1061,7 @@ export default {
             margin: [0, 10, 0, 0],
             columns: [
               {
-                // auto-sized columns have their widths based on their content
+                // auto-sized columns have their widths based on their content 
                 width: 50,
                 text: "2)",
                 alignment: "right",
