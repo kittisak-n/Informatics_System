@@ -449,7 +449,6 @@ export default {
         lab_unit: self.edit_lab_unit,
         learning_unit: self.edit_learning_unit,
       });
-
       self.close_modal_edit();
       location.reload();
     },
