@@ -286,7 +286,7 @@
         <a-col :span="24" style="text-align: center">
           <h3>รายละเอียดรายวิชาที่สอน</h3>
           <a-table :columns="subject_columns" :data-source="subject_data">
-            
+
           </a-table>
         </a-col>
       </a-row>
@@ -295,6 +295,7 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   data() {
     return {
@@ -335,9 +336,18 @@ export default {
   },
   methods: {
     GetSubject(){
-      
+       Axios.post("http://localhost:8080/WlsInsert/getsubject", {
+        person_id: 1
+      })
+        .then(function (result) {
+          console.log(result);
+        })
+        .catch((err) => alert(err));
     }
   },
+  created:{
+    GetSubject()
+  }
 };
 </script>
 
