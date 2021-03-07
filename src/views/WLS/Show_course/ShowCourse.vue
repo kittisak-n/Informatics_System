@@ -222,13 +222,13 @@
               </a-col>
             </a-row>
           </span>
-          <span slot="Action" slot-scope="record">
+          <!-- <span slot="Action" slot-scope="record">
             <a-button
               type="danger"
               @click="showDeleteConfirm(record.section_id)"
               ><a-icon type="close" />
             </a-button>
-          </span>
+          </span> -->
         </a-table>
       </a-modal>
       <!-- End Modal Detail -->
@@ -314,7 +314,7 @@ export default {
           title: "กลุ่ม",
           dataIndex: "section_number",
           key: "section_number",
-          width: "20%",
+          width: "30%",
           scopedSlots: {
             customRender: "section_number",
           },
@@ -325,7 +325,7 @@ export default {
           title: "รายละเอียดกลุ่ม",
           dataIndex: "section_name",
           key: "section_name",
-          width: "30%",
+          width: "40%",
           scopedSlots: {
             customRender: "section_name",
           },
@@ -336,17 +336,11 @@ export default {
           title: "จำนวนนักศึกษา",
           dataIndex: "section_student",
           key: "section_student",
-          width: "20%",
+          width: "30%",
           scopedSlots: {
             customRender: "section_student",
           },
           type: "flex",
-          align: "center",
-        },
-        {
-          title: "ดำเนินการ",
-          width: "20%",
-          scopedSlots: { customRender: "Action" },
           align: "center",
         },
       ],
@@ -358,7 +352,6 @@ export default {
       let self = this;
       this.$confirm({
         title: "ต้องการลบกลุ่มเรียนที่ " + id + " ใช่หรือไม่ ?",
-        // content: "Some descriptions",
         okText: "Yes",
         okType: "danger",
         cancelText: "No",
@@ -398,6 +391,9 @@ export default {
         this.import_status = false;
         this.import_filename = "";
         this.$refs.import_csv_file.value = null;
+        self.select_course_year = "";
+
+        location.reload();
       }
     },
     upload_file_click() {
@@ -406,7 +402,6 @@ export default {
     },
     Years_course() {
       var j = 0;
-
       for (var i = 10; i > -1; i--) {
         if (i == 10) {
           this.course_years.push(new Date().getFullYear() + 543);
@@ -495,12 +490,11 @@ export default {
       var input = document.getElementById("upload");
       input.value = undefined;
     },
-    async Insert_course() {
+    Insert_course() {
       var self = this;
       console.log("Year :", self.select_course_year);
       console.log("Term :", self.select_course_term);
-
-      await Axios.post("http://localhost:8080/WlsInsert/insertcourse", {
+      Axios.post("http://localhost:8080/WlsInsert/insertcourse", {
         course: self.data_course_import,
         course_term: self.select_course_term,
         course_year: self.select_course_year,
@@ -510,10 +504,9 @@ export default {
         })
         .catch((err) => alert(err));
     },
-
-    async get_all_sourse() {
+    get_all_sourse() {
       var self = this;
-      await Axios.post("http://localhost:8080/WlsInsert/getallcourse")
+      Axios.post("http://localhost:8080/WlsInsert/getallcourse")
         .then((response) => {
           response.data.results.forEach((element) => {
             let course = {
@@ -538,12 +531,12 @@ export default {
         .catch((err) => alert(err));
     },
 
-    async get_course_detail(id) {
+    get_course_detail(id) {
       const self = this;
       console.log("ID Button :", id);
       console.log("Course Detail :", this.course_detail_record);
 
-      await Axios.post("http://localhost:8080/WlsInsert/getcoursedetail", {
+      Axios.post("http://localhost:8080/WlsInsert/getcoursedetail", {
         course_id: id,
       })
         .then((response) => {
@@ -569,16 +562,15 @@ export default {
                 section_date: ele.section_date,
               });
             });
-
             console.log("Data Detail : ", self.course_detail_data);
             self.modal_detail = true;
           }
         })
         .catch((err) => alert(err));
     },
-    async RemoveSection(id) {
+    RemoveSection(id) {
       console.log(id);
-      await Axios.post("http://localhost:8080/WlsInsert/changestatus", {
+      Axios.post("http://localhost:8080/WlsInsert/changestatus", {
         section_id: id,
       })
         .then((response) => {
