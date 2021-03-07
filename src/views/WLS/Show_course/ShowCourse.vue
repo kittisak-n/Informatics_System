@@ -438,45 +438,19 @@ export default {
           const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); // Generate JSON table content，wb.Sheets[Sheet名]    Get the data of the first sheet
           console.log(ws);
           // Edit data
-          ws.forEach((ele) => {
-            if (ele.รหัสวิชา) {
-              self.data_course_import.push({
-                course_id: 0,
-                section_number: ele.กลุ่ม,
-                section_student: ele.จำนวนที่ลงทะเบียน,
-                course_name: ele.ชื่อวิชา,
-                course_type: ele.ประเภทรายวิชา,
-                course_year: ele.ปีหลักสูตร,
-                course_code: ele.รหัสวิชา,
-                section_unit: ele.หน่วยกิต,
-                section_lac_unit: ele.หน่วยกิต,
-                section_lab_unit: ele.หน่วยกิต,
-                section_self_unit: ele.หน่วยกิตเรียนรู้ด้วยตัวเอง,
-                section_detail: ele.รายละเอียดกลุ่มเรียน,
-                date: [
-                  {
-                    section_id: 0,
-                    section_date: ele.วัน,
-                    section_room: ele.ห้อง,
-                    section_start: ele.เวลาเริ่มเรียน,
-                    section_end: ele.เวลาเลิกเรียน,
-                    course_person: ele.ผู้สอน,
-                    course_person_position: 0,
-                  },
-                ],
-              });
+          let course_code = [];
+          ws.forEach(function (ele, index) {
+            if (
+              (course_code.find((element) => element != ele.รหัสวิชา) &&
+                ele.รหัสวิชา) ||
+              index === 0
+            ) {
+              course_code.push(ele.รหัสวิชา);
+              self.setCoruse(ele);
+            } else if (course_code == ele.รหัสวิชา && ele.รหัสวิชา) {
+              self.setSection(ele);
             } else {
-              self.data_course_import[
-                self.data_course_import.length - 1
-              ].date.push({
-                section_id: 0,
-                section_date: ele.วัน,
-                section_room: ele.ห้อง,
-                section_start: ele.เวลาเริ่มเรียน,
-                section_end: ele.เวลาเลิกเรียน,
-                course_person: ele.ผู้สอน,
-                course_person_position: 0,
-              });
+              self.setSectionDate(ele);
             }
           });
           console.log(self.data_course_import);
@@ -489,6 +463,82 @@ export default {
       fileReader.readAsBinaryString(files[0]);
       var input = document.getElementById("upload");
       input.value = undefined;
+    },
+    setCoruse(ele) {
+      console.log("setCoruse");
+      console.log(ele);
+      const self = this;
+      self.data_course_import.push({
+        course_id: 0,
+        course_code: ele.รหัสวิชา,
+        course_name: ele.ชื่อวิชา,
+        course_type: ele.ประเภทรายวิชา,
+        course_year: ele.ปีหลักสูตร,
+        course_unit: ele.หน่วยกิต,
+        course_lac_unit: ele.หน่วยกิตบรรยาย,
+        course_lab_unit: ele.หน่วยกิตปฏิบัติ,
+        course_self_unit: ele.หน่วยกิตเรียนรู้ด้วยตัวเอง,
+        course_section: [
+          {
+            section_id: 0,
+            section_number: ele.กลุ่ม,
+            section_student: ele.จำนวนที่ลงทะเบียน,
+            section_detail: ele.รายละเอียดกลุ่มเรียน,
+            section_date: [
+              {
+                section_date: ele.วัน,
+                section_room: ele.ห้อง,
+                section_start: ele.เวลาเริ่มเรียน,
+                section_end: ele.เวลาเลิกเรียน,
+                course_person: ele.ผู้สอน,
+                course_person_position: 0,
+              },
+            ],
+          },
+        ],
+      });
+    },
+    setSection(ele) {
+      const self = this;
+      console.log("setSection");
+      self.data_course_import[
+        self.data_course_import.findIndex(
+          (element) => (element.course_code = ele.รหัสวิชา)
+        )
+      ].course_section.push({
+        section_id: 0,
+        section_number: ele.กลุ่ม,
+        section_student: ele.จำนวนที่ลงทะเบียน,
+        section_detail: ele.รายละเอียดกลุ่มเรียน,
+        section_date: [
+          {
+            section_date: ele.วัน,
+            section_room: ele.ห้อง,
+            section_start: ele.เวลาเริ่มเรียน,
+            section_end: ele.เวลาเลิกเรียน,
+            course_person: ele.ผู้สอน,
+            course_person_position: 0,
+          },
+        ],
+      });
+    },
+    setSectionDate(ele) {
+      const self = this;
+      let i =
+        self.data_course_import[self.data_course_import.length - 1]
+          .course_section.length - 1;
+      console.log(i);
+      console.log("setectiondate");
+      self.data_course_import[
+        self.data_course_import.length - 1
+      ].course_section[i].section_date.push({
+        section_date: ele.วัน,
+        section_room: ele.ห้อง,
+        section_start: ele.เวลาเริ่มเรียน,
+        section_end: ele.เวลาเลิกเรียน,
+        course_person: ele.ผู้สอน,
+        course_person_position: 0,
+      });
     },
     Insert_course() {
       var self = this;
