@@ -216,98 +216,78 @@
     </a-row> -->
     <a-card>
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="24" style="text-align:center">
+        <a-col :span="24" style="text-align: center">
           <h3>รายละเอียดข้อมูลส่วนตัว</h3>
         </a-col>
       </a-row>
       <br />
 
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="2" style="text-align:end">
-          ชื่อ (อังกฤษ) :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> ชื่อ (อังกฤษ) : </a-col>
         <a-col :span="6">
-          <a-input style="width:100%" placeholder="Papai" />
+          <a-input style="width: 100%" placeholder="Papai" />
         </a-col>
-        <a-col :span="2" style="text-align:end">
-          นามสกุล (อังกฤษ) :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> นามสกุล (อังกฤษ) : </a-col>
         <a-col :span="6">
-          <a-input style="width:100%" placeholder="Papai" />
+          <a-input style="width: 100%" placeholder="Papai" />
         </a-col>
       </a-row>
       <br />
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="2" style="text-align:end">
-          ชื่อ (ภาษาไทย) :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> ชื่อ (ภาษาไทย) : </a-col>
         <a-col :span="6">
-          <a-input style="width:100%" placeholder="ประไพพรรณ" />
+          <a-input style="width: 100%" placeholder="ประไพพรรณ" />
         </a-col>
-        <a-col :span="2" style="text-align:end">
-          นามสกุล (ภาษาไทย) :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> นามสกุล (ภาษาไทย) : </a-col>
         <a-col :span="6">
-          <a-input style="width:100%" placeholder="สุ่มทรัพย์" />
+          <a-input style="width: 100%" placeholder="สุ่มทรัพย์" />
         </a-col>
       </a-row>
       <br />
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="2" style="text-align:end">
-          ต่ำแหน่ง :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> ต่ำแหน่ง : </a-col>
         <a-col :span="6">
-          <a-input style="width:100%" placeholder="เจ้าหน้าที่ฝ่ายธุรการ" />
+          <a-input style="width: 100%" placeholder="เจ้าหน้าที่ฝ่ายธุรการ" />
         </a-col>
-        <a-col :span="2" style="text-align:end">
-          ที่อยู่ :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> ที่อยู่ : </a-col>
         <a-col :span="6">
-          <a-input style="width:100%" placeholder="199/116 หมู่16" />
+          <a-input style="width: 100%" placeholder="199/116 หมู่16" />
         </a-col>
       </a-row>
       <br />
 
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="2" style="text-align:end">
-          จังหวัด :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> จังหวัด : </a-col>
         <a-col :span="2">
-          <a-input style="width:100%" placeholder="ชลบุรี" />
+          <a-input style="width: 100%" placeholder="ชลบุรี" />
         </a-col>
-        <a-col :span="2" style="text-align:end">
-          อำเภอ :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> อำเภอ : </a-col>
         <a-col :span="2">
-          <a-input style="width:100%" placeholder="ศรีราชา" />
+          <a-input style="width: 100%" placeholder="ศรีราชา" />
         </a-col>
-        <a-col :span="2" style="text-align:end">
-          ตำบล :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> ตำบล : </a-col>
         <a-col :span="2">
-          <a-input style="width:100%" placeholder="ศรีราชา" />
+          <a-input style="width: 100%" placeholder="ศรีราชา" />
         </a-col>
-        <a-col :span="2" style="text-align:end">
-          รหัสไปรษณีย์ :
-        </a-col>
+        <a-col :span="2" style="text-align: end"> รหัสไปรษณีย์ : </a-col>
         <a-col :span="2">
-          <a-input style="width:100%" placeholder="20000" />
+          <a-input style="width: 100%" placeholder="20000" />
         </a-col>
       </a-row>
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-        <a-col :span="24" style="text-align:end">
-          <a-button type="primary">
-            บันทึก
-          </a-button>
+        <a-col :span="24" style="text-align: end">
+          <a-button type="primary"> บันทึก </a-button>
         </a-col>
       </a-row>
     </a-card>
-    <br>
+    <br />
     <a-card>
       <a-row :gutter="[8, 8]" type="flex" justify="center">
-         <a-col :span="24" style="text-align:center">
+        <a-col :span="24" style="text-align: center">
           <h3>รายละเอียดรายวิชาที่สอน</h3>
-          
+          <a-table :columns="subject_columns" :data-source="subject_data">
+            
+          </a-table>
         </a-col>
       </a-row>
     </a-card>
@@ -316,6 +296,48 @@
 
 <script>
 export default {
+  data() {
+    return {
+      subject_columns: [
+        {
+          title: "รหัสวิชา",
+          dataIndex: "name",
+          key: "name",
+          scopedSlots: { customRender: "name" },
+        },
+        {
+          title: "ชื่อวิชา",
+          dataIndex: "name",
+          key: "name",
+          scopedSlots: { customRender: "name" },
+        },
+        {
+          title: "กลุ่มเรียน",
+          dataIndex: "name",
+          key: "name",
+          scopedSlots: { customRender: "name" },
+        },
+        {
+          title: "รายละเอียดกลุ่มเรียน",
+          dataIndex: "name",
+          key: "name",
+          scopedSlots: { customRender: "name" },
+        },
+        {
+          title: "หน่วยกิต",
+          dataIndex: "name",
+          key: "name",
+          scopedSlots: { customRender: "name" },
+        }
+      ],
+      subject_data: [],
+    };
+  },
+  methods: {
+    GetSubject(){
+      
+    }
+  },
 };
 </script>
 
