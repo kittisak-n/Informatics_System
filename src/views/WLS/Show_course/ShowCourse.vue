@@ -25,7 +25,7 @@
               >
                 เพิ่มรายวิชา
               </a-button>
-              <a-tooltip placement="top">
+              <!-- <a-tooltip placement="top">
                 <template slot="title">
                   <span>ส่งออกไฟล์ PDF</span>
                 </template>
@@ -46,7 +46,7 @@
                   icon="file-excel"
                   :style="{ marginRight: '3%' }"
                 />
-              </a-tooltip>
+              </a-tooltip> -->
             </a-col>
           </a-row>
           <hr style="width: 100%" />
@@ -210,15 +210,26 @@
               v-for="(item, index) in record.section_date"
               :key="index"
             >
-              <a-col :span="8" :offset="2">
+              <a-col :span="7">
                 ห้องเรียน : {{ item.section_detail_room }}
               </a-col>
-              <a-col :span="5">
+              <a-col :span="4">
                 วันที่เรียน : {{ item.section_detail_day }}
               </a-col>
-              <a-col :span="7">
+              <a-col :span="6">
                 เวลาเรียน : {{ item.section_detail_start_time }} -
                 {{ item.section_detail_end_time }}
+              </a-col>
+              <a-col :span="6">
+                อาจารย์ : {{ item.prefix }} {{ item.name }} {{ item.lastname }}
+              </a-col>
+              <a-col :span="1">
+                <a-button
+                  :size="size"
+                  type="warning"
+                  @click="EditDetail(item.section_detail_id)"
+                  ><a-icon type="edit"
+                /></a-button>
               </a-col>
             </a-row>
           </span>
@@ -232,6 +243,15 @@
         </a-table>
       </a-modal>
       <!-- End Modal Detail -->
+
+      <!-- Modal Edit Detail -->
+      <a-modal v-model="modal_edit_detail" title="Title" on-ok="handleOk">
+        <template slot="footer">
+          <a-button @click="handleCancel"> ยกเลิก </a-button>
+        </template>
+  
+      </a-modal>
+      <!-- End Modal Edit Detail -->
     </div>
   </div>
 </template>
@@ -245,6 +265,7 @@ export default {
     return {
       self: this,
 
+      modal_edit_detail: false,
       modal_detail: false,
       modal_insert: false,
       confirmLoading: false,
@@ -345,6 +366,7 @@ export default {
         },
       ],
       course_detail_data: [],
+      data_section_detail_edit: [],
     };
   },
   methods: {
@@ -452,7 +474,7 @@ export default {
             } else {
               self.setSectionDate(ele);
             }
-          });//สิ้นสุดจัดข้อมูล
+          }); //สิ้นสุดจัดข้อมูล
 
           console.log(self.data_course_import);
           this.import_filename = files[0].name;
@@ -626,6 +648,18 @@ export default {
       })
         .then((response) => {
           console.log(response);
+        })
+        .catch((err) => alert(err));
+    },
+    EditDetail(id) {
+      let self = this;
+      console.log(id);
+      Axios.post("http://localhost:8080/WlsInsert/getsectiondetailid", {
+        section_detail_id: id,
+      })
+        .then((response) => {
+          self.data_section_detail_edit = response.data.results;
+          console.log(self.data_section_detail_edit);
         })
         .catch((err) => alert(err));
     },
