@@ -247,9 +247,55 @@
       <!-- Modal Edit Detail -->
       <a-modal v-model="modal_edit_detail" title="Title" on-ok="handleOk">
         <template slot="footer">
-          <a-button @click="handleCancel"> ยกเลิก </a-button>
+          <a-button @click="colse_edit_edtail()"> ยกเลิก </a-button>
+          <a-button
+            type="success"
+            @click="edit_section_detail()"
+            v-if="data_section_detail_edit_room != ''"
+          >
+            บันทึก
+          </a-button>
         </template>
-  
+        <a-row :gutter="[8, 8]">
+          <a-col :span="6" :style="{ textAlign: 'end', marginTop: '3px' }"
+            >วันสอน :
+          </a-col>
+          <a-col :span="6">
+            <a-select
+              style="width: 100%"
+              default-value=""
+              v-model="data_section_detail_edit_date"
+            >
+              <a-select-option value="MON"> MON </a-select-option>
+              <a-select-option value="TUE"> TUE </a-select-option>
+              <a-select-option value="WED"> WED </a-select-option>
+              <a-select-option value="THU"> THU </a-select-option>
+              <a-select-option value="FRI"> FRI </a-select-option>
+              <a-select-option value="SAT"> SAT </a-select-option>
+              <a-select-option value="SUN"> SUN </a-select-option>
+            </a-select>
+          </a-col>
+          <a-col :span="6" :style="{ textAlign: 'end', marginTop: '3px' }"
+            >ห้องเรียน :
+          </a-col>
+          <a-col :span="6"
+            ><a-input v-model="data_section_detail_edit_room"
+          /></a-col>
+        </a-row>
+        <a-row :gutter="[8, 8]">
+          <a-col :span="6" :style="{ textAlign: 'end', marginTop: '3px' }"
+            >เวลาเริ่มเรียน :
+          </a-col>
+          <a-col :span="6"
+            ><a-input v-model="data_section_detail_edit_start_time" type="time"
+          /></a-col>
+          <a-col :span="6" :style="{ textAlign: 'end', marginTop: '3px' }"
+            >เวลาเลิกเรียน :
+          </a-col>
+          <a-col :span="6"
+            ><a-input v-model="data_section_detail_edit_end_time" type="time"
+          /></a-col>
+        </a-row>
       </a-modal>
       <!-- End Modal Edit Detail -->
     </div>
@@ -366,10 +412,19 @@ export default {
         },
       ],
       course_detail_data: [],
-      data_section_detail_edit: [],
+
+      course_detail_id: 0,
+      data_section_detail_edit_id: 0,
+      data_section_detail_edit_date: "",
+      data_section_detail_edit_start_time: "",
+      data_section_detail_edit_end_time: "",
+      data_section_detail_edit_room: "",
     };
   },
   methods: {
+    colse_edit_edtail() {
+      this.modal_edit_detail = false;
+    },
     showDeleteConfirm(id) {
       let self = this;
       this.$confirm({
@@ -606,6 +661,8 @@ export default {
 
     get_course_detail(id) {
       const self = this;
+
+      self.course_detail_id = id;
       console.log("ID Button :", id);
       console.log("Course Detail :", this.course_detail_record);
 
@@ -653,15 +710,43 @@ export default {
     },
     EditDetail(id) {
       let self = this;
+
       console.log(id);
       Axios.post("http://localhost:8080/WlsInsert/getsectiondetailid", {
         section_detail_id: id,
       })
         .then((response) => {
-          self.data_section_detail_edit = response.data.results;
-          console.log(self.data_section_detail_edit);
+          self.data_section_detail_edit_id =
+            response.data.results[0].section_detail_id;
+          self.data_section_detail_edit_date =
+            response.data.results[0].section_detail_day;
+          self.data_section_detail_edit_start_time =
+            response.data.results[0].section_detail_start_time;
+          self.data_section_detail_edit_end_time =
+            response.data.results[0].section_detail_end_time;
+          self.data_section_detail_edit_room =
+            response.data.results[0].section_detail_room;
         })
         .catch((err) => alert(err));
+
+      self.modal_edit_detail = true;
+    },
+    edit_section_detail() {
+      let self = this;
+
+      Axios.post("http://localhost:8080/WlsInsert/editsectiondetail", {
+        section_detail_id: self.data_section_detail_edit_id,
+        section_detail_day: self.data_section_detail_edit_date,
+        section_detail_start_time: self.data_section_detail_edit_start_time,
+        section_detail_end_time: self.data_section_detail_edit_end_time,
+        section_detail_room: self.data_section_detail_edit_room,
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => alert(err));
+      self.colse_edit_edtail();
+      self.get_course_detail(self.course_detail_id)
     },
   },
   created() {
