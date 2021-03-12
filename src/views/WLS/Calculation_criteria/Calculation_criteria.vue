@@ -12,7 +12,9 @@
               :xl="10"
               style="margin: 0.2em 0px"
             >
-              <a-card-meta title="หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน">
+              <a-card-meta
+                title="หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทน"
+              >
                 <a-icon
                   slot="avatar"
                   type="schedule"
@@ -48,30 +50,30 @@
               style="text-align: end"
             >
               <a-table
-                :columns="columns_calculation_criteria"
-                :data-source="calculation_criteria"
+                :columns="columns_schedule"
+                :data-source="schedule_of_data"
                 :pagination="false"
                 size="small"
+               
                 bordered
-                
               >
-                <span  slot="key" slot-scope="text, record, index">
+                <span slot="key" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     {{ index + 1 }}
                   </div>
                 </span>
-                <span slot="cc_name" slot-scope="text">
+                <span slot="schedule_name" slot-scope="text">
                   <div :style="{ textAlign: 'left' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="cc_start_date" slot-scope="text">
+                <span slot="schedule_start_date" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
 
-                <span slot="cc_status" slot-scope="text">
+                <span slot="schedule_status" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     <span v-if="text === 1">
                       <a-tag color="green"> กำลังใช้งาน </a-tag></span
@@ -81,13 +83,17 @@
                     </span>
                   </div>
                 </span>
-                <span slot="action">
+                <span slot="action" slot-scope="record, index">
                   <div :style="{ textAlign: 'center' }">
                     <a-tooltip placement="top">
                       <template slot="title">
                         <span>ดูรายละเอียด</span>
                       </template>
-                      <a-button type="warning" icon="search" @click="go_to_detail()"   >
+                      <a-button
+                        type="warning"
+                        icon="search"
+                        @click="go_to_detail(index)"
+                      >
                       </a-button>
                     </a-tooltip>
                   </div>
@@ -102,46 +108,47 @@
 </template>
 
 <script>
+const axios = require("axios");
+// const JSON = require('json');
 export default {
+ 
   data() {
     return {
-
-      
-      columns_calculation_criteria: [
+      columns_schedule: [
         {
           title: "ลำดับ",
           dataIndex: "key",
           key: "key",
           width: "3%",
-            scopedSlots: {
+          scopedSlots: {
             customRender: "key",
           },
         },
         {
           title: "ชื่อหลักเกณฑ์การกำหนดภาระงาน",
-          dataIndex: "cc_name",
-          key: "cc_name",
+          dataIndex: "schedule_name",
+          key: "schedule_name",
           width: "15%",
           scopedSlots: {
-            customRender: "cc_name",
+            customRender: "schedule_name",
           },
         },
         {
           title: "วันที่เริ่มใช้งาน",
-          dataIndex: "cc_start_date",
-          key: "cc_start_date",
+          dataIndex: "schedule_start_date",
+          key: "schedule_start_date",
           width: "5%",
           scopedSlots: {
-            customRender: "cc_start_date",
+            customRender: "schedule_start_date",
           },
         },
         {
           title: "สถานะการใช้งาน",
-          dataIndex: "cc_status",
-          key: "cc_status",
+          dataIndex: "schedule_status",
+          key: "schedule_status",
           width: "5%",
           scopedSlots: {
-            customRender: "cc_status",
+            customRender: "schedule_status",
           },
         },
         {
@@ -154,31 +161,53 @@ export default {
           },
         },
       ],
-      calculation_criteria: [
-        {
-          key: 0,
-          cc_name: "กำหนดการภาระงาน คณะวิทยาการสารสนเทศ",
-          cc_start_date: "1 ธันวาคม 2563",
-          cc_status: 1,
-        },
-        {
-          key: 1,
-          cc_name: "กำหนดการภาระงาน คณะวิทยาการสารสนเทศ / ภาคเรียนที่ 1",
-          cc_start_date: "1 มกราคม 2562",
-          cc_status: 0,
-        },
-      ],
+     
+      schedule_of_data: [],
     };
   },
-  methods: {
-    detail(index) {
-      console.log("in methods detail : " + index);
-    },
-    go_to_detail() {
-      this.$store.state.criteriaId = 0;
-       this.$router.push("Calculation_criteria/Detail_criteria");
 
+  methods: {
+   
+    
+    go_to_detail(index) {
+      console.log(index);
+      this.$store.state.schedule = index;
+      this.$router.push("Calculation_criteria/Detail_criteria");
     },
+    get_all_schedule() {
+  
+      const self = this;
+      
+       axios
+        .post(this.$store.state.url + "/WlsRouters/Get_all_schedule")
+        .then(function (response) {
+          response.data.results.schedule.forEach((data,index) => {
+              let schedule_data = {
+              ket:index+1,
+              schedule_id:data.schedule_id,
+              schedule_name: data.schedule_name,
+              schedule_start_date: data.schedule_start_date,
+              schedule_per_credit: data.schedule_per_credit,
+              schedule_general_min: data.schedule_general_min,
+              schedule_general_max: data.schedule_general_max,
+              schedule_status: data.schedule_status,
+              schedule_create_by: data.schedule_create_by,
+              schedule_create_date: data.schedule_create_date,
+            };   
+              self.schedule_of_data.push(schedule_data);
+          });
+             console.log(self.schedule_of_data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+          // always executed  ถ้าเจอ  Eror ทำไรต่อ
+        });
+    },
+  },
+  created() {
+    this.get_all_schedule();
   },
 };
 </script>

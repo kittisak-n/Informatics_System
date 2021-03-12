@@ -1,21 +1,24 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import PMS_login from "../views/login.vue";
+import PMS_Home from "../views/Home.vue";
+
+//PMS_manage
+import permission_manage from "../views/PMS/permission_manage.vue";
+import addposition from "../views/PMS/addposition.vue";
+import adduser from "../views/PMS/adduser.vue";
+import personal_data from "../views/PMS/personal_data.vue";
 
 //MDS_exchequer
 import MDS_exchequer from "../views/MDS/MDS_exchequer/MDS_exchequer.vue";
 import MDS_exchequer_adjust_suppiles from "../views/MDS/MDS_exchequer/MDS_exchequer_adjust_suppiles.vue";
 
-//MDS_disbursement_user
-import MDS_disbursement_user from "../views/MDS/MDS_disbursement/user/MDS_disbursement.vue";
-import MDS_disbursement_form_user from "../views/MDS/MDS_disbursement/user/MDS_disbursement_form.vue";
-
-//MDS_disbursement_admin
-import MDS_disbursement_admin from "../views/MDS/MDS_disbursement/admin/MDS_disbursement.vue";
-import MDS_disbursement_form_admin from "../views/MDS/MDS_disbursement/admin/MDS_disbursement_form.vue";
-
 import MDS_import from "../views/MDS/MDS_import/MDS_import.vue";
 import MDS_import_form from "../views/MDS/MDS_import/MDS_import_form.vue";
+import MDS_export from "../views/MDS/MDS_export/MDS_export.vue";
+import MDS_report from "../views/MDS/MDS_report/MDS_report.vue";
+import MDS_disbursement from "../views/MDS/MDS_disbursement/MDS_disbursement.vue";
+import MDS_disbursement_form from "../views/MDS/MDS_disbursement/MDS_disbursement_form.vue";
 
 //WLS
 import Calculation_criteria from "../views/WLS/Calculation_criteria/Calculation_criteria.vue";
@@ -27,11 +30,13 @@ import Show_course from "../views/WLS/Show_course/ShowCourse.vue";
 import InsertCourse from "../views/WLS/Show_course/Insert_Course_form.vue";
 import Calculation_workload from "../views/WLS/Calculation_criteria/Calculation_workload.vue";
 import Inspect_workload from "../views/WLS/Calculation_criteria/Inspect_workload.vue";
+import calculation_subworkload from "../views/WLS/Calculation_criteria/calculation_subworkload.vue";
+import Conclude_workload from "../views/WLS/Calculation_criteria/Conclude_workload.vue";
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "",
+    path: "/home",
     name: "Home",
     component: {
       render(c) {
@@ -42,15 +47,89 @@ const routes = [
     children: [
       {
         path: "",
-        component: Home,
-      },
-      {
-        path: "/home",
-        component: Home,
+        component: PMS_Home,
       },
     ],
   },
-
+  {
+    path: "/personal_data",
+    name: "personal_data",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    meta: { breadCrumb: "ข้อมูลส่วนตัว" },
+    children: [
+      {
+        path: "",
+        component: personal_data,
+      },
+    ],
+  },
+  {
+    path: "",
+    name: "login",
+    meta: { breadCrumb: "เข้าสู่ระบบ" },
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    children: [
+      {
+        path: "",
+        component: PMS_login,
+      },
+    ],
+  },
+  {
+    path: "/addposition",
+    name: "addposition",
+    meta: { breadCrumb: "เพิ่มตำแหน่งการเข้าถึง" },
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    children: [
+      {
+        path: "",
+        component: addposition,
+      },
+    ],
+  },
+  {
+    path: "/permission_manage",
+    name: "permission_manage",
+    meta: { breadCrumb: "จัดการสิทธิ์การใช้งาน" },
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    children: [
+      {
+        path: "",
+        component: permission_manage,
+      },
+      {
+        path: "adduser",
+        meta: { breadCrumb: "เพิ่มผู้ใช้งาน" },
+        component: {
+          render(c) {
+            return c("router-view");
+          },
+        },
+        children: [
+          {
+            path: "",
+            component: adduser,
+          },
+        ],
+      },
+    ],
+  },
 
   // หลักเกณฑ์การคำนวณ
   {
@@ -101,7 +180,6 @@ const routes = [
       },
     ],
   },
-
 
   // ตรวจสอบภาระงาน
   {
@@ -157,7 +235,7 @@ const routes = [
         meta: { breadCrumb: "เพิ่มรายวิชา" },
         path: "InsertCourse",
         component: InsertCourse,
-      }
+      },
     ],
   },
 
@@ -177,6 +255,18 @@ const routes = [
         component: Calculation_workload,
       },
     ],
+  },
+  {
+    path: "/Calculation_subworkload",
+    name: "Calculation_subworkload",
+    meta: { breadCrumb: "คำนวณภาระงาน" },
+    component: calculation_subworkload,
+  },
+  {
+    path: "/Conclude_workload",
+    name: "Conclude_workload",
+    meta: { breadCrumb: "สรุปรายละเอียดคำนวณภาระงาน" },
+    component: Conclude_workload,
   },
 
   {
@@ -212,38 +302,39 @@ const routes = [
     ],
   },
   {
-    path: "/MDS_disbursement_user",
-    name: "MDS_disbursement",
+    path: "/MDS_exchequer",
+    name: "MDS_exchequer",
+    meta: { breadCrumb: "รายการวัสดุในคลัง" },
     component: {
       render(c) {
         return c("router-view");
       },
     },
-    meta: { breadCrumb: "เบิกวัสดุ" },
     children: [
       {
         path: "",
-        component: MDS_disbursement_user,
+        component: MDS_exchequer,
       },
       {
-        path: "MDS_disbursement_form_user",
+        path: "MDS_exchequer_adjust_suppiles",
+        name: "MDS_exchequer_adjust_suppiles",
+        meta: { breadCrumb: "ปรับยอดรายการวัสดุ" },
         component: {
           render(c) {
             return c("router-view");
           },
         },
-        meta: { breadCrumb: "แบบฟอร์มเบิกวัสดุ" },
         children: [
           {
             path: "",
-            component: MDS_disbursement_form_user,
+            component: MDS_exchequer_adjust_suppiles,
           },
         ],
       },
     ],
   },
   {
-    path: "/MDS_disbursement_admin",
+    path: "/MDS_disbursement",
     name: "MDS_disbursement",
     component: {
       render(c) {
@@ -254,10 +345,10 @@ const routes = [
     children: [
       {
         path: "",
-        component: MDS_disbursement_admin,
+        component: MDS_disbursement,
       },
       {
-        path: "MDS_disbursement_form_admin",
+        path: "MDS_disbursement_form",
         component: {
           render(c) {
             return c("router-view");
@@ -267,9 +358,41 @@ const routes = [
         children: [
           {
             path: "",
-            component: MDS_disbursement_form_admin,
+            component: MDS_disbursement_form,
           },
         ],
+      },
+    ],
+  },
+  {
+    path: "/MDS_export",
+    name: "MDS_export",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    meta: { breadCrumb: "รายการเบิกจ่ายวัสดุ" },
+    children: [
+      {
+        path: "",
+        component: MDS_export,
+      },
+    ],
+  },
+  {
+    path: "/MDS_report",
+    name: "MDS_report",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
+    meta: { breadCrumb: "รายงานผลการเบิกจ่ายวัสดุ" },
+    children: [
+      {
+        path: "",
+        component: MDS_report,
       },
     ],
   },

@@ -5,6 +5,7 @@
       :style="{
         height: '100%',
       }"
+      v-if="this.$store.state.status_login"
     >
       <a-drawer
         class="display_mobile"
@@ -41,6 +42,7 @@
             <a-icon type="home" />
             <span>หน้าแรก</span>
           </a-menu-item>
+
           <a-sub-menu key="cal">
             <span slot="title">
               <a-icon type="calculator" />
@@ -136,13 +138,19 @@
             <span>หน้าแรก</span>
           </a-menu-item>
           <a-menu-item key="user">
-            <a-icon type="user" />
-            <span>ข้อมูลส่วนตัว</span>
+            <router-link :to="{ path: '/personal_data' }">
+              <a-icon type="user" />
+              <span>ข้อมูลส่วนตัว</span>
+            </router-link>
           </a-menu-item>
+
           <a-menu-item key="management">
-            <a-icon type="api" theme="filled" />
-            <span>จัดการสิทธิ์เข้าใช้งาน</span>
+            <router-link :to="{ path: '/permission_manage' }">
+              <a-icon type="api" theme="filled" />
+              <span>จัดการสิทธิ์เข้าใช้งาน</span>
+            </router-link>
           </a-menu-item>
+
           <a-sub-menu key="CWS">
             <span slot="title">
               <a-icon type="calculator" theme="filled" />
@@ -209,13 +217,13 @@
                 <a-icon type="file-done" />รายการนำเข้าวัสดุ
               </router-link>
             </a-menu-item>
-            <a-menu-item key="MDS_disbursement_admin">
-              <router-link :to="{ path: '/MDS_disbursement_admin' }">
+            <a-menu-item key="MDS_export">
+              <router-link :to="{ path: '/MDS_export' }">
                 <a-icon type="file-sync" />รายการเบิกจ่ายวัสดุ
               </router-link>
             </a-menu-item>
             <a-menu-item key="MDS_report">
-              <router-link :to="{ path: '/MDS_disbursement_user' }">
+              <router-link :to="{ path: '/MDS_report' }">
                 <a-icon type="area-chart" />รายงานผลเบิกจ่ายวัสดุ
               </router-link>
             </a-menu-item>
@@ -224,8 +232,8 @@
                 <a-icon type="setting" theme="filled" />ตั้งต่าระบบเบิกจ่าย
               </router-link>
             </a-menu-item>
-            <a-menu-item key="MDS_disbursement_user">
-              <router-link :to="{ path: '/MDS_disbursement_user' }">
+            <a-menu-item key="MDS_disbursement">
+              <router-link :to="{ path: '/MDS_disbursement' }">
                 <a-icon type="block" />เบิกจ่ายวัสดุ
               </router-link>
             </a-menu-item>
@@ -374,6 +382,22 @@
         </a-layout-content>
       </a-layout>
     </a-layout>
+
+
+    <!-- Bug -->
+    <a-layout
+      :style="{
+        height: '100%',
+      }"
+      v-if="!this.$store.state.status_login"
+    >
+      <a-layout-content>
+        <div class="layout-login">
+          <router-view />
+        </div>
+      </a-layout-content>
+    </a-layout>
+  <!-- End [Bug] -->
   </div>
 </template>
 <script>
@@ -438,7 +462,12 @@ export default {
     }
   }
 }
+.layout-login {
+  background-image: url("https://www.informatics.buu.ac.th/2020/wp-content/uploads/2018/07/NormalView.jpg") !important;
 
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 .ant-layout-sider {
   background: #ffffff !important;
 }

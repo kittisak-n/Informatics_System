@@ -5,7 +5,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    criteriaId: null,
+    schedule: null,
+    status_login: true,
+    url: "http://localhost:8080",
   },
   mutations: {},
   actions: {},
