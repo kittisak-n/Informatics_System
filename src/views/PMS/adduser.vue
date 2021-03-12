@@ -33,7 +33,7 @@
               <br />
               <a-row :gutter="[8, 8]" type="flex" justify="center">
                 <a-col :span="4" style="text-align:end">
-                  รหัสผ่านผู้ใช้งาน :
+                  ชื่อผู้ใช้งาน :
                 </a-col>
                 <a-col :span="14">
                   <a-input style="width:100%">
