@@ -18,7 +18,7 @@
             </a-col>
             <a-col :span="4" :style="{ textAlign: 'right' }">
               <a-button
-                type="success"
+                type="primary"
                 icon="plus"
                 :style="{ marginRight: '3%' }"
                 @click="showModal"
