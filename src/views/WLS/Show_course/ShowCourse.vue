@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-    <!-- panel -->
+    <!-- Start panel -->
     <a-row :gutter="[8, 8]">
       <a-col :span="24">
         <a-card size="small">
