@@ -17,14 +17,17 @@
               </a-card-meta>
             </a-col>
             <a-col :span="4" :style="{ textAlign: 'right' }">
-              <a-button
-                type="primary"
-                icon="plus"
-                :style="{ marginRight: '3%' }"
-                @click="showModal"
-              >
-                เพิ่มรายวิชา
-              </a-button>
+              <a-tooltip>
+                <template slot="title"> เพิ่มรายวิชา </template>
+                <a-button
+                  type="primary"
+                  icon="plus"
+                  :style="{ marginRight: '3%' }"
+                  @click="showModal"
+                >
+                  เพิ่มรายวิชา
+                </a-button>
+              </a-tooltip>
               <!-- <a-tooltip placement="top">
                 <template slot="title">
                   <span>ส่งออกไฟล์ PDF</span>
@@ -72,11 +75,14 @@
                 bordered
               >
                 <span slot="Action" slot-scope="record">
-                  <a-button
-                    type="primary"
-                    @click="get_course_detail(record.course_id)"
-                    ><a-icon type="search" />
-                  </a-button>
+                  <a-tooltip>
+                    <template slot="title"> ดูรายละเอียดรายวิชา </template>
+                    <a-button
+                      type="primary"
+                      @click="get_course_detail(record.course_id)"
+                      ><a-icon type="search" />
+                    </a-button>
+                  </a-tooltip>
                 </span>
               </a-table>
             </a-col>
@@ -206,30 +212,33 @@
         >
           <span slot="expandedRowRender" slot-scope="record">
             <a-row
-              :gutter="[8, 8]"
+              :gutter="[8,8]"
               v-for="(item, index) in record.section_date"
               :key="index"
             >
-              <a-col :span="7">
+              <a-col :span="6">
                 ห้องเรียน : {{ item.section_detail_room }}
               </a-col>
               <a-col :span="4">
                 วันที่เรียน : {{ item.section_detail_day }}
               </a-col>
-              <a-col :span="6">
+              <a-col :span="5">
                 เวลาเรียน : {{ item.section_detail_start_time }} -
                 {{ item.section_detail_end_time }}
               </a-col>
-              <a-col :span="6">
+              <a-col :span="7">
                 อาจารย์ : {{ item.prefix }} {{ item.name }} {{ item.lastname }}
               </a-col>
               <a-col :span="1">
-                <a-button
-                  :size="size"
-                  type="warning"
-                  @click="EditDetail(item.section_detail_id)"
-                  ><a-icon type="edit"
-                /></a-button>
+                <a-tooltip>
+                  <template slot="title"> แก้ไขรายละเอียดรายวิชา </template>
+                  <a-button
+                    :size="size"
+                    type="warning"
+                    @click="EditDetail(item.section_detail_id)"
+                    ><a-icon type="edit"
+                  /></a-button>
+                </a-tooltip>
               </a-col>
             </a-row>
           </span>
@@ -746,7 +755,7 @@ export default {
         })
         .catch((err) => alert(err));
       self.colse_edit_edtail();
-      self.get_course_detail(self.course_detail_id)
+      self.get_course_detail(self.course_detail_id);
     },
   },
   created() {
