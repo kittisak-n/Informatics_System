@@ -230,14 +230,14 @@
                       </div>
                     </span>
                     <span slot="condition" slot-scope="text, record, index">
-                      <div :style="{ textAlign: 'center', fontSize: '15px' }">
+                      <div :style="{ textAlign: 'center', fontSize: '13px' }">
                         <span>จำนวนนิสิตที่เกิน: </span>
 
                         <a-input
                           placeholder="1"
                           min="1"
                           type="number"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_Internal.lecture.condition[index]
@@ -250,7 +250,7 @@
                           placeholder="20"
                           min="1"
                           type="number"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_Internal.lecture.condition[index]
@@ -380,13 +380,13 @@
                       </div>
                     </span>
                     <span slot="condition" slot-scope="text, record, index">
-                      <div :style="{ textAlign: 'center', fontSize: '15px' }">
+                      <div :style="{ textAlign: 'center', fontSize: '13px' }">
                         <span>จำนวนนิสิตที่เกิน: </span>
 
                         <a-input
                           placeholder="1"
                           type="number"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_external.lecture.condition[index]
@@ -398,7 +398,7 @@
                         <a-input
                           type="number"
                           placeholder="20"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_external.lecture.condition[index]
@@ -533,15 +533,15 @@
                       </div>
                     </span>
                     <span slot="condition" slot-scope="text, record, index">
-                      <div :style="{ textAlign: 'center', fontSize: '15px' }">
+                      <div :style="{ textAlign: 'center', fontSize: '13px' }">
                         <span>จำนวนนิสิตที่เกิน: </span>
 
                         <a-input
                           min="1"
                           type="number"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
-                          placeholder="เช่น 1"
+                          placeholder="1"
                           v-model="
                             criteria_Internal.lab.condition[index]
                               .schedule_condition_min
@@ -553,7 +553,7 @@
                           min="1"
                           type="number"
                           placeholder="20"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_Internal.lab.condition[index]
@@ -598,6 +598,7 @@
                   </a-table>
                 </a-col>
               </a-row>
+
               <a-row :gutter="[8, 8]" type="flex" justify="center">
                 <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                   <a-button
@@ -685,14 +686,14 @@
                       </div>
                     </span>
                     <span slot="condition" slot-scope="text, record, index">
-                      <div :style="{ textAlign: 'center', fontSize: '15px' }">
+                      <div :style="{ textAlign: 'center', fontSize: '13px' }">
                         <span>จำนวนนิสิตที่เกิน: </span>
 
                         <a-input
                           placeholder="1"
                           min="1"
                           type="number"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_external.lab.condition[index]
@@ -705,7 +706,7 @@
                           min="1"
                           type="number"
                           placeholder="20"
-                          style="width: 14%"
+                          style="width: 16%"
                           addon-after="คน"
                           v-model="
                             criteria_external.lab.condition[index]
@@ -1257,7 +1258,7 @@ export default {
           title: "ลำดับ",
           dataIndex: "key",
           key: "key",
-          width: "3%",
+          width: "4%",
           scopedSlots: {
             customRender: "key",
           },

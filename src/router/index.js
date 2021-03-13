@@ -208,7 +208,7 @@ const routes = [
         return c("router-view");
       },
     },
-    meta: { breadCrumb: "ตรวจสอบภาระงาน" },
+    meta: { breadCrumb: "สรุปภาระงานเพื่อการจ่ายค่าตอบแทน" },
     children: [
       {
         path: "",
