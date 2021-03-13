@@ -233,7 +233,6 @@
                 <a-tooltip>
                   <template slot="title"> แก้ไขรายละเอียดรายวิชา </template>
                   <a-button
-                    :size="size"
                     type="warning"
                     @click="EditDetail(item.section_detail_id)"
                     ><a-icon type="edit"
@@ -442,11 +441,11 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk() {
-          console.log("OK");
+          // console.log("OK");
           self.RemoveSection(id);
         },
         onCancel() {
-          console.log("Cancel");
+          // console.log("Cancel");
         },
       });
     },
@@ -457,7 +456,7 @@ export default {
       this.modal_detail = false;
     },
     handleCancel() {
-      console.log("Clicked cancel button");
+      // console.log("Clicked cancel button");
 
       this.modal_insert = false;
 
@@ -483,7 +482,7 @@ export default {
       }
     },
     upload_file_click() {
-      console.log(123);
+      // console.log(123);
       this.$refs.import_csv_file.click();
     },
     Years_course() {
@@ -496,13 +495,13 @@ export default {
         }
         j++;
       }
-      console.log(this.course_years);
+      // console.log(this.course_years);
     },
     importExcel(e) {
       const self = this;
       const files = e.target.files;
-      console.log(files);
-      console.log(files[0].name);
+      // console.log(files);
+      // console.log(files[0].name);
 
       if (!files.length) {
         return;
@@ -522,7 +521,7 @@ export default {
           });
           const wsname = workbook.SheetNames[0]; // Take the first sheet，wb.SheetNames[0] :Take the name of the first sheet in the sheets
           const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); // Generate JSON table content，wb.Sheets[Sheet名]    Get the data of the first sheet
-          console.log(ws);
+          // console.log(ws);
           // Edit data
           let course_code = []; //จัดข้อมูล
           ws.forEach(function (ele, index) {
@@ -540,7 +539,7 @@ export default {
             }
           }); //สิ้นสุดจัดข้อมูล
 
-          console.log(self.data_course_import);
+          // console.log(self.data_course_import);
           this.import_filename = files[0].name;
           this.import_status = true;
         } catch (e) {
@@ -552,8 +551,8 @@ export default {
       input.value = undefined;
     },
     setCoruse(ele) {
-      console.log("setCoruse");
-      console.log(ele);
+      // console.log("setCoruse");
+      // console.log(ele);
       const self = this;
       self.data_course_import.push({
         course_id: 0,
@@ -587,7 +586,7 @@ export default {
     },
     setSection(ele) {
       const self = this;
-      console.log("setSection");
+      // console.log("setSection");
       self.data_course_import[
         self.data_course_import.findIndex(
           (element) => (element.course_code = ele.รหัสวิชา)
@@ -614,8 +613,8 @@ export default {
       let i =
         self.data_course_import[self.data_course_import.length - 1]
           .course_section.length - 1;
-      console.log(i);
-      console.log("setectiondate");
+      // console.log(i);
+      // console.log("setectiondate");
       self.data_course_import[
         self.data_course_import.length - 1
       ].course_section[i].section_date.push({
@@ -629,16 +628,14 @@ export default {
     },
     Insert_course() {
       var self = this;
-      console.log("Year :", self.select_course_year);
-      console.log("Term :", self.select_course_term);
+      // console.log("Year :", self.select_course_year);
+      // console.log("Term :", self.select_course_term);
       Axios.post("http://localhost:8080/WlsInsert/insertcourse", {
         course: self.data_course_import,
         course_term: self.select_course_term,
         course_year: self.select_course_year,
       })
-        .then(function (result) {
-          console.log(result);
-        })
+        .then()
         .catch((err) => alert(err));
     },
     get_all_sourse() {
@@ -663,7 +660,7 @@ export default {
             };
             self.course_record.push(course);
           });
-          console.log(self.course_record);
+          // console.log(self.course_record);
         })
         .catch((err) => alert(err));
     },
@@ -672,16 +669,16 @@ export default {
       const self = this;
 
       self.course_detail_id = id;
-      console.log("ID Button :", id);
-      console.log("Course Detail :", this.course_detail_record);
+      // console.log("ID Button :", id);
+      // console.log("Course Detail :", this.course_detail_record);
 
       Axios.post("http://localhost:8080/WlsInsert/getcoursedetail", {
         course_id: id,
       })
         .then((response) => {
-          console.log(response.data.results);
+          // console.log(response.data.results);
           if (response.data.results == 0) {
-            console.log("nodata");
+            // console.log("nodata");
             this.$info({
               title: "ไม่พบข้อมูลกลุ่มเรียน",
               onOk() {},
@@ -689,10 +686,10 @@ export default {
           } else {
             self.course_detail_data = [];
             response.data.results.forEach(function (ele) {
-              console.log(
-                "Section Des :",
-                ele.section_date[0].section_detail_description
-              );
+              // console.log(
+              //   "Section Des :",
+              //   ele.section_date[0].section_detail_description
+              // );
               self.course_detail_data.push({
                 section_id: ele.section_id,
                 section_number: ele.section_number,
@@ -701,26 +698,25 @@ export default {
                 section_date: ele.section_date,
               });
             });
-            console.log("Data Detail : ", self.course_detail_data);
+            // console.log("Data Detail : ", self.course_detail_data);
             self.modal_detail = true;
           }
         })
         .catch((err) => alert(err));
     },
     RemoveSection(id) {
-      console.log(id);
+      // console.log(id);
       Axios.post("http://localhost:8080/WlsInsert/changestatus", {
         section_id: id,
       })
-        .then((response) => {
-          console.log(response);
-        })
+        .then(
+        )
         .catch((err) => alert(err));
     },
     EditDetail(id) {
       let self = this;
 
-      console.log(id);
+      // console.log(id);
       Axios.post("http://localhost:8080/WlsInsert/getsectiondetailid", {
         section_detail_id: id,
       })
@@ -750,9 +746,7 @@ export default {
         section_detail_end_time: self.data_section_detail_edit_end_time,
         section_detail_room: self.data_section_detail_edit_room,
       })
-        .then((response) => {
-          console.log(response);
-        })
+        .then()
         .catch((err) => alert(err));
       self.colse_edit_edtail();
       self.get_course_detail(self.course_detail_id);
