@@ -119,15 +119,21 @@
         :confirm-loading="confirmLoading"
       >
         <template slot="footer">
-          <a-button key="back" @click="handleCancel"> ยกเลิก </a-button>
-          <a-button
-            key="submit"
-            type="success"
-            v-if="import_status"
-            @click="handleSubmit"
-          >
-            บันทึก
-          </a-button>
+          <a-tooltip>
+            <template slot="title"> ยกเลิก </template>
+            <a-button key="back" @click="handleCancel"> ยกเลิก </a-button>
+          </a-tooltip>
+          <a-tooltip>
+            <template slot="title"> บันทึกข้อมูล </template>
+            <a-button
+              key="submit"
+              type="success"
+              v-if="import_status"
+              @click="handleSubmit"
+            >
+              บันทึก
+            </a-button>
+          </a-tooltip>
         </template>
         <!-- <a-row :gutter="[10, 50]">
           <a-col :span="24" :style="{ textAlign: 'center' }">
@@ -212,7 +218,7 @@
         >
           <span slot="expandedRowRender" slot-scope="record">
             <a-row
-              :gutter="[8,8]"
+              :gutter="[8, 8]"
               v-for="(item, index) in record.section_date"
               :key="index"
             >
@@ -227,7 +233,7 @@
                 {{ item.section_detail_end_time }}
               </a-col>
               <a-col :span="7">
-                อาจารย์ : {{ item.prefix }} {{ item.name }} {{ item.lastname }}
+                อาจารย์ : {{ item.prefix }}{{ item.name }} {{ item.lastname }}
               </a-col>
               <a-col :span="1">
                 <a-tooltip>
@@ -255,14 +261,20 @@
       <!-- Modal Edit Detail -->
       <a-modal v-model="modal_edit_detail" title="Title" on-ok="handleOk">
         <template slot="footer">
-          <a-button @click="colse_edit_edtail()"> ยกเลิก </a-button>
-          <a-button
-            type="success"
-            @click="edit_section_detail()"
-            v-if="data_section_detail_edit_room != ''"
-          >
-            บันทึก
-          </a-button>
+          <a-tooltip>
+            <template slot="title"> ยกเลิก </template>
+            <a-button @click="colse_edit_edtail()"> ยกเลิก </a-button>
+          </a-tooltip>
+          <a-tooltip>
+            <template slot="title"> บันทึกข้อมูล </template>
+            <a-button
+              type="success"
+              @click="edit_section_detail()"
+              v-if="data_section_detail_edit_room != ''"
+            >
+              บันทึก
+            </a-button>
+          </a-tooltip>
         </template>
         <a-row :gutter="[8, 8]">
           <a-col :span="6" :style="{ textAlign: 'end', marginTop: '3px' }"
@@ -709,8 +721,7 @@ export default {
       Axios.post("http://localhost:8080/WlsInsert/changestatus", {
         section_id: id,
       })
-        .then(
-        )
+        .then()
         .catch((err) => alert(err));
     },
     EditDetail(id) {
