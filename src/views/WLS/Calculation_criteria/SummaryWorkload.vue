@@ -16,9 +16,29 @@
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="8" style="text-align: end">
               <span style="font-size: 18px">ปีการศึกษา </span>
-              <a-select v-model="year" style="width: 100px; font-size: 15px">
-                <a-select-option :value="2564"> 2564 </a-select-option>
-                <a-select-option :value="2563"> 2563 </a-select-option>
+              <a-select
+                @change="get_summary_by_year()"
+                v-model="year"
+                style="width: 35%; font-size: 15px"
+              >
+                <a-select-option :value="0" selected>
+                  แสดงทั้งหมด
+                </a-select-option>
+                <a-select-option :value="new Date().getFullYear() + 543">
+                  {{ new Date().getFullYear() + 543 }}
+                </a-select-option>
+                <a-select-option :value="new Date().getFullYear() + 542">
+                  {{ new Date().getFullYear() + 542 }}
+                </a-select-option>
+                <a-select-option :value="new Date().getFullYear() + 541">
+                  {{ new Date().getFullYear() + 541 }}
+                </a-select-option>
+                <a-select-option :value="new Date().getFullYear() + 540">
+                  {{ new Date().getFullYear() + 540 }}
+                </a-select-option>
+                <a-select-option :value="new Date().getFullYear() + 539">
+                  {{ new Date().getFullYear() + 539 }}
+                </a-select-option>
               </a-select>
             </a-col>
 
@@ -181,7 +201,7 @@ export default {
       export_data: [],
       receipt_data: [],
       semester: 1,
-      year: new Date().getFullYear() + 543, // 2020,
+      year: 0, // 2020,
 
       columns: [
         {
@@ -246,32 +266,73 @@ export default {
     };
   },
   methods: {
-    getdateThai_summary_data(){
+    get_summary_by_year() {
+      const self = this;
+   
+      if (this.year == 0) {
+        this.get_summary();
+      } else {
+        axios
+          .post(this.$store.state.url + "/summaryRouters/get_summary_by_year", {
+            summary_year: self.year,
+          })
+          .then((res) => {
+            self.summary_data = [];
+            res.data.results.forEach(function (element, index) {
+              self.summary_data.push({
+                key: index + 1,
+                summary_id: element.summary_id,
+                summary_total: element.summary_total,
+                summary_total_calculate: element.summary_total_calculate,
+                summary_total_around: element.summary_total_around,
+                summary_total_extra: element.summary_total_extra,
+                summary_bonus: element.summary_bonus,
+                summary_salary: element.summary_salary,
+                summary_lesson: element.summary_lesson,
+                summary_create_by: element.summary_create_by,
+                summary_create_date: element.summary_create_date,
 
+                schedule_per_credit: element.schedule_per_credit,
+                schedule_start_date: element.schedule_start_date,
+                schedule_name: element.schedule_name,
+                schedule_id: element.schedule_id,
+                summary_year: element.summary_year,
+                person_name: element.person_name,
+                position_name: element.position_name,
+                person_address: element.person_address,
+                provinces_name: element.provinces_name,
+                amphures_name: element.amphures_name,
+                districts_name: element.districts_name,
+                zip_code: element.zip_code,
+              });
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    },
+    getdateThai_summary_data() {
       const self = this;
 
-  self.summary_data.forEach((data,index) => {
-    
-     let summary_create_date_thai = new Date(data.summary_create_date)
+      self.summary_data.forEach((data, index) => {
+        let summary_create_date_thai = new Date(data.summary_create_date)
           .toISOString()
           .split("T")[0];
         summary_create_date_thai = `${summary_create_date_thai.split("-")[2]} ${
           self.month[parseInt(summary_create_date_thai.split("-")[1])]
         } ${parseInt(summary_create_date_thai.split("-")[0]) + 543}`;
 
-
-    let schedule_start_date_thai = new Date(data.schedule_start_date)
+        let schedule_start_date_thai = new Date(data.schedule_start_date)
           .toISOString()
           .split("T")[0];
-        schedule_start_date_thai = ` ${parseInt(schedule_start_date_thai.split("-")[0]) + 543}`;
+        schedule_start_date_thai = ` ${
+          parseInt(schedule_start_date_thai.split("-")[0]) + 543
+        }`;
 
-    self.summary_data[index].summary_create_date = summary_create_date_thai;
-     self.summary_data[index].schedule_start_date = schedule_start_date_thai;
-    
-  });
-
-     
-
+        self.summary_data[index].summary_create_date = summary_create_date_thai;
+        self.summary_data[index].schedule_start_date = schedule_start_date_thai;
+      });
     },
     genDate() {
       const self = this;
@@ -305,6 +366,7 @@ export default {
       axios
         .post(this.$store.state.url + "/summaryRouters/get_summary")
         .then((res) => {
+          self.summary_data = [];
           res.data.results.forEach(function (element, index) {
             self.summary_data.push({
               key: index + 1,
@@ -319,11 +381,11 @@ export default {
               summary_create_by: element.summary_create_by,
               summary_create_date: element.summary_create_date,
 
-              schedule_per_credit:element.schedule_per_credit,
-              schedule_start_date:element.schedule_start_date,
-              schedule_name:element.schedule_name,
-              schedule_id:element.schedule_id,
-              summary_year:element.summary_year,
+              schedule_per_credit: element.schedule_per_credit,
+              schedule_start_date: element.schedule_start_date,
+              schedule_name: element.schedule_name,
+              schedule_id: element.schedule_id,
+              summary_year: element.summary_year,
               person_name: element.person_name,
               position_name: element.position_name,
               person_address: element.person_address,
@@ -332,12 +394,10 @@ export default {
               districts_name: element.districts_name,
               zip_code: element.zip_code,
             });
-
-           
           });
-         
-           this.getdateThai_summary_data();
-            console.log(self.summary_data);
+
+          this.getdateThai_summary_data();
+          console.log(self.summary_data);
         })
         .catch((err) => {
           console.error(err);
@@ -462,7 +522,7 @@ export default {
                   {
                     border: [true, false, true, false],
                     margin: [20, 5, 5, 0],
-                    text: "ข้าพเจ้าชื่อ  "+self.export_data.person_name,
+                    text: "ข้าพเจ้าชื่อ  " + self.export_data.person_name,
                     colSpan: 3,
                     alignment: "left",
                   },
@@ -524,15 +584,26 @@ export default {
                 [
                   {
                     text:
-                       "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา "+self.export_data.summary_year+"\n"+"งวด 1 ( " +
-                      self.receipt_data[0].summary_detail_date + " )",
+                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา " +
+                      self.export_data.summary_year +
+                      "\n" +
+                      "งวด 1 ( " +
+                      self.receipt_data[0].summary_detail_date +
+                      " )",
                   },
-                  { text: self.receipt_data[0].summary_detail_seq, alignment: "center" },
+                  {
+                    text: self.receipt_data[0].summary_detail_seq,
+                    alignment: "center",
+                  },
                   { text: "-", alignment: "center" },
                 ],
                 [
                   { text: "รวมเงิน", alignment: "right", style: "tableHeader" },
-                  { text: self.receipt_data[0].summary_detail_seq, alignment: "center", style: "tableHeader" },
+                  {
+                    text: self.receipt_data[0].summary_detail_seq,
+                    alignment: "center",
+                    style: "tableHeader",
+                  },
                   { text: "-", alignment: "center", style: "tableHeader" },
                 ],
                 [
@@ -642,7 +713,7 @@ export default {
                   {
                     border: [true, false, true, false],
                     margin: [20, 5, 5, 0],
-                    text: "ข้าพเจ้าชื่อ  " +self.export_data.person_name,
+                    text: "ข้าพเจ้าชื่อ  " + self.export_data.person_name,
                     colSpan: 3,
                     alignment: "left",
                   },
@@ -705,17 +776,26 @@ export default {
                 [
                   {
                     text:
-                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา "+self.export_data.summary_year+"\n"+"งวด 2 ( " +
-                      self.receipt_data[1].summary_detail_date + " )",
-
-
+                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา " +
+                      self.export_data.summary_year +
+                      "\n" +
+                      "งวด 2 ( " +
+                      self.receipt_data[1].summary_detail_date +
+                      " )",
                   },
-                  { text: self.receipt_data[1].summary_detail_seq, alignment: "center" },
+                  {
+                    text: self.receipt_data[1].summary_detail_seq,
+                    alignment: "center",
+                  },
                   { text: "-", alignment: "center" },
                 ],
                 [
                   { text: "รวมเงิน", alignment: "right", style: "tableHeader" },
-                  { text: self.receipt_data[1].summary_detail_seq, alignment: "center", style: "tableHeader" },
+                  {
+                    text: self.receipt_data[1].summary_detail_seq,
+                    alignment: "center",
+                    style: "tableHeader",
+                  },
                   { text: "-", alignment: "center", style: "tableHeader" },
                 ],
                 [
@@ -888,15 +968,26 @@ export default {
                 [
                   {
                     text:
-                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา "+self.export_data.summary_year+"\n"+"งวด 3 ( " +
-                      self.receipt_data[2].summary_detail_date + " )",
- },
-                  { text: self.receipt_data[2].summary_detail_seq, alignment: "center" },
+                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา " +
+                      self.export_data.summary_year +
+                      "\n" +
+                      "งวด 3 ( " +
+                      self.receipt_data[2].summary_detail_date +
+                      " )",
+                  },
+                  {
+                    text: self.receipt_data[2].summary_detail_seq,
+                    alignment: "center",
+                  },
                   { text: "-", alignment: "center" },
                 ],
                 [
                   { text: "รวมเงิน", alignment: "right", style: "tableHeader" },
-                  { text: self.receipt_data[2].summary_detail_seq, alignment: "center", style: "tableHeader" },
+                  {
+                    text: self.receipt_data[2].summary_detail_seq,
+                    alignment: "center",
+                    style: "tableHeader",
+                  },
                   { text: "-", alignment: "center", style: "tableHeader" },
                 ],
                 [
@@ -1006,7 +1097,7 @@ export default {
                   {
                     border: [true, false, true, false],
                     margin: [20, 5, 5, 0],
-                    text: "ข้าพเจ้าชื่อ  "+self.export_data.person_name,
+                    text: "ข้าพเจ้าชื่อ  " + self.export_data.person_name,
                     colSpan: 3,
                     alignment: "left",
                   },
@@ -1018,7 +1109,7 @@ export default {
                     border: [true, false, true, false],
                     margin: [0, 0, 0, 5],
                     text:
-                    self.export_data.person_address +
+                      self.export_data.person_address +
                       " ตำบล " +
                       self.export_data.districts_name +
                       " อำเภอ " +
@@ -1069,15 +1160,26 @@ export default {
                 [
                   {
                     text:
-                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา "+self.export_data.summary_year+"\n"+"งวด 4 ( " +
-                      self.receipt_data[3].summary_detail_date + " )",
- },
-                  { text: self.receipt_data[3].summary_detail_seq, alignment: "center" },
+                      "ค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ปีการศึกษา " +
+                      self.export_data.summary_year +
+                      "\n" +
+                      "งวด 4 ( " +
+                      self.receipt_data[3].summary_detail_date +
+                      " )",
+                  },
+                  {
+                    text: self.receipt_data[3].summary_detail_seq,
+                    alignment: "center",
+                  },
                   { text: "-", alignment: "center" },
                 ],
                 [
                   { text: "รวมเงิน", alignment: "right", style: "tableHeader" },
-                  { text: self.receipt_data[3].summary_detail_seq, alignment: "center", style: "tableHeader" },
+                  {
+                    text: self.receipt_data[3].summary_detail_seq,
+                    alignment: "center",
+                    style: "tableHeader",
+                  },
                   { text: "-", alignment: "center", style: "tableHeader" },
                 ],
                 [
@@ -1181,7 +1283,8 @@ export default {
               },
               {
                 text:
-                  "ขออนุมัติเบิกค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ประจำภาคต้น ปีการศึกษา "+self.export_data.summary_year ,
+                  "ขออนุมัติเบิกค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ประจำภาคต้น ปีการศึกษา " +
+                  self.export_data.summary_year,
                 alignment: "left",
                 margin: [10, 0, 0, 0],
               },
@@ -1206,7 +1309,19 @@ export default {
           {
             margin: [0, 35, 0, 0],
             text:
-              "ตามที่ "+self.export_data.person_name+"    ส่งภาระงานเพื่อประกอบการเบิกจ่ายค่าตอบแทนสอนเกินเกณฑ์\n ประจำภาคต้น ปีการศึกษา "+self.export_data.summary_year +" นั้น ดังนั้นเพื่อให้การเบิกจ่ายค่าตอบแทนสอนเกินเกณฑ์เป็นไปด้วยความเรียบร้อยงานการเงินคณะวิทยาการสารสนเทศ \nจึงเรียนมาเพื่อขออนุมัติเบิกค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ประจำภาคต้น ปีการศึกษา "+self.export_data.summary_year +" งวดที่ 4 (เดือน "+self.receipt_data[3].summary_detail_date+") ตามประกาศคณะวิทยาการสารสนเทศ เรื่อง "+self.export_data.schedule_name+"\n พ.ศ. "+self.export_data.schedule_start_date +" และที่แก้ไขเพิ่มเติม รายละเอียดดังนี้",
+              "ตามที่ " +
+              self.export_data.person_name +
+              "    ส่งภาระงานเพื่อประกอบการเบิกจ่ายค่าตอบแทนสอนเกินเกณฑ์\n ประจำภาคต้น ปีการศึกษา " +
+              self.export_data.summary_year +
+              " นั้น ดังนั้นเพื่อให้การเบิกจ่ายค่าตอบแทนสอนเกินเกณฑ์เป็นไปด้วยความเรียบร้อยงานการเงินคณะวิทยาการสารสนเทศ \nจึงเรียนมาเพื่อขออนุมัติเบิกค่าตอบแทนสอนเกินเกณฑ์ภาระงาน ประจำภาคต้น ปีการศึกษา " +
+              self.export_data.summary_year +
+              " งวดที่ 4 (เดือน " +
+              self.receipt_data[3].summary_detail_date +
+              ") ตามประกาศคณะวิทยาการสารสนเทศ เรื่อง " +
+              self.export_data.schedule_name +
+              "\n พ.ศ. " +
+              self.export_data.schedule_start_date +
+              " และที่แก้ไขเพิ่มเติม รายละเอียดดังนี้",
             alignment: "left",
           },
           {
@@ -1252,9 +1367,12 @@ export default {
                 ],
                 [
                   { text: "1", alignment: "center" },
-                  { text: self.export_data.person_name},
+                  { text: self.export_data.person_name },
                   { text: self.export_data.summary_bonus, style: "number" },
-                  { text: self.export_data.schedule_per_credit, style: "number" },
+                  {
+                    text: self.export_data.schedule_per_credit,
+                    style: "number",
+                  },
                   { text: self.export_data.summary_salary, style: "number" },
                   { text: self.export_data.summary_lesson, style: "number" },
                 ],
@@ -1296,7 +1414,9 @@ export default {
           {
             margin: [0, 5, 0, 0],
             text:
-              "งบดำเนินงาน หมวดค่าตอบแทนใช้สอยและวัสดุ เป็นเงิน "+self.export_data.summary_lesson+" บาท",
+              "งบดำเนินงาน หมวดค่าตอบแทนใช้สอยและวัสดุ เป็นเงิน " +
+              self.export_data.summary_lesson +
+              " บาท",
           },
           {
             margin: [0, 70, 70, 0],
@@ -1340,11 +1460,12 @@ export default {
             pageBreak: "before",
             alignment: "center",
             text:
-              "สรุปภาระงานสอนเพื่อการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ\nภาคต้น ปีการศึกษา "+self.export_data.summary_year,
+              "สรุปภาระงานสอนเพื่อการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ\nภาคต้น ปีการศึกษา " +
+              self.export_data.summary_year,
           },
           {
             alignment: "left",
-            text: "ชื่อ - สกุล "+self.export_data.person_name,
+            text: "ชื่อ - สกุล " + self.export_data.person_name,
           },
           {
             style: "bold",
@@ -1669,7 +1790,10 @@ export default {
           {
             margin: [0, 15, 0, 0],
             text:
-              "เรื่อง หลักเกณฑ์การกำหนดภาระงานสอนเพื่อการจ่ายค่าตอบแทนของคณาจารย์ประจำคณะวิทยาการสารสนเทศ พ.ศ. 2563",
+              "เรื่อง " +
+              self.export_data.schedule_name +
+              " พ.ศ. " +
+              self.export_data.summary_year,
             bold: true,
             alignment: "left",
           },
@@ -1793,11 +1917,14 @@ export default {
               },
               {
                 width: 250,
-                text: "ค่าสอน หน่วยกิตละ "+self.export_data.summary_total_extra+"บาท จำนวน 15 สัปดาห์ เป็นเงิน  ",
+                text:
+                  "ค่าสอน หน่วยกิตละ " +
+                  self.export_data.summary_total_extra +
+                  "บาท จำนวน 15 สัปดาห์ เป็นเงิน  ",
               },
               {
                 width: 100,
-                text: self.export_data.summary_salary+"  บาท",
+                text: self.export_data.summary_salary + "  บาท",
                 alignment: "center",
               },
               {
@@ -1806,7 +1933,7 @@ export default {
                 alignment: "left",
               },
               {
-                text: self.export_data.summary_lesson+" บาท",
+                text: self.export_data.summary_lesson + " บาท",
                 alignment: "center",
               },
             ],
@@ -1833,7 +1960,7 @@ export default {
           {
             margin: [0, 5, 130, 0],
             alignment: "right",
-            text: "(        "+self.export_data.person_name+"        )",
+            text: "(        " + self.export_data.person_name + "        )",
           },
           {
             margin: [0, 25, 100, 0],
