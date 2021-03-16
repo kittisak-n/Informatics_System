@@ -23,7 +23,7 @@
           <a-input
             style="width: 100%"
             disabled
-            v-model="schedule.criteria_name"
+            v-model="schedule.schedule_name"
         /></a-col>
         <a-col :span="6" style="margin: 0.2em 0px"></a-col>
       </a-row>
@@ -32,9 +32,9 @@
         <a-col :span="6" style="margin: 0.2em 0px"> </a-col>
         <a-col :span="6" style="margin: 0.2em 0px">วันที่เริ่มใช้:</a-col>
         <a-col :span="6" style="margin: 0.2em 0px">
-          <a-date-picker
+          <a-input
             style="width: 100%"
-            v-model="schedule.criteria_start_date"
+            v-model="schedule.schedule_start_date"
             disabled
           />
         </a-col>
@@ -46,7 +46,7 @@
         <a-col :span="6" style="margin: 0.2em 0px">ผู้สร้างกำหนดการ:</a-col>
         <a-col :span="6" style="margin: 0.2em 0px">
           <a-input
-            v-model="schedule.criteria_creat_by"
+            v-model="schedule.schedule_create_by"
             style="width: 100%"
             disabled
         /></a-col>
@@ -58,7 +58,7 @@
         <a-col :span="6" style="margin: 0.2em 0px">
           <a-input
             style="width: 100%"
-            v-model="schedule.criteria_rate_per_credit"
+            v-model="schedule.schedule_per_credit"
             disabled
             addon-after="บาท"
             type="number"
@@ -82,7 +82,7 @@
             type="number"
             style="width: 70%"
             disabled
-            v-model="schedule.nmp_minimum"
+            v-model="schedule.schedule_general_min"
           />
         </a-col>
 
@@ -92,15 +92,16 @@
             addon-after="หน่วยภาระงานสอน"
             type="number"
             style="width: 70%"
-            v-model="schedule.nmp_maximum"
+            v-model="schedule.schedule_general_max"
             disabled
           />
         </a-col>
       </a-row>
     </a-card>
     <!-- สิ้นสุด ส่วนตั้งค่าทั่วไป -->
+    
     <!-- วิชาในหลักสูตร -->
-    <a-row :gutter="[8, 8]">
+     <a-row :gutter="[8, 8]">
       <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
         <a-card size="small">
           <a-row :gutter="[8, 8]">
@@ -126,7 +127,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_Internal.lecture.Bachelor"
+                v-model="schedule_Internal.lecture.schedule_detail_bachelor"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -137,7 +138,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_Internal.lecture.Graduate"
+                v-model="schedule_Internal.lecture.schedule_detail_graduate"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -153,27 +154,27 @@
 
           <a-row
             :gutter="[8, 8]"
-            v-for="data in schedule.criteria_Internal.lecture.condition"
-            :key="data.key"
+            v-for="data in schedule_Internal.lecture.condition"
+            :key="data.schedule_condition_id"
           >
             <a-col :span="24" style="margin: 0.2em 0px; text-align: center">
               <span>จำนวนนิสิตที่เกิน: </span>
               <a-input
-                :value="data.Minimum_number_students"
+                :value="data.schedule_condition_min"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> ถึง </span>
               <a-input
-                :value="data.Maximum_number_students"
+                :value="data.schedule_condition_max"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> เท่ากับ </span
               ><a-input
-                :value="data.Weight_per_credit"
+                :value="data.schedule_condition_weight_per_credit"
                 disabled
                 style="width: 100px"
               />
@@ -198,7 +199,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_Internal.lab.Bachelor"
+                v-model="schedule_Internal.lab.schedule_detail_bachelor"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -209,7 +210,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_Internal.lab.Graduate"
+                v-model="schedule_Internal.lab.schedule_detail_graduate"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -225,27 +226,27 @@
 
           <a-row
             :gutter="[8, 8]"
-            v-for="data in schedule.criteria_Internal.lab.condition"
-            :key="data.key"
+            v-for="data in schedule_Internal.lab.condition"
+            :key="data.schedule_condition_id"
           >
             <a-col :span="24" style="margin: 0.2em 0px; text-align: center">
               <span>จำนวนนิสิตที่เกิน: </span>
               <a-input
-                :value="data.Minimum_number_students"
+                :value="data.schedule_condition_min"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> ถึง </span>
               <a-input
-                :value="data.Maximum_number_students"
+                :value="data.schedule_condition_max"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> เท่ากับ </span
               ><a-input
-                :value="data.Weight_per_credit"
+                :value="data.schedule_condition_weight_per_credit"
                 disabled
                 style="width: 100px"
               />
@@ -257,7 +258,7 @@
       <!-- สิ้นสุด วิชาในหลักสูตร -->
 
       <!-- วิชาศึกษาทั่วไป -->
-      <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
+       <a-col :span="12" style="margin: 0.2em 0px; text-align: center">
         <a-card size="small">
           <a-row :gutter="[8, 8]">
             <a-col :span="24" style="margin: 0.2em 0p">
@@ -282,7 +283,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_external.lecture.Bachelor"
+                v-model="schedule_external.lecture.schedule_detail_bachelor"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -293,7 +294,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_external.lecture.Graduate"
+                v-model="schedule_external.lecture.schedule_detail_graduate"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -309,27 +310,27 @@
 
           <a-row
             :gutter="[8, 8]"
-            v-for="data in schedule.criteria_external.lecture.condition"
-            :key="data.key"
+            v-for="data in schedule_external.lecture.condition"
+            :key="data.schedule_condition_id"
           >
             <a-col :span="24" style="margin: 0.2em 0px; text-align: center">
               <span>จำนวนนิสิตที่เกิน: </span>
               <a-input
-                :value="data.Minimum_number_students"
+                :value="data.schedule_condition_min"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> ถึง </span>
               <a-input
-                :value="data.Maximum_number_students"
+                :value="data.schedule_condition_max"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> เท่ากับ </span
               ><a-input
-                :value="data.Weight_per_credit"
+                :value="data.schedule_condition_weight_per_credit"
                 disabled
                 style="width: 100px"
               />
@@ -354,7 +355,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_external.lab.Bachelor"
+                v-model="schedule_external.lab.schedule_detail_bachelor"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -365,7 +366,7 @@
             </a-col>
             <a-col :span="6" style="margin: 0.2em 0px; text-align: center">
               <a-input
-                v-model="schedule.criteria_external.lab.Graduate"
+                v-model="schedule_external.lab.schedule_detail_graduate"
                 disabled
                 addon-after="คน"
                 type="number"
@@ -381,180 +382,201 @@
 
           <a-row
             :gutter="[8, 8]"
-            v-for="data in schedule.criteria_external.lab.condition"
-            :key="data.key"
+            v-for="data in schedule_external.lab.condition"
+            :key="data.schedule_condition_id"
           >
             <a-col :span="24" style="margin: 0.2em 0px; text-align: center">
               <span>จำนวนนิสิตที่เกิน: </span>
               <a-input
-                :value="data.Minimum_number_students"
+                :value="data.schedule_condition_min"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> ถึง </span>
               <a-input
-                :value="data.Maximum_number_students"
+                :value="data.schedule_condition_max"
                 disabled
                 style="width: 100px"
                 addon-after="คน"
               />
               <span> เท่ากับ </span
               ><a-input
-                :value="data.Weight_per_credit"
+                :value="data.schedule_condition_weight_per_credit"
                 disabled
                 style="width: 100px"
               />
               <span> ค่าน้ำหนักต่อหน่วยกิต</span>
             </a-col>
           </a-row>
-        </a-card>
+        </a-card> 
       </a-col>
-    </a-row>
+    </a-row> 
     <!-- END -->
+
+ 
   </div>
 </template>
 
 <script>
+const axios = require("axios");
+
 export default {
   data() {
     return {
-      schedule_detail: [
-        {
-          schedule_detail_id: 1,
-          schedule_detail_type: 0,
-          schedule_detail_subject: 1,
-          schedule_detail_bachelor: 20,
-          schedule_detail_graduate: 50,
-        },
-        {
-          schedule_detail_id: 2,
-          schedule_detail_type: 0,
-          schedule_detail_subject: 0,
-          schedule_detail_bachelor: 99,
-          schedule_detail_graduate: 50,
-        },
-        {
-          schedule_detail_id: 3,
-          schedule_detail_type: 1,
-          schedule_detail_subject: 1,
-          schedule_detail_bachelor: 30,
-          schedule_detail_graduate: 20,
-        },
-        {
-          schedule_detail_id: 4,
-          schedule_detail_type: 1,
-          schedule_detail_subject: 0,
-          schedule_detail_bachelor: 10,
-          schedule_detail_graduate: 30,
-        },
-      ],
-      schedule: {
-        schedule_id: 2,
-        schedule_name: "กำหนดการวิทยาการสารสนเทศ คำนวณภาระงานอาจารย์",
-        schedule_start_date: "2021-02-19T17:00:00.000Z",
-        schedule_per_credit: 400,
-        //  กำหนดภาระงานเพื่อการจ่ายค่าตอบแทนสอนเกินของคณาจารย์ประจำที่ไม่ได้ดำรงตำแหน่งบริหาร
-        schedule_general_min: 6,
-        schedule_general_max: 18,
-        schedule_create_by: "666",
-      },
+      
+      schedule: {},
       // วิชาในหลักสูตร
-      criteria_Internal: {
+      schedule_Internal: {
         lab: {
-          Bachelor: 20,
-          Graduate: 50,
-          index_condition: 0,
-          condition: [
-            {
-              key: 1,
-              Minimum_number_students: 1,
-              Maximum_number_students: 10,
-              Weight_per_credit: 0.0015,
-            },
-          ],
+          schedule_detail_bachelor: null,
+          schedule_detail_graduate: null,
+          condition: [],
         },
         lecture: {
-          Bachelor: 50,
-          Graduate: 20,
-          index_condition: 0,
-          condition: [
-            {
-              key: 1,
-              Minimum_number_students: 1,
-              Maximum_number_students: 10,
-              Weight_per_credit: 0.0015,
-            },
-            {
-              key: 2,
-              Minimum_number_students: 11,
-              Maximum_number_students: 30,
-              Weight_per_credit: 0.0015,
-            },
-          ],
+          schedule_detail_bachelor: null,
+          schedule_detail_graduate: null,
+          condition: [],
         },
       },
 
       // วิชานอกหลักสูตร
-      criteria_external: {
+      schedule_external: {
         lab: {
-          Bachelor: 30,
-          Graduate: 20,
-          index_condition: 0,
-          condition: [
-            {
-              key: 1,
-              Minimum_number_students: 1,
-              Maximum_number_students: 10,
-              Weight_per_credit: 0.0015,
-            },
-            {
-              key: 2,
-              Minimum_number_students: 11,
-              Maximum_number_students: 30,
-              Weight_per_credit: 0.0015,
-            },
-            {
-              key: 3,
-              Minimum_number_students: 31,
-              Maximum_number_students: 35,
-              Weight_per_credit: 0.0015,
-            },
-          ],
+          schedule_detail_bachelor: null,
+          schedule_detail_graduate: null,
+          condition: [],
         },
         lecture: {
-          Bachelor: 10,
-          Graduate: 20,
-          index_condition: 0,
-          condition: [
-            {
-              key: 1,
-              Minimum_number_students: 1,
-              Maximum_number_students: 10,
-              Weight_per_credit: 0.0015,
-            },
-          ],
+          schedule_detail_bachelor: null,
+          schedule_detail_graduate: null,
+
+          condition: [],
         },
       },
     };
   },
 
   methods: {
-    get_schedule_by_Id() {
-      // console.log("schedule_id = " + this.$store.state.schedule_id);
-    },
-    get_schedule_detail_by_scheduleID() {
-      // console.log("schedule_id = " + this.$store.state.schedule_id);
-    },
-    get_condition_by_schedule_detail_id() {
+    get_schedule_detail() {
+      const self = this;
+      this.schedule = this.$store.state.schedule;
+
+      axios
+        .post(
+          this.$store.state.url +
+            "/WlsRouters/Get_schedule_detail_by_scheduleID",
+          this.schedule
+        )
+        .then((res) => {
+
+
+        
+      
+          res.data.results.schedule_detail.forEach((data,index) => {
+            if (data.schedule_detail_type == 0) {
+              // 0 internal 1 external
+
+                 
+              if (data.schedule_detail_subject == 0) {
+                // 0 lucther 1 lab
+              
+                self.schedule_Internal.lab.schedule_detail_bachelor = res.data.results.schedule_detail[index].schedule_detail_bachelor;
+                self.schedule_Internal.lab.schedule_detail_graduate = res.data.results.schedule_detail[index].schedule_detail_graduate;
+
+ 
+                axios
+                  .post(
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
+                    data
+                  )
+                  .then((res) => {
+                    console.log("ข้อมูลเงื่อนไข ของวิชาใน lucther");
+                    self.schedule_Internal.lecture.condition = res.data.results.condition;
+
+                    console.log( self.schedule_Internal.lecture.condition)
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              } else if (data.schedule_detail_subject == 1) {
+
+                self.schedule_Internal.lecture.schedule_detail_bachelor = res.data.results.schedule_detail[index].schedule_detail_bachelor;
+                self.schedule_Internal.lecture.schedule_detail_graduate = res.data.results.schedule_detail[index].schedule_detail_graduate;
+
+                axios
+                  .post(
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
+                    data
+                  )
+                  .then((res) => {
+                    console.log("ข้อมูลเงื่อนไข ของวิชาใน lab");
+         
+
+                       self.schedule_Internal.lab.condition = res.data.results.condition;
+
+                    console.log( self.schedule_Internal.lab)
+
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              }
+            } else if (data.schedule_detail_type == 1) {
+              if (data.schedule_detail_subject == 0) {
+                // 0 lucther 1 lab
+    
+                self.schedule_external.lecture.schedule_detail_bachelor = res.data.results.schedule_detail[index].schedule_detail_bachelor;
+                self.schedule_external.lecture.schedule_detail_graduate = res.data.results.schedule_detail[index].schedule_detail_graduate;
+
+                axios
+                  .post(
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
+                    data
+                  )
+                  .then((res) => {
+                    console.log("ข้อมูลเงื่อนไข ของวิชานอก lucther");
+                        self.schedule_external.lecture.condition = res.data.results.condition;
+
+                    console.log( self.schedule_external.lecture.condition)
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              } else if (data.schedule_detail_subject == 1) {
+
+                
+                self.schedule_external.lab.schedule_detail_bachelor = res.data.results.schedule_detail[index].schedule_detail_bachelor;
+                self.schedule_external.lab.schedule_detail_graduate = res.data.results.schedule_detail[index].schedule_detail_graduate;
+
+
+                axios
+                  .post(
+                    "http://localhost:8080/WlsRouters/Get_condition_by_schedule_detail_id",
+                    data
+                  )
+                  .then((res) => {
+                    console.log("ข้อมูลเงื่อนไข ของวิชานอก lab");
+                     self.schedule_external.lab.condition = res.data.results.condition;
+
+                    console.log( self.schedule_external.lab.condition)
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              }
+            }
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
       // schedule_detail_id ใช้ หา condition
     },
   },
-  mounted() {
-    console.log("schedule_id = " + this.$store.state.schedule_id);
-    this.get_schedule_by_Id();
-    this.get_schedule_detail_by_scheduleID();
-    this.get_condition_by_schedule_detail_id();
+  created() {
+    this.get_schedule_detail();
   },
 };
 </script>

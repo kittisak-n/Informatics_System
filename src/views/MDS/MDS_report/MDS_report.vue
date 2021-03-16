@@ -8,7 +8,7 @@
               <highcharts
                 :options="chartOptions"
                 ref="lineCharts"
-                style="position: relative; height:22.7vh; width:auto"
+                style="position: relative; height:12.5vw; width:auto"
               ></highcharts>
             </a-col>
           </a-row>
@@ -30,12 +30,14 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">
-                    จำนวนรายการเบิกเข้าวัสดุทั้งหมด : 2561 - 2563
+                    จำนวนรายการเบิกเข้าวัสดุทั้งหมด
                   </div>
-                  <div><span class="text-number ">2 </span>รายการ</div>
                   <div>
-                    จำนวนรายการเบิกวัสดุทั้งหมด ตั้งแต่วันที่ 1 ม.ค. 2561 ถึง 29
-                    ธ.ค. 2563
+                    <span class="text-number "> {{ totallist }} </span>รายการ
+                  </div>
+                  <div>
+                    จำนวนรายการเบิกวัสดุทั้งหมด ตั้งแต่วันที่
+                    {{ genDate(startValue) }} ถึง {{ genDate(endValue) }}
                   </div>
                 </a-col>
               </a-row>
@@ -55,7 +57,9 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">รายการเบิกสำเร็จ</div>
-                  <div><span class="text-number ">2 </span>รายการ</div>
+                  <div>
+                    <span class="text-number "> {{ totalawait }} </span>รายการ
+                  </div>
                   <div>รายการที่ทำรายการเบิกเสร็จสิ้น</div>
                 </a-col>
               </a-row>
@@ -75,7 +79,9 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">รายการเบิกไม่สำเร็จ</div>
-                  <div><span class="text-number ">0 </span>รายการ</div>
+                  <div>
+                    <span class="text-number "> {{ totalsucces }} </span>รายการ
+                  </div>
                   <div>รายการที่ทำรายการเบิกไม่เสร็จสิ้น</div>
                 </a-col>
               </a-row>
@@ -89,7 +95,7 @@
         <a-card size="small">
           <a-row :gutter="[8, 8]">
             <a-col :span="12" style="margin: 0.2em 0px;">
-              <a-card-meta title="รายการเบิกจ่ายวัสดุ : ปี 2561 - ปี 2563">
+              <a-card-meta title="รายการเบิกจ่ายวัสดุ">
                 <a-icon
                   slot="avatar"
                   type="folder-open"
@@ -101,129 +107,243 @@
             </a-col>
           </a-row>
           <hr style="width:100%" />
-          <Report_list />
+          <a-row :gutter="[8, 8]">
+            <a-col :span="24">
+              <br />
+              <a-row :gutter="[8, 8]" type="flex" justify="end">
+                <a-col :span="3" style="text-align:end">
+                  <a-date-picker
+                    v-model="startValue"
+                    :disabled-date="disabledStartDate"
+                    :format="moment(startValue).format('LL')"
+                    placeholder="วันที่เริ่มต้น"
+                    @openChange="handleStartOpenChange"
+                  />
+                </a-col>
+                <a-col :span="3">
+                  <a-date-picker
+                    v-model="endValue"
+                    :disabled-date="disabledEndDate"
+                    :format="moment(endValue).format('LL')"
+                    placeholder="วันที่สิ้นสุด"
+                    :open="endOpen"
+                    @openChange="handleEndOpenChange"
+                    @change="changeCondition()"
+                  />
+                </a-col>
+                <a-col :span="5" style="text-align:end">
+                  <a-input-search
+                    placeholder="ค้นหาตามชื่อผู้ทำรายการเบิกวัสดุ"
+                    style="width: 100%"
+                    v-model="text_search"
+                    v-on:keyup.enter="changeCondition()"
+                  />
+                </a-col>
+              </a-row>
+              <a-row :gutter="[8, 8]">
+                <a-col :span="24">
+                  <a-table
+                    :columns="columns"
+                    :data-source="disbursement"
+                    :pagination="false"
+                    bordered
+                    size="small"
+                  >
+                    <span slot="key" slot-scope="text">
+                      <div :style="{ textAlign: 'center' }">
+                        {{ text }}
+                      </div>
+                    </span>
+                    <span slot="disbursement_code" slot-scope="text">
+                      <div :style="{ textAlign: 'center' }">
+                        {{ text }}
+                      </div>
+                    </span>
+                    <span slot="disbursement_date" slot-scope="text">
+                      <div :style="{ textAlign: 'center' }">
+                        {{ text }}
+                      </div>
+                    </span>
+                    <span slot="disbursement_total" slot-scope="text">
+                      <div :style="{ textAlign: 'center' }">
+                        {{ text }}
+                      </div>
+                    </span>
+                    <span slot="disbursement_status" slot-scope="text">
+                      <div :style="{ textAlign: 'center' }">
+                        {{ text }}
+                      </div>
+                    </span>
+                    <span slot="action" slot-scope="text, record, index">
+                      <div :style="{ textAlign: 'center' }">
+                        <a-tooltip placement="top">
+                          <template slot="title">
+                            <span>ตรวจสอบราบการเบิกวัสดุ</span>
+                          </template>
+                          <a-button
+                            type="primary"
+                            icon="search"
+                            @click="showModal(index)"
+                          >
+                          </a-button>
+                        </a-tooltip>
+                      </div>
+                    </span>
+                  </a-table>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row>
+                <a-col :span="15">
+                  <a-col :span="15">
+                    <p
+                      :style="{ margin: '0.3em 0.5%' }"
+                      v-if="this.totalPage != 0"
+                    >
+                      {{ this.start }} -
+                      {{
+                        this.end > this.totalPage ? this.totalPage : this.end
+                      }}
+                      จาก {{ this.totalPage }} รายการ
+                    </p>
+                    <p
+                      :style="{ margin: '0.3em 0.5%' }"
+                      v-if="this.totalPage == 0"
+                    >
+                      ไม่พบรายการที่ค้นหา
+                    </p>
+                  </a-col>
+                </a-col>
+                <a-col :span="9" :style="{ textAlign: 'Right' }">
+                  แสดงทีละ
+                  <a-select
+                    v-model="pagesize"
+                    :style="{ width: '60px', marginRight: '1%' }"
+                  >
+                    <a-select-option value="10">
+                      10
+                    </a-select-option>
+                    <a-select-option value="25">
+                      25
+                    </a-select-option>
+                    <a-select-option value="50">
+                      50
+                    </a-select-option>
+                    <a-select-option value="100">
+                      100
+                    </a-select-option>
+                  </a-select>
+
+                  <a-pagination
+                    :style="{ display: 'inline' }"
+                    v-model="current"
+                    :total="totalPage"
+                    :page-size="pagesize"
+                    @change="changePageTable(current)"
+                  />
+                </a-col>
+              </a-row>
+            </a-col>
+          </a-row>
         </a-card>
       </a-col>
     </a-row>
     <a-modal
-      width="1000px"
-      :dialog-style="{ top: '5%' }"
       v-model="visible"
-      title="รายละเอียดวัสดุ/อุปกรณ์หมายเลข : OFM5011020"
+      :title="
+        'รายละเอียดใบเบิกวัสดุหมายเลข : ' +
+          disbursement_update.disbursement_code
+      "
+      on-ok="handleOk"
+      width="80%"
     >
       <a-row :gutter="[8, 8]">
-        <a-col :span="10" style="text-align:center">
-          <img
-            alt="example"
-            width="50%"
-            src="https://www.dohome.co.th/media/catalog/product/cache/2/image/255x255/9df78eab33525d08d6e5fb8d27136e95/1/0/10024002_REM_1200_1.jpg"
-          />
+        <a-col :span="24">
+          รายละเอียดการเบิกวัสดุ
         </a-col>
-        <a-col :span="14">
-          <p><b>หมายเลขวัสดุ</b> : OFM5011020</p>
-          <p><b>รายการ</b> : กระดาษถ่ายเอกสาร A4 Double A</p>
-          <p><b>หมวดหมู่</b> : อุปกรณ์สำนักงาน</p>
-          <p><b>หน่วยนับ (นำเข้า/ส่งออก)</b> : ลัง / รีม</p>
-          <p><b>จำนวนคงเหลือ </b> : 400 รีม</p>
-          <p><b>สถานะ </b> : สามารถเบิกได้</p>
+        <a-col :span="8"
+          >ผู้เบิกวัสดุ :
+          {{ disbursement_update.disbursement_name }}
         </a-col>
-      </a-row>
-      <a-row :gutter="[8, 8]">
-        <a-col :span="19" style="margin: 0.3em 0px;font-size: 115%;"
-          ><b>ตารางแสดงรายการนำเข้าวัสดุ</b>
+        <a-col :span="8"
+          >วันที่ทำการเบิก :
+          {{ disbursement_update.disbursement_date }}
         </a-col>
-        <a-col :span="5" style="text-align:end">
-          <a-input-search placeholder="รหัสหรือชื่อวัสดุ" style="width: 100%" />
+        <a-col :span="2" style="text-align:end">สถานะ :</a-col>
+        <a-col :span="6">
+          {{
+            disbursement_update.disbursement_status == 1
+              ? "รอการอนุมัติ"
+              : disbursement_update.disbursement_status == 2
+              ? "เบิกจ่ายไม่สำเร็จ"
+              : disbursement_update.disbursement_status == 3
+              ? "รอการเบิกจ่าย"
+              : disbursement_update.disbursement_status == 4
+              ? "เบิกจ่ายเสร็จสิ้น"
+              : "ยกเลิกรายการเบิกจ่าย"
+          }}
         </a-col>
-      </a-row>
-      <a-row :gutter="[8, 8]">
-        <a-col :span="24" style="text-align:center">
+        <a-col :span="24">
+          หมายเหตุ : {{ disbursement_update.disbursement_note }}
+        </a-col>
+        <a-col :span="24">
+          ตารางแสดงรายการเบิกวัสดุ
+        </a-col>
+        <a-col :span="24">
           <a-table
-            :columns="columns_metertail_detail"
-            :data-source="meterail"
+            :columns="disbursement_material_order"
+            :data-source="disbursement_material"
             :pagination="false"
-            size="small"
             bordered
+            size="small"
+            :scroll="{ y: '500px' }"
           >
-            <span slot="key" slot-scope="text, record, index">
-              <div :style="{ textAlign: 'center' }">
-                {{ index + 1 }}
-              </div>
-            </span>
-            <span slot="meterail_name" slot-scope="text">
+            <span slot="key" slot-scope="text">
               <div :style="{ textAlign: 'center' }">
                 {{ text }}
               </div>
             </span>
-            <span slot="meterail_unit" slot-scope="text">
+            <span slot="material_code" slot-scope="text">
+              <div>
+                {{ text }}
+              </div>
+            </span>
+            <span slot="material_name" slot-scope="text">
+              <div>
+                {{ text }}
+              </div>
+            </span>
+            <span slot="material_unit" slot-scope="text">
               <div :style="{ textAlign: 'center' }">
                 {{ text }}
               </div>
             </span>
-            <span slot="meterail_balance" slot-scope="text">
+            <span slot="material_balance" slot-scope="text">
               <div :style="{ textAlign: 'center' }">
                 {{ text }}
               </div>
             </span>
-            <span slot="meterail_note">
+            <span slot="disbursement_amount" slot-scope="text">
               <div :style="{ textAlign: 'center' }">
-                <a-input placeholder="ระบุหมายเหตุการเบิก" />
+                {{ text }}
               </div>
             </span>
-
-            <span slot="action">
+            <span slot="disbursement_export" slot-scope="text">
               <div :style="{ textAlign: 'center' }">
-                <a-tooltip placement="top">
-                  <template slot="title">
-                    <span>ตรวจสอบข้อมูลวัสดุุ</span>
-                  </template>
-                  <a-button
-                    type="primary"
-                    icon="search"
-                    @click="visible = !visible"
-                  >
-                  </a-button>
-                </a-tooltip>
+                {{ text }}
+              </div>
+            </span>
+            <span slot="disbursement_note" slot-scope="text">
+              <div :style="{ textAlign: 'center' }">
+                {{ text }}
               </div>
             </span>
           </a-table>
         </a-col>
       </a-row>
-      <br />
-      <a-row>
-        <a-col :span="15">
-          <p :style="{ margin: '0.3em 0.5%' }">1-10 จาก 10 รายการ</p>
-        </a-col>
-        <a-col :span="9" :style="{ textAlign: 'Right' }">
-          แสดงทีละ
-          <a-select
-            default-value="10"
-            :style="{ width: '60px', marginRight: '1%' }"
-          >
-            <a-select-option value="10">
-              10
-            </a-select-option>
-            <a-select-option value="25">
-              25
-            </a-select-option>
-            <a-select-option value="50">
-              50
-            </a-select-option>
-            <a-select-option value="100">
-              100
-            </a-select-option>
-          </a-select>
 
-          <a-pagination
-            :style="{ display: 'inline' }"
-            v-model="current"
-            :total="total"
-            :page-size="10"
-          />
-        </a-col>
-      </a-row>
       <template slot="footer">
-        <a-button key="back" @click="handleCancel">
+        <a-button key="submit" type="primary" :loading="loading">
           ปิด
         </a-button>
       </template>
@@ -231,22 +351,35 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 import { Chart } from "highcharts-vue";
 import Highcharts from "highcharts";
 import dataModule from "highcharts/modules/data";
 import drilldown from "highcharts/modules/drilldown";
-import Report_list from "../../../components/MDS/MDS_export/report_list.vue";
-
+import moment from "moment";
+import "moment/locale/th";
 drilldown(Highcharts);
 dataModule(Highcharts);
 
 export default {
   components: {
     highcharts: Chart,
-    Report_list,
   },
   data() {
     return {
+      moment,
+      startValue: new Date("2021-01-01"),
+      endValue: new Date(),
+      endOpen: false,
+      text_search: "",
+      start: 1,
+      end: 10,
+      current: 1,
+      pagesize: 10,
+      totalPage: 0,
+      totallist: 0,
+      totalawait: 0,
+      totalsucces: 0,
       columns: [
         {
           title: "#",
@@ -258,57 +391,59 @@ export default {
           },
         },
         {
-          title: "รหัสวัสดุ",
-          dataIndex: "meterail_code",
-          key: "meterail_code",
+          title: "หมายเลขรายการ",
+          dataIndex: "disbursement_code",
+          key: "disbursement_code",
+          width: "5%",
+          scopedSlots: {
+            customRender: "disbursement_code",
+          },
+        },
+        {
+          title: "ชื่อผู้เบิกวัสดุ",
+          dataIndex: "disbursement_name",
+          key: "disbursement_name",
+          width: "5%",
+          scopedSlots: { customRender: "disbursement_name" },
+        },
+        {
+          title: "วันที่ทำการเบิกวัสดุ",
+          dataIndex: "disbursement_date",
+          key: "disbursement_date",
+          width: "5%",
+          scopedSlots: { customRender: "disbursement_date" },
+        },
+
+        {
+          title: "จำนวนรายการเบิก",
+          dataIndex: "disbursement_total",
+          key: "disbursement_total",
+          width: "5%",
+          scopedSlots: {
+            customRender: "disbursement_total",
+          },
+        },
+        {
+          title: "หมายเหตุ",
+          dataIndex: "disbursement_note",
+          key: "disbursement_note",
           width: "10%",
           scopedSlots: {
-            customRender: "meterail_code",
+            customRender: "disbursement_note",
           },
         },
         {
-          title: "วัสดุ",
-          dataIndex: "meterail_name",
-          key: "meterail_name",
-          width: "10%",
-          scopedSlots: {
-            customRender: "meterail_name",
-          },
-        },
-        {
-          title: "หน่วย",
-          dataIndex: "meterail_unit",
-          key: "meterail_unit",
-          width: "5%",
-          scopedSlots: {
-            customRender: "meterail_unit",
-          },
-        },
-        {
-          title: "ค่าต่ำสุด",
-          dataIndex: "meterail_min",
-          key: "meterail_min",
-          width: "5%",
-          scopedSlots: { customRender: "meterail_min" },
-        },
-        {
-          title: "คงเหลือ",
-          dataIndex: "meterail_balance",
-          key: "meterail_balance",
-          width: "5%",
-          scopedSlots: { customRender: "meterail_balance" },
-        },
-        {
-          title: "ตรวจสอบ",
+          title: "ดำเนินการ",
           dataIndex: "action",
           key: "action",
-          width: "5%",
+          width: "10%",
           scopedSlots: {
             customRender: "action",
           },
         },
       ],
-      columns_metertail_detail: [
+      disbursement: [],
+      disbursement_material_order: [
         {
           title: "#",
           dataIndex: "key",
@@ -319,299 +454,373 @@ export default {
           },
         },
         {
-          title: "หมายเลขใบสั่งซื้อ",
-          dataIndex: "meterail_code",
-          key: "meterail_code",
+          title: "รหัสวัสดุ",
+          dataIndex: "material_code",
+          key: "material_code",
           width: "10%",
           scopedSlots: {
-            customRender: "meterail_code",
+            customRender: "material_code",
           },
         },
         {
-          title: "ผู้จัดจำหน่าย",
-          dataIndex: "meterail_name",
-          key: "meterail_name",
+          title: "ชื่อวัสดุ",
+          dataIndex: "material_name",
+          key: "material_name",
           width: "10%",
           scopedSlots: {
-            customRender: "meterail_name",
+            customRender: "material_name",
           },
         },
         {
-          title: "วันที่นำเข้า",
-          dataIndex: "meterail_name",
-          key: "meterail_name",
-          width: "10%",
-          scopedSlots: {
-            customRender: "meterail_name",
-          },
-        },
-        {
-          title: "นำเข้า",
-          dataIndex: "meterail_import",
-          key: "meterail_import",
+          title: "หน่วย",
+          dataIndex: "material_unit",
+          key: "material_unit",
           width: "5%",
-          scopedSlots: { customRender: "meterail_import" },
-        },
-        {
-          title: "ผู้ตรวจรับ",
-          dataIndex: "meterail_name",
-          key: "meterail_name",
-          width: "10%",
           scopedSlots: {
-            customRender: "meterail_name",
+            customRender: "material_unit",
           },
         },
         {
-          title: "คงเหลือ",
-          dataIndex: "meterail_balance",
-          key: "meterail_balance",
-          width: "5%",
-          scopedSlots: { customRender: "meterail_balance" },
+          title: "จำนวน",
+          children: [
+            {
+              title: "ขอเบิก",
+              dataIndex: "disbursement_amount",
+              key: "disbursement_amount",
+              width: "5%",
+              scopedSlots: {
+                customRender: "disbursement_amount",
+              },
+            },
+            {
+              title: "เบิกได้",
+              dataIndex: "disbursement_export",
+              key: "disbursement_export",
+              width: "5%",
+              scopedSlots: {
+                customRender: "disbursement_export",
+              },
+            },
+          ],
+        },
+        {
+          title: "หมายเหตุ",
+          dataIndex: "disbursement_note",
+          key: "disbursement_note",
+          width: "10%",
+          scopedSlots: {
+            customRender: "disbursement_note",
+          },
         },
       ],
-      meterail: [
-        {
-          key: 1,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 2,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 3,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 4,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 5,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 6,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 7,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 8,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 9,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-        {
-          key: 10,
-          meterail_code: "",
-          meterail_name: "",
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-      ],
-
+      disbursement_material: [],
+      disbursement_update: {},
+      loading: false,
+      visible: false,
       chartOptions: {
         chart: {
           type: "column",
         },
         title: {
-          text: "วัสดุถูกเบิกจ่ายตั้งแต่ ปี 2561 ถึง ปี 2563",
+          text: "",
         },
         subtitle: {
-          text: "โดยคิดจาก 10 อันดับแรกของวัสดุที่มีการเบิกจ่ายมากที่สุด",
-        },
-        accessibility: {
-          announceNewData: {
-            enabled: true,
-          },
+          text: "โดยนับจาก 10 อันดับแรก",
         },
         xAxis: {
-          type: "category",
+          categories: [],
+          crosshair: true,
         },
         yAxis: {
+          min: 0,
           title: {
-            text: "Total percent market share",
+            text: "เปอร์เซ็นของการขอเบิก/เบิกได้",
           },
         },
-        legend: {
-          enabled: false,
+        tooltip: {
+          headerFormat:
+            '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat:
+            '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.2f}%</b></td></tr>',
+          footerFormat: "</table>",
+          shared: true,
+          useHTML: true,
         },
         plotOptions: {
-          series: {
+          column: {
+            pointPadding: 0.2,
             borderWidth: 0,
-            dataLabels: {
-              enabled: true,
-              format: "{point.y:.1f}%",
-            },
           },
         },
-
-        tooltip: {
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-          pointFormat:
-            '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>',
-        },
-
         series: [
           {
-            name: "Browsers",
-            colorByPoint: true,
-            data: [
-              {
-                name: "Chrome",
-                y: 62.74,
-                drilldown: "Chrome",
-              },
-              {
-                name: "Firefox",
-                y: 10.57,
-                drilldown: "Firefox",
-              },
-              {
-                name: "Internet Explorer",
-                y: 7.23,
-                drilldown: "Internet Explorer",
-              },
-              {
-                name: "Safari",
-                y: 5.58,
-                drilldown: "Safari",
-              },
-              {
-                name: "Edge",
-                y: 4.02,
-                drilldown: "Edge",
-              },
-              {
-                name: "Opera",
-                y: 1.92,
-                drilldown: "Opera",
-              },
-              {
-                name: "Other",
-                y: 7.62,
-                drilldown: null,
-              },
-              {
-                name: "asdasd",
-                y: 7.62,
-                drilldown: null,
-              },
-              {
-                name: "asdassssd",
-                y: 7.62,
-                drilldown: null,
-              },
-              {
-                name: "asdasaaaaaa",
-                y: 7.62,
-                drilldown: null,
-              },
-            ],
+            name: "ขอเบิก",
+            data: [],
+          },
+          {
+            name: "เบิกได้",
+            data: [],
           },
         ],
-        drilldown: {
-          series: [
-            {
-              name: "Chrome",
-              id: "Chrome",
-              data: [
-                ["v65.0", 0.1],
-                ["v64.0", 1.3],
-                ["v63.0", 53.02],
-              ],
-            },
-            {
-              name: "Firefox",
-              id: "Firefox",
-              data: [
-                ["v58.0", 1.02],
-                ["v57.0", 7.36],
-                ["v56.0", 0.35],
-              ],
-            },
-            {
-              name: "Internet Explorer",
-              id: "Internet Explorer",
-              data: [
-                ["v11.0", 6.2],
-                ["v10.0", 0.29],
-                ["v9.0", 0.27],
-              ],
-            },
-            {
-              name: "Safari",
-              id: "Safari",
-              data: [
-                ["v11.0", 3.39],
-                ["v10.1", 0.96],
-                ["v10.0", 0.36],
-              ],
-            },
-            {
-              name: "Edge",
-              id: "Edge",
-              data: [
-                ["v16", 2.6],
-                ["v15", 0.92],
-                ["v14", 0.4],
-              ],
-            },
-            {
-              name: "Opera",
-              id: "Opera",
-              data: [
-                ["v50.0", 0.96],
-                ["v49.0", 0.82],
-              ],
-            },
-          ],
-        },
       },
-      visible: false,
     };
+  },
+  methods: {
+    genDate(date) {
+      const month = [
+        "ม.ค.",
+        "ก.พ.",
+        "มี.ค.",
+        "เม.ย.",
+        "พ.ค.",
+        "มิ.ย.",
+        "ก.ค.",
+        "ส.ค.",
+        "ก.ย.",
+        "ต.ค.",
+        "พ.ย.",
+        "ธ.ค.",
+      ];
+      let dateThai = new Date(date).toISOString().split("T")[0];
+      dateThai = `${dateThai.split("-")[2]} ${
+        month[parseInt(dateThai.split("-")[1]) - 1]
+      } ${parseInt(dateThai.split("-")[0]) + 543}`;
+      return dateThai;
+    },
+    changeCondition() {
+      const self = this;
+      self.start = 1;
+      self.end = self.pagesize;
+      self.current = 1;
+      self.getRequisitionOrderAllByDate();
+      self.genChart();
+      self.getPerpageRequisitionOrder();
+    },
+    changePageTable(current) {
+      console.log(current);
+      const self = this;
+      self.start = self.pagesize * (current - 1) + 1;
+      self.end = self.pagesize * (current - 1) + parseInt(self.pagesize);
+      console.log(self.start);
+      console.log(self.end);
+      self.getRequisitionOrderAllByDate();
+    },
+    getPerpageRequisitionOrder() {
+      const self = this;
+      let data = {
+        requisition_code: self.text_search,
+        dateStart: new Date(self.startValue).toISOString().split("T")[0],
+        dateEnd: new Date(self.endValue).toISOString().split("T")[0],
+      };
+      axios
+        .post(
+          self.$store.state.url +
+            "/RequisitionOrderRouters/getPerpageRequisitionOrderByDate",
+          data
+        )
+        .then(function(res) {
+          console.log(res);
+          self.totalPage = res.data.results[0].total;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getTotalRequisitionOrder() {
+      const self = this;
+      let data = {
+        requisition_status_1: 4,
+        requisition_status_2: 2,
+      };
+      axios
+        .post(
+          self.$store.state.url +
+            "/RequisitionOrderRouters/getTotalRequisitionOrder",
+          data
+        )
+        .then(function(res) {
+          console.log(res);
+          self.totallist = res.data.results[0].total;
+          self.totalawait = res.data.results[0].await;
+          self.totalsucces = res.data.results[0].success;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    showModal(index) {
+      console.log(index);
+      const self = this;
+      self.disbursement_update.disbursement_name =
+        self.disbursement[index].disbursement_name;
+      self.disbursement_update.disbursement_id =
+        self.disbursement[index].requisition_id;
+      self.disbursement_update.disbursement_code =
+        self.disbursement[index].disbursement_code;
+      self.disbursement_update.disbursement_note =
+        self.disbursement[index].disbursement_note;
+      self.disbursement_update.disbursement_total =
+        self.disbursement[index].disbursement_total;
+      self.disbursement_update.disbursement_status =
+        self.disbursement[index].disbursement_status;
+      self.disbursement_update.disbursement_date =
+        self.disbursement[index].disbursement_date;
+      let data = {
+        requisition_id: self.disbursement[index].requisition_id,
+      };
+      axios
+        .post(
+          self.$store.state.url +
+            "/RequisitionOrderRouters/getrequisitionOrderMeterial",
+          data
+        )
+        .then(function(res) {
+          console.log(res);
+          self.disbursement_material = [];
+          res.data.results.forEach(function(ele, index) {
+            self.disbursement_material.push({
+              key: index + 1,
+              material_code: ele.material_code,
+              material_name: ele.material_name,
+              material_unit: ele.unit_name,
+              material_balance: ele.material_balance,
+              disbursement_amount: ele.requisition_material_amount,
+              disbursement_export: ele.requisition_material_export_amount,
+              disbursement_note: ele.requisition_material_note,
+            });
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      self.selectKey = index;
+      self.visible = true;
+    },
+    getRequisitionOrderAllByDate() {
+      const self = this;
+      let data = {
+        requisition_code: self.text_search,
+        dateStart: new Date(self.startValue).toISOString().split("T")[0],
+        dateEnd: new Date(self.endValue).toISOString().split("T")[0],
+        start: self.start,
+        end: self.end,
+      };
+      axios
+        .post(
+          self.$store.state.url +
+            "/RequisitionOrderRouters/getRequisitionOrderAllByDate",
+          data
+        )
+        .then(function(res) {
+          console.log(res);
+          self.disbursement = [];
+          res.data.results.forEach(function(ele, index) {
+            self.disbursement.push({
+              key: index + 1,
+              requisition_id: ele.requisition_id,
+              disbursement_code: ele.requisition_code,
+              disbursement_name: ele.name,
+              disbursement_date: self.genDate(ele.requisition_create_date),
+              disbursement_total: ele.requisition_total,
+              disbursement_status: ele.requisition_status,
+              disbursement_note: ele.requisition_detail,
+            });
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    handleOk() {
+      this.loading = true;
+      setTimeout(() => {
+        this.visible = false;
+        this.loading = false;
+      }, 3000);
+    },
+    handleCancel() {
+      this.visible = false;
+    },
+    disabledStartDate(startValue) {
+      const endValue = this.endValue;
+      if (!startValue || !endValue) {
+        return false;
+      }
+      return startValue.valueOf() > endValue.valueOf();
+    },
+    disabledEndDate(endValue) {
+      const startValue = this.startValue;
+      if (!endValue || !startValue) {
+        return false;
+      }
+      return startValue.valueOf() >= endValue.valueOf();
+    },
+    handleStartOpenChange(open) {
+      if (!open) {
+        this.endOpen = true;
+      }
+    },
+    handleEndOpenChange(open) {
+      this.endOpen = open;
+    },
+    genChart() {
+      const self = this;
+      let data = {
+        dateStart: new Date(self.startValue).toISOString().split("T")[0],
+        dateEnd: new Date(self.endValue).toISOString().split("T")[0],
+      };
+
+      axios
+        .post(
+          self.$store.state.url + "/materialRouters/getMaterialgenChart",
+          data
+        )
+        .then(function(res) {
+          console.log(res);
+          let sum_amount = 0;
+          let sum_export_amount = 0;
+          self.chartOptions.title.text =
+            "วัสดุถูกเบิกจ่ายตั้งแต่วันที่ " +
+            self.genDate(self.startValue) +
+            " ถึง " +
+            self.genDate(self.endValue);
+          self.chartOptions.xAxis.categories = [];
+          res.data.results.forEach((ele) => {
+            self.chartOptions.xAxis.categories.push(ele.material_name);
+            sum_amount += ele.amount;
+            sum_export_amount += ele.export_amount;
+          });
+          res.data.results.forEach((ele) => {
+            self.chartOptions.xAxis.categories.push(ele.material_name);
+            console.log((ele.amount * 100) / sum_amount);
+            console.log();
+            self.chartOptions.series[0].data.push(
+              (ele.amount * 100) / sum_amount
+            );
+            self.chartOptions.series[1].data.push(
+              (ele.export_amount * 100) / sum_export_amount
+            );
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+  },
+  watch: {
+    startValue(val) {
+      console.log("startValue", val);
+    },
+    endValue(val) {
+      console.log("endValue", val);
+    },
+  },
+  created() {
+    this.genChart();
+    this.getRequisitionOrderAllByDate();
+    this.getTotalRequisitionOrder();
+    this.getPerpageRequisitionOrder();
   },
 };
 </script>

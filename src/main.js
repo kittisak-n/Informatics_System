@@ -5,12 +5,20 @@ import store from "./store";
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import HighchartsVue from "highcharts-vue";
-import VueLoading from 'vue-loading-template';
+import XLSX from 'xlsx'
+import VueAxios from "vue-axios";
+import axios from "axios";
+
 Vue.config.productionTip = false
+Vue.use(VueAxios, axios);
 Vue.use(Antd, HighchartsVue);
 Vue.use(VueLoading, /** options **/);
+Vue.use(XLSX)
+
 new Vue({
     router,
     store,
     render: h => h(App)
+
 }).$mount("#app");
+
