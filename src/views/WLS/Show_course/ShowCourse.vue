@@ -38,8 +38,8 @@
                   :style="{ marginRight: '3%' }"
                   @click="exportPDF()"
                 />
-              </a-tooltip>
-
+              </a-tooltip> -->
+              <!--
               <a-tooltip placement="top">
                 <template slot="title">
                   <span>ส่งออกไฟล์ EXCEL</span>
@@ -325,10 +325,13 @@
 <script>
 import xlsx from "xlsx";
 import Axios from "axios";
+import pdfMake from "pdfmake";
+import pdfFonts from "@/assets/fontsPDF/THSarabunPsk-fonts.js"; // 1. import custom fonts
 
 export default {
   data() {
     return {
+      data_store: [],
       self: this,
 
       modal_edit_detail: false,
@@ -761,6 +764,241 @@ export default {
         .catch((err) => alert(err));
       self.colse_edit_edtail();
       self.get_course_detail(self.course_detail_id);
+    },
+    exportPDF() {
+      let self = this;
+
+      for (var i = 0; i < 3; i++) {
+        let data = {
+          number: 1,
+          serial_number: "1AX85PC",
+          name_product: "A5",
+          catagories: "อุปกรณ์",
+          import: 20,
+          export: 10,
+          change: 20,
+          total: 10,
+        };
+        self.data_store.push(data);
+      }
+
+      var headers = {
+        column1: {
+          col_1: { text: "ลำดับ", style: "tableheader", rowSpan: 2 },
+          col_2: { text: "หมายเลขวัสดุ", style: "tableheader", rowSpan: 2 },
+          col_3: { text: "ชื่อวัสดุ", style: "tableheader", rowSpan: 2 },
+          col_4: { text: "หมวดหมู่", style: "tableheader", rowSpan: 2 },
+          col_5: { text: "จำนวนวัสดุ", style: "tableheader", colSpan: 4 },
+          col_6: {
+            rowSpan: undefined,
+            _maxWidth: 0,
+            _minWidth: 0,
+            _span: true,
+          },
+          col_7: {
+            rowSpan: undefined,
+            _maxWidth: 0,
+            _minWidth: 0,
+            _span: true,
+          },
+          col_8: {
+            rowSpan: undefined,
+            _maxWidth: 0,
+            _minWidth: 0,
+            _span: true,
+          },
+        },
+        column2: {
+          col_1: {
+            _span: true,
+            _minWidth: 0,
+            _maxWidth: 0,
+            _columnEndingContext: {
+              page: 0,
+              x: 5,
+              y: 16.200000000000003,
+              availableHeight: null,
+              availableWidth: 30,
+              lastColumnWidth: 30,
+            },
+            _rowSpanCurrentOffset: 1,
+          },
+          col_2: {
+            _span: true,
+            _minWidth: 0,
+            _maxWidth: 0,
+            _columnEndingContext: {
+              page: 0,
+              x: 5,
+              y: 16.200000000000003,
+              availableHeight: null,
+              availableWidth: 30,
+              lastColumnWidth: 30,
+            },
+            _rowSpanCurrentOffset: 1,
+          },
+          col_3: {
+            _span: true,
+            _minWidth: 0,
+            _maxWidth: 0,
+            _columnEndingContext: {
+              page: 0,
+              x: 5,
+              y: 16.200000000000003,
+              availableHeight: null,
+              availableWidth: 30,
+              lastColumnWidth: 30,
+            },
+            _rowSpanCurrentOffset: 1,
+          },
+          col_4: {
+            _span: true,
+            _minWidth: 0,
+            _maxWidth: 0,
+            _columnEndingContext: {
+              page: 0,
+              x: 5,
+              y: 16.200000000000003,
+              availableHeight: null,
+              availableWidth: 30,
+              lastColumnWidth: 30,
+            },
+            _rowSpanCurrentOffset: 1,
+          },
+          col_5: { text: "นำเข้า", style: "tableheader" },
+          col_6: { text: "เบิกจ่าย", style: "tableheader" },
+          col_7: { text: "ปรับยอด", style: "tableheader" },
+          col_8: { text: "คงเหลือ", style: "tableheader" },
+        },
+      };
+
+      var body = [];
+
+      for (var item in headers) {
+        var header = headers[item];
+        var row = new Array();
+        row.push(header.col_1);
+        row.push(header.col_2);
+        row.push(header.col_3);
+        row.push(header.col_4);
+        row.push(header.col_5);
+        row.push(header.col_6);
+        row.push(header.col_7);
+        row.push(header.col_8);
+        body.push(row);
+      }
+
+      for (var key in self.data_store) {
+        var data = self.data_store[key];
+        var newrow = new Array();
+        newrow.push(data.number.toString());
+        newrow.push(data.serial_number.toString());
+        newrow.push(data.name_product.toString());
+        newrow.push(data.catagories.toString());
+        newrow.push(data.import.toString());
+        newrow.push(data.export.toString());
+        newrow.push(data.change.toString());
+        newrow.push(data.total.toString());
+        body.push(newrow);
+      }
+      console.log("Body", body);
+
+      pdfMake.vfs = pdfFonts.pdfMake.vfs; // 2. set vfs pdf font
+      pdfMake.fonts = {
+        THSarabunPsk: {
+          normal: "THSarabun.ttf",
+          bold: "THSarabun-Bold.ttf",
+          italics: "THSarabu-Italic.ttf",
+          bolditalics: "THSarabun-Bold-Italic.ttf",
+        },
+      };
+      var dd = {
+        content: [
+          {
+            table: {
+              widths: [30, "*", "*", "*", "*", "*", "*", "*"],
+              heights: ["*", "*", "*", "*", "*", "*", "*", "*"],
+              body: body,
+            },
+          },
+        ],
+        defaultStyle: {
+          font: "THSarabunPsk",
+        },
+        styles: {
+          tableheader: {
+            bold: true,
+            alignment: "center",
+          },
+          header: {
+            fontSize: 22,
+            bold: true,
+            alignment: "center",
+          },
+        },
+      };
+      // const docDefinition = {
+      //   pageSize: "A4",
+      //   content: [
+      //     {
+      //       table: {
+      //         headerRows: 2,
+      //         widths: [30, "*", "*", "*", "*", "*", "*", "*"],
+      //         heights: ["*", "*", "*", "*", "*", "*", "*", "*"],
+
+      //         body: [
+      //           [
+      //             { text: "ลำดับ", style: "tableheader", rowSpan: 2 },
+      //             { text: "หมายเลขวัสดุ", style: "tableheader", rowSpan: 2 },
+      //             { text: "ชื่อวัสดุ", style: "tableheader", rowSpan: 2 },
+      //             { text: "หมวดหมู่", style: "tableheader", rowSpan: 2 },
+      //             { text: "จำนวนวัสดุ", style: "tableheader", colSpan: 4 },
+      //             {},
+      //             {},
+      //             {},
+      //           ],
+      //           [
+      //             {},
+      //             {},
+      //             {},
+      //             {},
+      //             { text: "นำเข้า", style: "tableheader" },
+      //             { text: "เบิกจ่าย", style: "tableheader" },
+      //             { text: "ปรับยอด", style: "tableheader" },
+      //             { text: "คงเหลือ", style: "tableheader" },
+      //           ],
+      //           [
+      //             { text: "นำเข้า", style: "tableheader" },
+      //             { text: "นำเข้า", style: "tableheader" },
+      //             { text: "นำเข้า", style: "tableheader" },
+      //             { text: "นำเข้า", style: "tableheader" },
+      //             { text: "นำเข้า", style: "tableheader" },
+      //             { text: "เบิกจ่าย", style: "tableheader" },
+      //             { text: "ปรับยอด", style: "tableheader" },
+      //             { text: "คงเหลือ", style: "tableheader" },
+      //           ],
+      //         ],
+      //       },
+      //     },
+      //   ],
+      //   defaultStyle: {
+      //     font: "THSarabunPsk",
+      //   },
+      //   styles: {
+      //     tableheader: {
+      //       bold: true,
+      //       alignment: "center",
+      //     },
+      //     header: {
+      //       fontSize: 22,
+      //       bold: true,
+      //       alignment: "center",
+      //     },
+      //   },
+      // };
+      console.log(dd);
+      pdfMake.createPdf(dd).open({}, window.open());
+      self.data_store = [];
     },
   },
   created() {
