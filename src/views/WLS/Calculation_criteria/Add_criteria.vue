@@ -1533,6 +1533,7 @@ export default {
       this.$message.success(
         "บันทึกตั้งค่าอัตราการจ่ายค่าตอบแทนภาระงานสอนเสร็จสิ้น"
       );
+      setTimeout(this.$message, 1500);
       // Update_status_schedule
       axios
         .post("http://localhost:8080/WlsRouters/Update_status_schedule")
