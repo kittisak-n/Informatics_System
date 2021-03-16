@@ -20,7 +20,7 @@
               <a-tooltip>
                 <template slot="title"> เพิ่มรายวิชา </template>
                 <a-button
-                  type="primary"
+                  type="success"
                   icon="plus"
                   :style="{ marginRight: '3%' }"
                   @click="showModal"
