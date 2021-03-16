@@ -8,7 +8,7 @@ import HighchartsVue from "highcharts-vue";
 import XLSX from 'xlsx'
 import VueAxios from "vue-axios";
 import axios from "axios";
-
+import VueLoading from 'vue-loading-template';
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
 Vue.use(Antd, HighchartsVue);
