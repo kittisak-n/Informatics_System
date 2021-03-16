@@ -28,55 +28,70 @@
               <b>หมายเลขใบรายการ</b> :
             </a-col>
             <a-col :span="8">
-              <a-input />
+              <a-input
+                placeholder="หมายเลขใบรายการ"
+                v-model="PurchaseOrder.purchase_order_code"
+              />
             </a-col>
             <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
               <b>ผู้จัดจำหน่าย</b>
             </a-col>
             <a-col :span="8">
-              <a-input />
+              <a-input
+                placeholder="ชื่อบริษัท"
+                v-model="PurchaseOrder.purchase_order_company"
+              />
             </a-col>
           </a-row>
           <br />
           <a-row :gutter="[8, 8]" type="flex" justify="center">
-            <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
-              <b>วันที่นำเข้าวัสดุ</b> :
-            </a-col>
-            <a-col :span="8">
-              <a-input />
-            </a-col>
-            <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
-              <b>ผู้ตรวจรับ</b> :
-            </a-col>
-            <a-col :span="8">
-              <a-input />
-            </a-col>
-          </a-row>
-          <br />
-          <a-row :gutter="[8, 8]" type="flex" justify="center">
-            <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
-              <b>จำนวน</b> :
-            </a-col>
-            <a-col :span="3">
-              <a-input />
-            </a-col>
             <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
               <b>ยอดชำระ</b> :</a-col
             >
             <a-col :span="3">
-              <a-input />
+              <a-input
+                type="text"
+                disabled
+                v-model="PurchaseOrder.purchase_order_payment_amount"
+              />
             </a-col>
             <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
               <b>ภาษี (7%)</b> :
             </a-col>
             <a-col :span="3">
-              <a-input />
+              <a-input
+                type="text"
+                disabled
+                v-model="PurchaseOrder.purchase_order_vat_amount"
+              />
             </a-col>
             <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
               <b>ยอดชำระสุทธิ</b> :
             </a-col>
+
             <a-col :span="3">
-              <a-input />
+              <a-input
+                disabled
+                type="text"
+                :value="
+                  parseFloat(PurchaseOrder.purchase_order_vat_amount) +
+                  parseFloat(PurchaseOrder.purchase_order_payment_amount)
+                    ? parseFloat(PurchaseOrder.purchase_order_vat_amount) +
+                      parseFloat(PurchaseOrder.purchase_order_payment_amount)
+                    : 0
+                "
+              />
+            </a-col>
+            <a-col :span="2" :style="{ textAlign: 'end', margin: '0.2em 0px' }">
+              <b>จำนวน</b> :
+            </a-col>
+            <a-col :span="3">
+              <a-input
+                disabled
+                type="number"
+                min="1"
+                :value="PurchaseOrder.purchase_suppiles.length"
+              />
             </a-col>
           </a-row>
           <a-row :gutter="[8, 8]">
@@ -86,10 +101,10 @@
           </a-row>
           <br />
           <a-row :gutter="[8, 8]" type="flex" justify="center">
-            <a-col :span="20">
+            <a-col :span="24">
               <a-table
-                :columns="columns_order_meterail"
-                :data-source="meterail"
+                :columns="columns_order_material"
+                :data-source="PurchaseOrder.purchase_suppiles"
                 :pagination="false"
                 size="small"
                 bordered
@@ -99,12 +114,17 @@
                     {{ index + 1 }}
                   </div>
                 </span>
-                <span slot="order_meterail_name">
+                <span
+                  slot="order_material_name"
+                  slot-scope="text, record, index"
+                >
                   <div :style="{ textAlign: 'center' }">
                     <a-select
                       show-search
-                      :value="value"
-                      placeholder="กรอกชื่อวัสดุที่ต้องการเบิก"
+                      v-model="
+                        PurchaseOrder.purchase_suppiles[index].order_material_id
+                      "
+                      placeholder="กรอกชื่อวัสดุ"
                       style="width: 100%"
                       :default-active-first-option="false"
                       :show-arrow="false"
@@ -113,35 +133,100 @@
                       @search="handleSearch"
                       @change="handleChange"
                     >
-                      <a-select-option v-for="d in data" :key="d.value">
-                        {{ d.text }}
+                      <a-select-option
+                        v-for="item in optionMaterial"
+                        :key="item.material_id"
+                      >
+                        {{ item.material_name }}
                       </a-select-option>
                     </a-select>
                   </div>
                 </span>
-                <span slot="order_meterail_amount">
+                <span
+                  slot="order_material_amount"
+                  slot-scope="text, record, index"
+                >
                   <div :style="{ textAlign: 'center' }">
-                    <a-input placeholder="จำนวนวัสดุ" />
+                    <a-input
+                      placeholder="จำนวนวัสดุ"
+                      v-model="
+                        PurchaseOrder.purchase_suppiles[index]
+                          .order_material_amount
+                      "
+                      @change="summary()"
+                    />
                   </div>
                 </span>
-
-                <span slot="order_meterail_price_per_unit">
+                <span
+                  slot="order_material_unit"
+                  slot-scope="text, record, index"
+                >
                   <div :style="{ textAlign: 'center' }">
-                    <a-input placeholder="ราคาต่อหน่วย" />
+                    <a-select
+                      style="width: 100%"
+                      v-model="
+                        PurchaseOrder.purchase_suppiles[index].order_material_id
+                      "
+                      disabled
+                    >
+                      <a-select-option :value="null">
+                        หน่วยนับ
+                      </a-select-option>
+                      <a-select-option
+                        v-for="item in objMaterial"
+                        :key="item.key"
+                        :value="item.material_id"
+                      >
+                        {{ item.unit_name }}
+                      </a-select-option>
+                    </a-select>
                   </div>
                 </span>
-                <span slot="order_meterail_price">
+                <span
+                  slot="order_material_price_per_unit"
+                  slot-scope="text, record, index"
+                >
                   <div :style="{ textAlign: 'center' }">
-                    <a-input placeholder="ราคารวมของวัสดุ" />
+                    <a-input
+                      placeholder="ราคาต่อหน่วย"
+                      v-model="
+                        PurchaseOrder.purchase_suppiles[index]
+                          .order_material_price_per_unit
+                      "
+                      @change="summary()"
+                    />
                   </div>
                 </span>
-
-                <span slot="meterail_note">
+                <span
+                  slot="order_material_price"
+                  slot-scope="text, record, index"
+                >
                   <div :style="{ textAlign: 'center' }">
-                    <a-input placeholder="ระบุหมายเหตุการเบิก" />
+                    <a-input
+                      disabled
+                      placeholder="ราคารวมของวัสดุ"
+                      :value="
+                        parseFloat(
+                          PurchaseOrder.purchase_suppiles[index]
+                            .order_material_amount
+                        ) *
+                        parseFloat(
+                          PurchaseOrder.purchase_suppiles[index]
+                            .order_material_price_per_unit
+                        )
+                          ? parseFloat(
+                              PurchaseOrder.purchase_suppiles[index]
+                                .order_material_amount
+                            ) *
+                            parseFloat(
+                              PurchaseOrder.purchase_suppiles[index]
+                                .order_material_price_per_unit
+                            )
+                          : 0
+                      "
+                    />
                   </div>
                 </span>
-
                 <span slot="action" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     <a-tooltip placement="top">
@@ -149,10 +234,10 @@
                         <span>ลบข้อมูลวัสดุ</span>
                       </template>
                       <a-button
-                        :disabled="meterail.length == 1"
+                        :disabled="PurchaseOrder.purchase_suppiles.length == 1"
                         type="danger"
                         icon="close"
-                        @click="deleteRecordMeterail(index)"
+                        @click="deleteRecordmaterial(index)"
                       >
                       </a-button>
                     </a-tooltip>
@@ -167,7 +252,7 @@
                 type="dashed"
                 style="width:100%"
                 icon="plus"
-                @click="addRecordMeterail()"
+                @click="addRecordmaterial()"
                 >เพิ่มรายการข้อมูล
               </a-button>
             </a-col>
@@ -185,6 +270,7 @@
                   type="success"
                   style="width:25%;margin:0px 1.5%"
                   icon="save"
+                  @click="SaveRecordmaterial()"
                   >บันทึกรายการ
                 </a-button>
               </a-col>
@@ -197,49 +283,65 @@
 </template>
 
 <script>
-import jsonp from "fetch-jsonp";
-import querystring from "querystring";
+import axios from "axios";
 
 let timeout;
-let currentValue;
 
 function fetch(value, callback) {
   if (timeout) {
     clearTimeout(timeout);
     timeout = null;
   }
-  currentValue = value;
-
   function fake() {
-    const str = querystring.encode({
-      code: "utf-8",
-      q: value,
-    });
-    jsonp(`https://suggest.taobao.com/sug?${str}`)
-      .then((response) => response.json())
-      .then((d) => {
-        if (currentValue === value) {
-          const result = d.result;
-          const data = [];
-          result.forEach((r) => {
-            data.push({
-              value: r[0],
-              text: r[0],
-            });
+    axios
+      .post("http://localhost:8080/materialRouters/getMaterialOption", {
+        material_name: value,
+      })
+      .then(function(res) {
+        console.log(res);
+        const data = res.data.results;
+        const optionMaterial = [];
+        data.forEach(function(ele) {
+          optionMaterial.push({
+            material_id: ele.material_id,
+            material_name: ele.material_name,
           });
-          callback(data);
-        }
+          console.log(optionMaterial);
+          callback(optionMaterial);
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
       });
   }
-
   timeout = setTimeout(fake, 300);
 }
+
 export default {
   name: "reveal_form",
   components: {},
   data() {
     return {
-      columns_order_meterail: [
+      optionMaterial: [],
+      objMaterial: [],
+      indexPurchaseOrder: 2,
+      PurchaseOrder: {
+        purchase_order_code: null,
+        purchase_order_company: null,
+        purchase_order_amount: 0,
+        purchase_order_payment_amount: 0,
+        purchase_order_vat_amount: 0,
+        purchase_order_by: this.$store.state.person_id,
+        purchase_suppiles: [
+          {
+            key: 1,
+            order_material_id: undefined,
+            order_material_amount: 0,
+            order_material_price_per_unit: 0,
+          },
+        ],
+      },
+      columns_order_material: [
         {
           title: "#",
           dataIndex: "key",
@@ -251,47 +353,47 @@ export default {
         },
         {
           title: "รายการวัสดุ",
-          dataIndex: "order_meterail_name",
-          key: "order_meterail_name",
+          dataIndex: "order_material_name",
+          key: "order_material_name",
           width: "15%",
           scopedSlots: {
-            customRender: "order_meterail_name",
+            customRender: "order_material_name",
           },
         },
         {
           title: "จำนวน",
-          dataIndex: "order_meterail_amount",
-          key: "order_meterail_amount",
+          dataIndex: "order_material_amount",
+          key: "order_material_amount",
           width: "7%",
           scopedSlots: {
-            customRender: "order_meterail_amount",
+            customRender: "order_material_amount",
           },
         },
         {
           title: "หน่วยนับ",
-          dataIndex: "order_meterail_unit",
-          key: "order_meterail_unit",
+          dataIndex: "order_material_unit",
+          key: "order_material_unit",
           width: "5%",
           scopedSlots: {
-            customRender: "order_meterail_unit",
+            customRender: "order_material_unit",
           },
         },
         {
           title: "ราคาต่อหน่วย",
-          dataIndex: "order_meterail_price_per_unit",
-          key: "order_meterail_price_per_unit",
+          dataIndex: "order_material_price_per_unit",
+          key: "order_material_price_per_unit",
           width: "5%",
           scopedSlots: {
-            customRender: "order_meterail_price_per_unit",
+            customRender: "order_material_price_per_unit",
           },
         },
         {
           title: "ราคารวม (บาท)",
-          dataIndex: "order_meterail_price",
-          key: "order_meterail_price",
+          dataIndex: "order_material_price",
+          key: "order_material_price",
           width: "5%",
           scopedSlots: {
-            customRender: "order_meterail_price",
+            customRender: "order_material_price",
           },
         },
         {
@@ -304,42 +406,97 @@ export default {
           },
         },
       ],
-      meterail: [
-        {
-          key: 1,
-          meterail_name: null,
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-      ],
-      data: [],
-      value: undefined,
     };
   },
   methods: {
+    filterOption(input, option) {
+      console.log(option);
+      return (
+        option.componentOptions.children[0].text
+          .toUpperCase()
+          .indexOf(input.toUpperCase()) >= 0
+      );
+    },
+    addRecordmaterial() {
+      this.PurchaseOrder.purchase_suppiles.push({
+        key: this.indexPurchaseOrder,
+        order_material_id: undefined,
+        order_material_amount: 0,
+        order_material_price_per_unit: 0,
+      });
+      this.indexPurchaseOrder++;
+    },
+    deleteRecordmaterial(index) {
+      this.PurchaseOrder.purchase_suppiles.splice(index, 1);
+    },
+    getMaterial() {
+      const self = this;
+      axios
+        .post(self.$store.state.url + "/materialRouters/getMaterialOption", {
+          material_name: "",
+        })
+        .then(function(res) {
+          console.log(res);
+          let data = res.data.results;
+          data.forEach(function(ele, index) {
+            self.objMaterial.push({
+              key: index + 1,
+              material_id: ele.material_id,
+              unit_name: ele.unit_name,
+            });
+            console.log(self.objMaterial);
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    summary() {
+      const self = this;
+      self.PurchaseOrder.purchase_order_payment_amount = 0;
+      self.PurchaseOrder.purchase_order_vat_amount = 0;
+      self.PurchaseOrder.purchase_suppiles.forEach((ele) => {
+        self.PurchaseOrder.purchase_order_payment_amount +=
+          ele.order_material_amount * ele.order_material_price_per_unit;
+      });
+      self.PurchaseOrder.purchase_order_vat_amount =
+        (self.PurchaseOrder.purchase_order_payment_amount * 7) / 100;
+    },
+    SaveRecordmaterial() {
+      const self = this;
+      console.log(self.PurchaseOrder.purchase_suppiles);
+      axios
+        .post(
+          self.$store.state.url + "/purchaseOrderRouters/insertPurchaseOrder",
+          self.PurchaseOrder
+        )
+        .then(function(res) {
+          console.log(res);
+          self.$notification["success"]({
+            message: "นำเข้าวัสดุเสร็จสิ้น",
+            duration: 2,
+          });
+          self.$router.go(-1);
+        })
+        .catch(function(error) {
+          console.log(error);
+          self.$notification["error"]({
+            message: "นำเข้าวัสดุเสร็จสิ้น",
+            duration: 2,
+          });
+        });
+    },
     handleSearch(value) {
-      fetch(value, (data) => (this.data = data));
+      fetch(value, (optionMaterial) => (this.optionMaterial = optionMaterial));
     },
     handleChange(value) {
       console.log(value);
-      this.value = value;
-      fetch(value, (data) => (this.data = data));
+
+      fetch(value, (optionMaterial) => (this.optionMaterial = optionMaterial));
     },
-    addRecordMeterail() {
-      let data_meterail = {
-        key: this.meterail.length + 1,
-        meterail_name: null,
-        meterail_balance: 0,
-        meterail_reveal: null,
-        meterail_note: null,
-      };
-      this.meterail.push(data_meterail);
-    },
-    deleteRecordMeterail(index) {
-      this.meterail.splice(index, 1);
-    },
-    SaveRecordMeterail() {},
+  },
+  created() {
+    this.getMaterial();
   },
 };
 </script>

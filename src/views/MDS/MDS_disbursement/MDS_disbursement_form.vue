@@ -6,8 +6,11 @@
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="24">หมายเหตุการเบิกวัสดุ </a-col>
             <a-col :span="24"
-              ><a-input placeholder="วัตถุประสงค์การเบิกวัสดุ"
-            /></a-col>
+              ><a-input
+                v-model="material.material_note"
+                placeholder="วัตถุประสงค์การเบิกวัสดุ"
+              />
+            </a-col>
           </a-row>
           <br />
           <a-row :gutter="[8, 8]" type="flex" justify="center">
@@ -16,8 +19,8 @@
           <a-row :gutter="[8, 8]" type="flex" justify="center">
             <a-col :span="24">
               <a-table
-                :columns="columns"
-                :data-source="meterail"
+                :columns="columns_material"
+                :data-source="material.material_list"
                 :pagination="false"
                 size="small"
                 bordered
@@ -27,44 +30,96 @@
                     {{ index + 1 }}
                   </div>
                 </span>
-                <span slot="meterail_name" slot-scope="text, record, index">
+                <span slot="material_name" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
                     <a-select
                       show-search
-                      :value="value"
-                      v-model="meterail[index].meterail_name"
-                      placeholder="กรอกชื่อวัสดุที่ต้องการเบิก"
+                      v-model="material.material_list[index].material_id"
+                      placeholder="ชื่อวัสดุ"
+                      option-filter-prop="children"
                       style="width: 100%"
-                      :default-active-first-option="false"
-                      :show-arrow="false"
-                      :filter-option="false"
-                      :not-found-content="null"
-                      @search="handleSearch"
-                      @change="handleChange"
+                      :filter-option="filterOptionMaterial"
                     >
-                      <a-select-option v-for="d in data" :key="d.value">
-                        {{ d.text }}
+                      <a-select-option
+                        v-for="item in optionMaterial"
+                        :key="item.key"
+                        :value="item.material_id"
+                        :disabled="
+                          material.material_list.find(
+                            (ele) => ele.material_id == item.material_id
+                          ) || item.material_balance == 0
+                        "
+                      >
+                        {{ item.material_name }}
                       </a-select-option>
                     </a-select>
                   </div>
                 </span>
-                <span slot="meterail_unit" slot-scope="text">
+                <span slot="material_unit" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
-                    {{ text }}
+                    {{
+                      optionMaterial.findIndex(
+                        (ele) =>
+                          ele.material_id ===
+                          material.material_list[index].material_id
+                      ) != -1
+                        ? optionMaterial[
+                            optionMaterial.findIndex(
+                              (ele) =>
+                                ele.material_id ===
+                                material.material_list[index].material_id
+                            )
+                          ].material_unit
+                        : ""
+                    }}
                   </div>
                 </span>
-                <span slot="meterail_balance" slot-scope="text">
+                <span slot="material_balance" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
-                    {{ text }}
+                    {{
+                      optionMaterial.findIndex(
+                        (ele) =>
+                          ele.material_id ===
+                          material.material_list[index].material_id
+                      ) != -1
+                        ? optionMaterial[
+                            optionMaterial.findIndex(
+                              (ele) =>
+                                ele.material_id ===
+                                material.material_list[index].material_id
+                            )
+                          ].material_balance
+                        : ""
+                    }}
                   </div>
                 </span>
-                <span slot="meterail_reveal">
+                <span slot="material_reveal" slot-scope="text, record, index">
                   <div :style="{ textAlign: 'center' }">
-                    <a-input placeholder="จำนวนวัสดุที่ต้องการเบิก" />
+                    <a-input-number
+                      style="width: 100%"
+                      v-model="material.material_list[index].material_reveal"
+                      :min="1"
+                      :max="
+                        optionMaterial.findIndex(
+                          (ele) =>
+                            ele.material_id ===
+                            material.material_list[index].material_id
+                        ) != -1
+                          ? optionMaterial[
+                              optionMaterial.findIndex(
+                                (ele) =>
+                                  ele.material_id ===
+                                  material.material_list[index].material_id
+                              )
+                            ].material_balance
+                          : 1
+                      "
+                      placeholder="จำนวนวัสดุที่ต้องการเบิก"
+                    />
                   </div>
                 </span>
 
-                <span slot="meterail_note">
+                <span slot="material_note">
                   <div :style="{ textAlign: 'center' }">
                     <a-input placeholder="ระบุหมายเหตุการเบิก" />
                   </div>
@@ -77,10 +132,10 @@
                         <span>ลบข้อมูลวัสดุ</span>
                       </template>
                       <a-button
-                        :disabled="meterail.length == 1"
+                        :disabled="material.material_list.length == 1"
                         type="danger"
                         icon="close"
-                        @click="deleteRecordMeterail(index)"
+                        @click="deleteRecordmaterial(index)"
                       >
                       </a-button>
                     </a-tooltip>
@@ -95,7 +150,7 @@
                 type="dashed"
                 style="width:100%"
                 icon="plus"
-                @click="addRecordMeterail()"
+                @click="addRecordmaterial()"
                 >เพิ่มรายการข้อมูล
               </a-button>
             </a-col>
@@ -116,7 +171,7 @@
                   type="success"
                   style="width:25%;margin:0px 1.5%"
                   icon="save"
-                  @click="SaveRecordMeterail()"
+                  @click="SaveMaterial()"
                   >บันทึกการเพิ่มข้อมูล
                 </a-button>
               </a-col>
@@ -129,50 +184,12 @@
 </template>
 
 <script>
-import jsonp from "fetch-jsonp";
-import querystring from "querystring";
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
-let timeout;
-let currentValue;
-
-function fetch(value, callback) {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  currentValue = value;
-
-  function fake() {
-    const str = querystring.encode({
-      code: "utf-8",
-      q: value,
-    });
-    jsonp(`https://suggest.taobao.com/sug?${str}`)
-      .then((response) => response.json())
-      .then((d) => {
-        if (currentValue === value) {
-          const result = d.result;
-          const data = [];
-          result.forEach((r) => {
-            data.push({
-              value: r[0],
-              text: r[0],
-            });
-          });
-          callback(data);
-        }
-      });
-  }
-
-  timeout = setTimeout(fake, 300);
-}
+import axios from "axios";
 export default {
   name: "reveal_form",
-  components: {},
   data() {
     return {
-      columns: [
+      columns_material: [
         {
           title: "ลำดับ",
           dataIndex: "key",
@@ -184,20 +201,20 @@ export default {
         },
         {
           title: "วัสดุ",
-          dataIndex: "meterail_name",
-          key: "meterail_name",
+          dataIndex: "material_name",
+          key: "material_name",
           width: "15%",
           scopedSlots: {
-            customRender: "meterail_name",
+            customRender: "material_name",
           },
         },
         {
           title: "หน่วย",
-          dataIndex: "meterail_unit",
-          key: "meterail_unit",
+          dataIndex: "material_unit",
+          key: "material_unit",
           width: "10%",
           scopedSlots: {
-            customRender: "meterail_unit",
+            customRender: "material_unit",
           },
         },
         {
@@ -205,27 +222,27 @@ export default {
           children: [
             {
               title: "จำนวนคงเหลือ",
-              dataIndex: "meterail_balance",
-              key: "meterail_balance",
+              dataIndex: "material_balance",
+              key: "material_balance",
               width: "10%",
-              scopedSlots: { customRender: "meterail_balance" },
+              scopedSlots: { customRender: "material_balance" },
             },
             {
               title: "จำนวนเบิก",
-              dataIndex: "meterail_reveal",
-              key: "meterail_reveal",
+              dataIndex: "material_reveal",
+              key: "material_reveal",
               width: "10%",
-              scopedSlots: { customRender: "meterail_reveal" },
+              scopedSlots: { customRender: "material_reveal" },
             },
           ],
         },
         {
           title: "หมายเหตุ",
-          dataIndex: "meterail_note",
-          key: "meterail_note",
+          dataIndex: "material_note",
+          key: "material_note",
           width: "10%",
           scopedSlots: {
-            customRender: "meterail_note",
+            customRender: "material_note",
           },
         },
         {
@@ -236,42 +253,84 @@ export default {
           scopedSlots: { customRender: "action" },
         },
       ],
-      meterail: [
-        {
-          key: 1,
-          meterail_name: null,
-          meterail_balance: 0,
-          meterail_reveal: null,
-          meterail_note: null,
-        },
-      ],
-      data: [],
-      value: undefined,
+      material: {
+        material_note: undefined,
+        material_list: [
+          {
+            key: 1,
+            material_id: undefined,
+            material_reveal: 1,
+            material_note: undefined,
+          },
+        ],
+        requisition_create_by: this.$store.state.person_id,
+      },
+      keymaterial_list: 2,
+      optionMaterial: [],
     };
   },
   methods: {
-    handleSearch(value) {
-      fetch(value, (data) => (this.data = data));
+    addRecordmaterial() {
+      this.material.material_list.push({
+        key: this.keymaterial_list,
+        material_id: undefined,
+        material_reveal: 1,
+        material_note: undefined,
+      });
+      this.keymaterial_list++;
     },
-    handleChange(value) {
-      console.log(value);
-      this.value = value;
-      fetch(value, (data) => (this.data = data));
+    getMaterial() {
+      const self = this;
+      axios
+        .post(self.$store.state.url + "/materialRouters/getMaterialOption")
+        .then(function(res) {
+          console.log(res);
+          const data = res.data.results;
+          self.optionMaterial = [];
+          data.forEach(function(ele, index) {
+            self.optionMaterial.push({
+              key: index + 1,
+              material_id: ele.material_id,
+              material_name: ele.material_name,
+              material_unit: ele.unit_name,
+              material_balance: ele.material_balance,
+            });
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    addRecordMeterail() {
-      let data_meterail = {
-        key: this.meterail.length + 1,
-        meterail_name: null,
-        meterail_balance: 0,
-        meterail_reveal: null,
-        meterail_note: null,
-      };
-      this.meterail.push(data_meterail);
+    filterOptionMaterial(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toLowerCase()
+          .indexOf(input.toLowerCase()) >= 0
+      );
     },
-    deleteRecordMeterail(index) {
-      this.meterail.splice(index, 1);
+    deleteRecordmaterial(index) {
+      this.material.material_list.splice(index, 1);
     },
-    SaveRecordMeterail() {},
+    SaveMaterial() {
+      const self = this;
+      console.log(self.material);
+      axios
+        .post(
+          self.$store.state.url +
+            "/RequisitionOrderRouters/insertRequisitionOrder",
+          self.material
+        )
+        .then(function(res) {
+          console.log(res);
+          self.$router.back();
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    },
+  },
+  created() {
+    this.getMaterial();
   },
 };
 </script>

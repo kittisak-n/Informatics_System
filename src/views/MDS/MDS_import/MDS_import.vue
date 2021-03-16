@@ -8,7 +8,7 @@
               <highcharts
                 :options="chartOptions"
                 ref="lineCharts"
-                style="position: relative; height:22.7vh; width:auto"
+                style="position: relative; height:12.7vw; width:auto"
               ></highcharts>
             </a-col>
           </a-row>
@@ -30,12 +30,15 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">
-                    จำนวนรายการนำเข้าวัสดุทั้งหมด : ปี 2563
+                    จำนวนรายการนำเข้าวัสดุทั้งหมด
                   </div>
-                  <div><span class="text-number ">2 </span>รายการ</div>
                   <div>
-                    จำนวนรายการนำเข้าวัสดุทั้งหมด ตั้งแต่วันที่ 1 ม.ค. 2563 ถึง
-                    29 ธ.ค. 2563
+                    <span class="text-number "> {{ totallist }} </span>รายการ
+                  </div>
+                  <div>
+                    จำนวนรายการนำเข้าวัสดุทั้งหมด ตั้งแต่วันที่
+                    {{ genDate(start_date_search) }} ถึง
+                    {{ genDate(end_date_search) }}
                   </div>
                 </a-col>
               </a-row>
@@ -55,8 +58,10 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">รายการนำเข้าคงเหลือ</div>
-                  <div><span class="text-number ">2 </span>รายการ</div>
-                  <div>รายการนำเข้าวัสดุที่คงเหลือวัสดุ</div>
+                  <div>
+                    <span class="text-number "> {{ totalawait }} </span>รายการ
+                  </div>
+                  <div>จำนวนรายการนำเข้าสินค้าคงเหลือ</div>
                 </a-col>
               </a-row>
             </a-card>
@@ -75,8 +80,10 @@
                 </a-col>
                 <a-col :span="20" style="text-align:end">
                   <div class="text-head">รายการนำเข้าหมด</div>
-                  <div><span class="text-number ">0 </span>รายการ</div>
-                  <div>รายการนำเข้าวัสดุที่คงเหลือเป็น 0</div>
+                  <div>
+                    <span class="text-number "> {{ totalsucces }} </span>รายการ
+                  </div>
+                  <div>จำนวนรายการนำเข้าสินค้าหมด</div>
                 </a-col>
               </a-row>
             </a-card>
@@ -89,7 +96,7 @@
         <a-card size="small">
           <a-row :gutter="[8, 8]">
             <a-col :span="20" style="margin: 0.2em 0px;">
-              <a-card-meta title="รายการนำเข้าวัสดุ/อุปกรณ์ : ปี 2563">
+              <a-card-meta title="รายการนำเข้าวัสดุ">
                 <a-icon
                   slot="avatar"
                   type="folder-open"
@@ -100,28 +107,6 @@
               </a-card-meta>
             </a-col>
             <a-col :span="4" :style="{ textAlign: 'right' }">
-              <a-tooltip placement="top">
-                <template slot="title">
-                  <span>ส่งออกไฟล์ PDF</span>
-                </template>
-                <a-button
-                  type="danger"
-                  icon="file-pdf"
-                  :style="{ marginRight: '3%' }"
-                />
-              </a-tooltip>
-
-              <a-tooltip placement="top">
-                <template slot="title">
-                  <span>ส่งออกไฟล์ EXCEL</span>
-                </template>
-                <a-button
-                  type="success"
-                  icon="file-excel"
-                  :style="{ marginRight: '3%' }"
-                />
-              </a-tooltip>
-
               <router-link :to="{ path: '/MDS_import/MDS_import_form' }">
                 <a-button type="primary" icon="plus">
                   เพิ่มรายการนำเข้าวัสดุ
@@ -133,18 +118,18 @@
           <a-row :gutter="[8, 8]" type="flex" justify="end">
             <a-col :span="3" style="text-align:end">
               <a-date-picker
-                v-model="startValue"
+                v-model="start_date_search"
                 :disabled-date="disabledStartDate"
-                :format="moment(startValue).format('LL')"
+                :format="moment(start_date_search).format('LL')"
                 placeholder="วันที่เริ่มต้น"
                 @openChange="handleStartOpenChange"
               />
             </a-col>
             <a-col :span="3">
               <a-date-picker
-                v-model="endValue"
+                v-model="end_date_search"
                 :disabled-date="disabledEndDate"
-                :format="moment(endValue).format('LL')"
+                :format="moment(end_date_search).format('LL')"
                 placeholder="วันที่สิ้นสุด"
                 :open="endOpen"
                 @openChange="handleEndOpenChange"
@@ -154,14 +139,16 @@
               <a-input-search
                 placeholder="ค้นหาตามรหัส หรือ ชื่อวัสดุ"
                 style="width: 100%"
+                v-model="text_search"
+                v-on:keyup.enter="changeCondition()"
               />
             </a-col>
           </a-row>
           <a-row :gutter="[8, 8]">
             <a-col :span="24">
               <a-table
-                :columns="columns_order_import"
-                :data-source="order_import"
+                :columns="columns_purchase_order"
+                :data-source="purchase_order"
                 :pagination="false"
                 size="small"
                 bordered
@@ -171,42 +158,42 @@
                     {{ index + 1 }}
                   </div>
                 </span>
-                <span slot="order_import_code" slot-scope="text">
+                <span slot="purchase_order_code" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_company" slot-scope="text">
+                <span slot="purchase_order_company" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_date" slot-scope="text">
+                <span slot="purchase_order_date" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_total" slot-scope="text">
+                <span slot="purchase_order_total" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_paymant" slot-scope="text">
+                <span slot="purchase_order_paymant" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_vat" slot-scope="text">
+                <span slot="purchase_order_vat" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_paymant_total" slot-scope="text">
+                <span slot="purchase_order_paymant_total" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
                 </span>
-                <span slot="order_import_creator" slot-scope="text">
+                <span slot="purchase_order_creator" slot-scope="text">
                   <div :style="{ textAlign: 'center' }">
                     {{ text }}
                   </div>
@@ -221,24 +208,64 @@
                       <a-button
                         type="primary"
                         icon="search"
-                        @click="visible = !visible"
-                      >
-                      </a-button>
-                    </a-tooltip>
-                    <a-tooltip placement="top">
-                      <template slot="title">
-                        <span>แก้ไขรายการ</span>
-                      </template>
-                      <a-button
-                        type="warning"
-                        icon="edit"
-                        @click="deleteRecordMeterail(index)"
+                        @click="showModal(index)"
                       >
                       </a-button>
                     </a-tooltip>
                   </div>
                 </span>
               </a-table>
+            </a-col>
+          </a-row>
+          <br />
+          <a-row>
+            <a-col :span="15">
+              <p
+                :style="{ margin: '0.3em 0.5%' }"
+                v-if="this.total_search != 0"
+              >
+                {{ this.start_search }} -
+                {{
+                  this.end_search > this.total_search
+                    ? this.total_search
+                    : this.end_search
+                }}
+                จาก {{ this.total_search }} รายการ
+              </p>
+              <p
+                :style="{ margin: '0.3em 0.5%' }"
+                v-if="this.total_search == 0"
+              >
+                ไม่พบรายการที่ค้นหา
+              </p>
+            </a-col>
+            <a-col :span="9" :style="{ textAlign: 'Right' }">
+              แสดงทีละ
+              <a-select
+                default-value="10"
+                v-model="PageSize"
+                :style="{ width: '60px', marginRight: '1%' }"
+              >
+                <a-select-option value="10">
+                  10
+                </a-select-option>
+                <a-select-option value="25">
+                  25
+                </a-select-option>
+                <a-select-option value="50">
+                  50
+                </a-select-option>
+                <a-select-option value="100">
+                  100
+                </a-select-option>
+              </a-select>
+              <a-pagination
+                :style="{ display: 'inline' }"
+                v-model="current"
+                :total="total_search"
+                :page-size="PageSize"
+                @change="changePageTable(current)"
+              />
             </a-col>
           </a-row>
         </a-card>
@@ -248,49 +275,38 @@
       width="1200px"
       :dialog-style="{ top: '5%' }"
       v-model="visible"
-      title="รายละเอียดใบรายการนำเข้าวัสดุหมายเลข : 1103-01-0005"
+      :title="
+        'รายละเอียดใบรายการนำเข้าวัสดุหมายเลข : ' + purchase.purchase_order_code
+      "
     >
       <a-row :gutter="[8, 0]">
         <a-col :span="24">
-          <p><b>หมายเลขใบรายการ</b> : 1103-01-0005</p>
+          <p><b>หมายเลขใบรายการ</b> : {{ purchase.purchase_order_code }}</p>
         </a-col>
         <a-col :span="8">
-          <p><b>วันที่นำเข้าวัสดุ</b> : 1 ธันวาคม 2563</p>
+          <p><b>วันที่นำเข้าวัสดุ</b> : {{ purchase.purchase_order_date }}</p>
         </a-col>
         <a-col :span="8">
-          <p><b>ผู้ตรวจรับ</b> : นายกิตติศักดิ์ น้อยดอนไพร</p>
+          <p><b>ผู้ตรวจรับ</b> : {{ purchase.purchase_order_creator }}</p>
         </a-col>
         <a-col :span="8">
-          <p><b>จำนวน</b> : 3 รายการ</p>
+          <p><b>จำนวน</b> : {{ purchase.purchase_order_total }} รายการ</p>
         </a-col>
         <a-col :span="8">
-          <p><b>ยอดชำระ</b> : 7500.00 บาท</p>
+          <p><b>ยอดชำระ</b> : {{ purchase.purchase_order_paymant }} บาท</p>
         </a-col>
         <a-col :span="8">
-          <p><b>ภาษี (7%)</b> : 525.00 บาท</p>
+          <p><b>ภาษี (7%)</b> : {{ purchase.purchase_order_vat }} บาท</p>
         </a-col>
         <a-col :span="8">
-          <p><b>ยอดชำระสุทธิ</b> : 8025.00 บาท</p>
+          <p>
+            <b>ยอดชำระสุทธิ</b> :{{ purchase.purchase_order_paymant_total }} บาท
+          </p>
         </a-col>
       </a-row>
       <a-row :gutter="[8, 0]">
         <a-col :span="24">
-          <p><b>ผู้จัดจำหน่าย</b> : บริษัท ออฟฟิศเมท (ไทย) จำกัด</p>
-        </a-col>
-        <a-col :span="24">
-          <p>
-            <b>ที่อยู่</b> : สำนักงานใหญ่ เลขที่ 919/555 อาคารเซาท์ทาวเวอร์ ชั้น
-            14 ห้อง 2-6 และ 9 ถนนสีลม แขวงสีลม เขตบางรัก กรุงเทพมหานคร 10500
-          </p>
-        </a-col>
-        <a-col :span="8">
-          <p><b>เบอร์ติดต่อ</b> : 1281</p>
-        </a-col>
-        <a-col :span="8">
-          <p><b>FAX</b> : 02-763-5555</p>
-        </a-col>
-        <a-col :span="8">
-          <p><b>E-mail</b> : contact@officemate.co.th</p>
+          <p><b>ผู้จัดจำหน่าย</b> :{{ purchase.purchase_order_company }}</p>
         </a-col>
       </a-row>
 
@@ -354,6 +370,7 @@ import Highcharts from "highcharts";
 import dataModule from "highcharts/modules/data";
 import drilldown from "highcharts/modules/drilldown";
 import loadExporting from "highcharts/modules/exporting";
+import axios from "axios";
 drilldown(Highcharts);
 dataModule(Highcharts);
 loadExporting(Highcharts);
@@ -366,35 +383,48 @@ export default {
   },
   data() {
     return {
+      start_search: 1,
+      end_search: 10,
+      PageSize: 10,
+      total_search: 0,
+      current: 1,
+      text_search: "",
+      condition: "",
+      status_search: 0,
+      start_date_search: new Date("2021-01-01"),
+      end_date_search: new Date(),
+      totallist: 0,
+      totalawait: 0,
+      totalsucces: 0,
       moment,
-      startValue: null,
-      endValue: null,
       endOpen: false,
+      month: [
+        "ม.ค.",
+        "ก.พ.",
+        "มี.ค.",
+        "เม.ย.",
+        "พ.ค.",
+        "มิ.ย.",
+        "ก.ค.",
+        "ส.ค.",
+        "ก.ย.",
+        "ต.ค.",
+        "พ.ย.",
+        "ธ.ค.",
+      ],
+      purchase: {},
       chartOptions: {
         chart: {
           type: "line",
         },
         title: {
-          text: "จำนวนรายการนำเข้าวัสดุ/อุปกรณ์ : ปี 2563",
+          text: "จำนวนรายการนำเข้าวัสดุ",
         },
         subtitle: {
-          text: "",
+          text: "ย้อนหลัง 12 เดือนนับจากวันที่ดูข้อมูล",
         },
         xAxis: {
-          categories: [
-            "ม.ค.",
-            "ก.พ.",
-            "มี.ค.",
-            "เม.ย.",
-            "พ.ค.",
-            "มิ.ย.",
-            "ก.ค.",
-            "ส.ค.",
-            "ก.ย.",
-            "ต.ค.",
-            "พ.ย.",
-            "ธ.ค.",
-          ],
+          categories: [],
         },
         yAxis: {
           title: {
@@ -411,42 +441,12 @@ export default {
         },
         series: [
           {
-            name: "Office Mate",
-            data: [
-              7.0,
-              6.9,
-              9.5,
-              14.5,
-              18.4,
-              21.5,
-              25.2,
-              26.5,
-              23.3,
-              18.3,
-              13.9,
-              9.6,
-            ],
-          },
-          {
-            name: "Excel Choice",
-            data: [
-              3.9,
-              4.2,
-              5.7,
-              8.5,
-              11.9,
-              15.2,
-              17.0,
-              16.6,
-              14.2,
-              10.3,
-              6.6,
-              4.8,
-            ],
+            name: "รายการนำเข้า",
+            data: [],
           },
         ],
       },
-      columns_order_import: [
+      columns_purchase_order: [
         {
           title: "ลำดับ",
           dataIndex: "key",
@@ -458,70 +458,70 @@ export default {
         },
         {
           title: "หมายเลขใบรายการ",
-          dataIndex: "order_import_code",
-          key: "order_import_code",
+          dataIndex: "purchase_order_code",
+          key: "purchase_order_code",
           width: "5%",
           scopedSlots: {
-            customRender: "order_import_code",
+            customRender: "purchase_order_code",
           },
         },
         {
           title: "ผู้จัดจำหน่าย",
-          dataIndex: "order_import_company",
-          key: "order_import_company",
+          dataIndex: "purchase_order_company",
+          key: "purchase_order_company",
           width: "10%",
           scopedSlots: {
-            customRender: "order_import_company",
+            customRender: "purchase_order_company",
           },
         },
         {
           title: "วันที่นำเข้าวัสดุ",
-          dataIndex: "order_import_date",
-          key: "order_import_date",
+          dataIndex: "purchase_order_date",
+          key: "purchase_order_date",
           width: "5%",
           scopedSlots: {
-            customRender: "order_import_date",
+            customRender: "purchase_order_date",
           },
         },
         {
           title: "จำนวนรายการ",
-          dataIndex: "order_import_total",
-          key: "order_import_total",
+          dataIndex: "purchase_order_total",
+          key: "purchase_order_total",
           width: "5%",
-          scopedSlots: { customRender: "order_import_total" },
+          scopedSlots: { customRender: "purchase_order_total" },
         },
         {
           title: "ราคา",
           children: [
             {
               title: "ยอดชำระ",
-              dataIndex: "order_import_paymant",
-              key: "order_import_paymant",
+              dataIndex: "purchase_order_paymant",
+              key: "purchase_order_paymant",
               width: "5%",
-              scopedSlots: { customRender: "order_import_paymant" },
+              scopedSlots: { customRender: "purchase_order_paymant" },
             },
             {
               title: "ภาษี (7%)",
-              dataIndex: "order_import_vat",
-              key: "order_import_vat",
+              dataIndex: "purchase_order_vat",
+              key: "purchase_order_vat",
               width: "5%",
-              scopedSlots: { customRender: "order_import_vat" },
+              scopedSlots: { customRender: "purchase_order_vat" },
             },
             {
               title: "ยอดชำระสุทธิ",
-              dataIndex: "order_import_paymant_total",
-              key: "order_import_paymant_total",
+              dataIndex: "purchase_order_paymant_total",
+              key: "purchase_order_paymant_total",
               width: "5%",
-              scopedSlots: { customRender: "order_import_paymant_total" },
+              scopedSlots: { customRender: "purchase_order_paymant_total" },
             },
           ],
         },
         {
           title: "ผู้ทำรายการ",
-          dataIndex: "order_import_creator",
-          key: "order_import_creator",
+          dataIndex: "purchase_order_creator",
+          key: "purchase_order_creator",
           width: "5%",
-          scopedSlots: { customRender: "order_import_creator" },
+          scopedSlots: { customRender: "purchase_order_creator" },
         },
         {
           title: "ตรวจสอบ",
@@ -533,31 +533,7 @@ export default {
           },
         },
       ],
-      order_import: [
-        {
-          key: 1,
-          order_import_code: "1103-01-0005",
-          order_import_company: "บริษัท ออฟฟิศเมท (ไทย) จำกัด",
-          order_import_date: "1 ธันวาคม 2563",
-          order_import_total: "3",
-          order_import_paymant: 7500,
-          order_import_vat: 525,
-          order_import_paymant_total: 8025,
-          order_import_creator: "กิตติศักดิ์",
-        },
-        {
-          key: 2,
-          order_import_code: "1103-01-0007",
-          order_import_company: "บริษัท ออฟฟิศเมท (ไทย) จำกัด",
-
-          order_import_date: "3 ธันวาคม 2563",
-          order_import_total: "2",
-          order_import_paymant: 8000,
-          order_import_vat: 560,
-          order_import_paymant_total: 8560,
-          order_import_creator: "กิตติศักดิ์",
-        },
-      ],
+      purchase_order: [],
       columns_order_meterail: [
         {
           title: "#",
@@ -624,22 +600,6 @@ export default {
           order_meterail_unit: "ริม",
           order_meterail_price: "6500",
         },
-        {
-          key: 2,
-          order_meterail_code: "MDS1000787",
-          order_meterail_name: "ปากกามาร์คเกอร์ 2 หัว หมึกสีดำ ตราม้า",
-          order_meterail_amount: 50,
-          order_meterail_unit: "ด้าม",
-          order_meterail_price: "500",
-        },
-        {
-          key: 3,
-          order_meterail_code: "MDS3101160",
-          order_meterail_name: "เทปใส แกน 1 นิ้ว 3/4 นิ้วx36 หลา",
-          order_meterail_amount: 10,
-          order_meterail_unit: "ม้วน",
-          order_meterail_price: "500",
-        },
       ],
       visible: false,
     };
@@ -653,6 +613,204 @@ export default {
     },
   },
   methods: {
+    genDate(date) {
+      const self = this;
+      let dateThai = new Date(date).toISOString().split("T")[0];
+      dateThai = `${dateThai.split("-")[2]} ${
+        self.month[parseInt(dateThai.split("-")[1]) - 1]
+      } ${parseInt(dateThai.split("-")[0]) + 543}`;
+      return dateThai;
+    },
+    changeCondition() {
+      const self = this;
+      self.start_search = 1;
+      self.end_search = self.PageSize;
+      self.getPurchaseOrderRecord();
+    },
+    showModal(index) {
+      console.log(index);
+      const self = this;
+      self.purchase.purchase_order_code =
+        self.purchase_order[index].purchase_order_code;
+      self.purchase.purchase_order_company =
+        self.purchase_order[index].purchase_order_company;
+      self.purchase.purchase_order_total =
+        self.purchase_order[index].purchase_order_total;
+      self.purchase.purchase_order_date =
+        self.purchase_order[index].purchase_order_date;
+      self.purchase.purchase_order_paymant =
+        self.purchase_order[index].purchase_order_paymant;
+      self.purchase.purchase_order_vat =
+        self.purchase_order[index].purchase_order_vat;
+      self.purchase.purchase_order_paymant_total =
+        self.purchase_order[index].purchase_order_paymant_total;
+      self.purchase.purchase_order_creator =
+        self.purchase_order[index].purchase_order_creator;
+
+      let data = {
+        purchase_order_id: self.purchase_order[index].purchase_order_id,
+      };
+      axios
+        .post(self.$store.state.url + "/purchaseOrderRouters/getByID", data)
+        .then(function(res) {
+          console.log(res);
+          self.order_meterail = [];
+          res.data.results.forEach(function(ele, index) {
+            self.order_meterail.push({
+              key: index + 1,
+              order_meterail_code: ele.material_code,
+              order_meterail_name: ele.material_name,
+              order_meterail_amount: ele.purchase_order_material_import_amount,
+              order_meterail_unit: ele.unit_name,
+              order_meterail_price: ele.purchase_order_material_price_total,
+            });
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+
+      self.visible = true;
+    },
+    getCondition() {
+      const self = this;
+      self.condition = ``;
+      self.condition += `where (pco.purchase_order_code LIKE "%${self.text_search}%" or pco.purchase_order_company LIKE "%${self.text_search}%") \n`;
+      if (self.start_date_search && self.end_date_search) {
+        self.condition += `and pco.purchase_order_create_date between CAST('${
+          new Date(self.start_date_search).toISOString().split("T")[0]
+        }' as DATE) and CAST('${
+          new Date(self.end_date_search).toISOString().split("T")[0]
+        }' AS DATE) \n`;
+      }
+    },
+    changePageTable(current) {
+      console.log(current);
+      const self = this;
+      self.start_search = self.PageSize * (current - 1) + 1;
+      self.end_search = self.PageSize * (current - 1) + parseInt(self.PageSize);
+
+      self.getPurchaseOrder();
+      self.getTotalRequisitionOrder();
+    },
+    getPurchaseOrderRecord() {
+      const self = this;
+      self.getCondition();
+      axios
+        .post(
+          self.$store.state.url +
+            "/purchaseOrderRouters/getRecordPurchaseOrder",
+          {
+            condition: self.condition,
+          }
+        )
+        .then(function(response) {
+          console.log(response);
+          self.total_search = response.data.results[0].total_Row;
+          self.getPurchaseOrder();
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getPurchaseOrder() {
+      const self = this;
+      self.getCondition();
+      axios
+        .post(self.$store.state.url + "/purchaseOrderRouters/getByCondition", {
+          condition: self.condition,
+          start: self.start_search,
+          end: self.end_search,
+        })
+        .then(function(res) {
+          console.log(res);
+          const data = res.data.results;
+          self.purchase_order = [];
+          data.forEach(function(ele) {
+            self.purchase_order.push({
+              key: ele.num,
+              purchase_order_id: ele.purchase_order_id,
+              purchase_order_code: ele.purchase_order_code,
+              purchase_order_company: ele.purchase_order_company,
+              purchase_order_date: self.genDate(ele.date),
+              purchase_order_total: ele.purchase_order_amount,
+              purchase_order_paymant: ele.purchase_order_payment_amount,
+              purchase_order_vat: ele.purchase_order_vat_amount,
+              purchase_order_paymant_total:
+                ele.purchase_order_net_payment_amount,
+              purchase_order_creator: ele.purchase_order_creator,
+            });
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getTotalRequisitionOrder() {
+      const self = this;
+      let data = {
+        date_Start: new Date(self.start_date_search)
+          .toISOString()
+          .split("T")[0],
+        date_End: new Date(self.end_date_search).toISOString().split("T")[0],
+      };
+      axios
+        .post(
+          self.$store.state.url + "/purchaseOrderRouters/getPurchaseOrderTotal",
+          data
+        )
+        .then(function(res) {
+          console.log(res);
+          self.totallist = res.data.results[0].total;
+          self.totalawait = res.data.results[0].depleted;
+          self.totalsucces = res.data.results[0].undepleted;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getChart() {
+      const self = this;
+      self.getCondition();
+      axios
+        .post(self.$store.state.url + "/purchaseOrderRouters/genChartByMonth")
+        .then(function(res) {
+          console.log(res);
+          let data = res.data.results[0];
+          self.chartOptions.xAxis.categories = [
+            self.month[parseInt(data.month_12) - 1],
+            self.month[parseInt(data.month_11) - 1],
+            self.month[parseInt(data.month_10) - 1],
+            self.month[parseInt(data.month_9) - 1],
+            self.month[parseInt(data.month_8) - 1],
+            self.month[parseInt(data.month_7) - 1],
+            self.month[parseInt(data.month_6) - 1],
+            self.month[parseInt(data.month_5) - 1],
+            self.month[parseInt(data.month_4) - 1],
+            self.month[parseInt(data.month_3) - 1],
+            self.month[parseInt(data.month_2) - 1],
+            self.month[parseInt(data.month_1) - 1],
+          ];
+
+          self.chartOptions.series[0].data = [
+            data.m12,
+            data.m11,
+            data.m10,
+            data.m9,
+            data.m8,
+            data.m7,
+            data.m6,
+            data.m5,
+            data.m4,
+            data.m3,
+            data.m2,
+            data.m1,
+          ];
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     disabledStartDate(startValue) {
       const endValue = this.endValue;
       if (!startValue || !endValue) {
@@ -674,7 +832,13 @@ export default {
     },
     handleEndOpenChange(open) {
       this.endOpen = open;
+      this.changeCondition();
     },
+  },
+  created() {
+    this.getPurchaseOrderRecord();
+    this.getTotalRequisitionOrder();
+    this.getChart();
   },
 };
 </script>
