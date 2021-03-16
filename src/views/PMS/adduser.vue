@@ -45,7 +45,7 @@
                   <a-input-search
                     placeholder="กรอกชื่อผู้ใช้งาน"
                     style="width:100%"
-                    enter-button="Search"
+                    enter-button="ค้นหา"
                     @search="onSearch"
                     v-model="username_search"
                   >
@@ -88,7 +88,6 @@
                     <a-select
                       style="width:100%"
                       v-model="person.prefix_id"
-                      show-search
                       placeholder="โปรดเลือกคำนำหน้า"
                     >
                       <!-- <a-select-option :value="null" v-if="(value = null)">
@@ -128,7 +127,6 @@
                     <a-select
                       style="width:100%"
                       v-model="person.position_id"
-                      show-search
                       placeholder="โปรดเลือกตำแหน่ง"
                     >
                       <!-- <a-select-option :value="null" v-if="(value = null)">
@@ -265,42 +263,48 @@
             >
               <br />
               <a-row
-                :gutter="[8, 8]"
+                :gutter="[10, 10]"
                 v-for="(item, index) in person.position_access"
                 :key="item.key"
                 type="flex"
                 justify="center"
               >
-                <a-col :span="12">
+                <a-col :span="10">
                   <a-select
                     show-search
-                    placeholder="โปรดเลือกตำแหน่งการเข้าถึง"
+                    placeholder="โปรดกำหนดสิทธิ์ให้กับผู้ใช้งาน"
                     option-filter-prop="children"
                     style="width: 100%;"
                     v-model="person.position_access[index].position_access_id"
                     :filter-option="filterOptionPositionAccess"
-                    @change="getAllDistrict()"
                   >
                     <a-select-option
                       v-for="item in dataPositionAccess"
                       :key="item.key"
-                      :value="item.postion_access_id"
+                      :value="item.position_access_id"
+                      :disabled="
+                        person.position_access.find(
+                          (ele) =>
+                            ele.position_access_id === item.position_access_id
+                        )
+                      "
                     >
-                      {{ item.postion_access_name_TH }}
+                      {{ item.position_access_name_TH }}
                     </a-select-option>
                   </a-select>
                 </a-col>
-                <a-col :span="5">
+                <a-col :span="1">
                   <a-button
                     type="primary"
                     icon="search"
                     :disabled="
-                      person.position_access[index].position_access_id
-                        ? disabled
-                        : ''
+                      person.position_access[index].position_access_id ==
+                        undefined
                     "
+                    @click="getPositionDetail(index)"
                   />
-
+                </a-col>
+                <a-col :span="1">
                   <a-button
                     type="success"
                     icon="plus"
@@ -310,6 +314,9 @@
                   <a-button
                     type="danger"
                     icon="line"
+                    @click="
+                      removePositionAccess(person.position_access[index].key)
+                    "
                     v-if="index < person.position_access.length - 1"
                   />
                 </a-col>
@@ -396,7 +403,7 @@
                 </a-col>
               </a-row>
               <br />
-              <hr style="width:90%" />
+              <!-- <hr style="width:90%" />
               <br />
 
               <a-row :gutter="[8, 8]" type="flex" justify="center">
@@ -404,7 +411,7 @@
                   <h3>ตรวจสอบสิทธิ์</h3>
                 </a-col>
               </a-row>
-              <br />
+              <br /> -->
 
               <!-- <a-row :gutter="[8, 8]">
                 <a-col :span="24" :offset="10">
@@ -473,7 +480,12 @@
                   ถัดไป1
                 </a-button> -->
 
-                <a-button v-if="current == 0" type="primary" @click="next1">
+                <a-button
+                  v-if="current == 0"
+                  type="primary"
+                  @click="next1"
+                  :disabled="!chackUsername_search"
+                >
                   ถัดไป
                 </a-button>
 
@@ -507,22 +519,49 @@
       @ok="handleOk"
       :footer="null"
     >
-      <a-row :gutter="[8, 8]">
-        <a-col :span="24">
-          <p>ระบบคำนวณภาระงาน</p>
+      <a-table
+        :columns="columns_modal_manage"
+        :data-source="systemPositionAccess"
+        size="small"
+        :pagination="false"
+        bordered
+      >
+        ]
+
+        <span slot="expandedRowRender" slot-scope="record" style="margin: 0">
+          <div v-for="(item, index) in record.sub_system" :key="index">
+            <p v-if="item.sub_system_name_TH == null">
+              ไม่มีระบบย่อย
+            </p>
+            <p v-else>
+              {{ item.sub_system_name_TH }}
+            </p>
+          </div>
+        </span>
+        <!-- <template slot="title" >
+            Header
+          </template> -->
+        <!-- <template slot="footer">
+            Footer
+          </template> -->
+      </a-table>
+
+      <!-- <a-row :gutter="[8, 8]">
+        <a-col :span="24" v-model="system">
+          <p>{{ system }}</p>
         </a-col>
       </a-row>
 
       <a-row :gutter="[8, 8]">
-        <a-col :span="24">
-          <p>ระบบเบิกจ่ายวัสดุ</p>
+        <a-col :span="24" v-model="sub_system">
+          <p>{{ sub_system }}</p>
         </a-col>
-      </a-row>
+      </a-row> -->
     </a-modal>
 
     <a-modal
       v-model="visible_LDAP"
-      title="เข้าสู่ระบบมหาวิทยาลัยบรูพา"
+      title="เข้าสู่ระบบมหาวิทยาลัยบรูพาของท่านเพื่อเพิ่มผู้ใช้งาน"
       @ok="handleOk"
       :footer="null"
     >
@@ -534,12 +573,20 @@
         </a-row>
         <a-row :gutter="[8, 16]">
           <a-col :span="24">
-            <a-input type="text" placeholder="ชื่อผู้ใช้" v-model="username">
+            <a-input
+              type="text"
+              placeholder="กรอกชื่อผู้ใช้"
+              v-model="username"
+            >
               <a-icon slot="prefix" type="user" />
             </a-input>
           </a-col>
           <a-col :span="24">
-            <a-input type="password" placeholder="รหัสผ่าน" v-model="password">
+            <a-input
+              type="password"
+              placeholder="กรอกรหัสผ่าน"
+              v-model="password"
+            >
               <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-col>
@@ -553,7 +600,7 @@
               :style="{ width: '100%' }"
               @click="login()"
             >
-              เข้าสู่ระบบ
+              ค้นหาผู้ใช้งาน
             </a-button>
           </a-col>
         </a-row>
@@ -580,9 +627,18 @@
 <script>
 import { VueLoading } from "vue-loading-template";
 const axios = require("axios");
+const columns_modal_manage = [
+  {
+    title: "สิทธิ์การใช้งานระบบ",
+    dataIndex: "system_name",
+    key: "system_name",
+    scopedSlots: { customRender: "system_name" },
+  },
+];
 export default {
   data() {
     return {
+      columns_modal_manage,
       person: {
         username_search: "",
         nameEng: "",
@@ -611,6 +667,9 @@ export default {
       dataProvinces: [],
       dataPosition: [],
       dataPositionAccess: [],
+      systemPositionAccess: [],
+      system: "",
+      sub_system: "",
       prefixVeri: "",
       nameEngVeri: "",
       nameThaiVeri: "",
@@ -649,9 +708,10 @@ export default {
       loading: true,
       username: "",
       password: "",
-      indexpostion: 2,
+      indexpostion: 1,
       checkLogin: false,
       // province_id: 11,
+      checkUser: false,
     };
   },
   components: {
@@ -729,6 +789,7 @@ export default {
         .then(function(res) {
           console.log(res.data);
           const data = res.data;
+          self.dataDistricts = [];
           data.results.forEach(function(ele, index) {
             self.dataDistricts.push({
               key: index + 1,
@@ -771,14 +832,31 @@ export default {
           data.results.forEach(function(ele, index) {
             self.dataPositionAccess.push({
               key: index + 1,
-              postion_access_id: ele.postion_access_id,
-              postion_access_name_TH: ele.postion_access_name_TH,
+              position_access_id: ele.postion_access_id,
+              position_access_name_TH: ele.postion_access_name_TH,
+              position_access_status: false,
             });
           });
           console.log(self.dataPositionAccess);
         });
     },
-
+    getPositionDetail(index) {
+      this.visible_adduser = true;
+      const self = this;
+      console.log(self.person.position_access[index].position_access_id);
+      axios
+        .post("http://localhost:8080/personRouters/getPositionName", {
+          position_access_id:
+            self.person.position_access[index].position_access_id,
+        })
+        .then(function(result) {
+          console.log(result.data.results);
+          self.systemPositionAccess = [];
+          result.data.results.forEach(function(res) {
+            self.systemPositionAccess.push(res);
+          });
+        });
+    },
     login() {
       if (!this.checkSpecificKey(this.username)) {
         this.$notification["warning"]({
@@ -848,20 +926,22 @@ export default {
           });
       }
     },
-
     checkSpecificKey(data) {
       var specialKey =
         "[`~!#$^&*()=|{}':;',\\[\\].<>/?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'";
       for (var i = 0; i < data.length; i++) {
         if (specialKey.indexOf(data.substr(i, 1)) != -1) {
           return false;
-        } else if (data[i] == " ") {
+        }
+        if (data[i] == " ") {
           return false;
         }
       }
       return true;
     },
     onSearch(value) {
+      const self = this;
+      console.log(value);
       // for (var i = 0; i < this.person.username_search.length - 1; i++) {
       //   if (this.person.username_search[i] == " ") {
       //     this.$notification["warning"]({
@@ -871,29 +951,40 @@ export default {
       //     });
       //     break;
       //   }
-      // }
-
-      if (value == "") {
-        this.$notification["warning"]({
-          message: "ชื่อผู้ใช้งาน ไม่ได้กรอกข้อมูล",
-          description: "กรุณากรอกชื่อผู้ใช้งาน",
-          duration: 3,
+      axios
+        .post("http://localhost:8080/personRouters/checkPerson", {
+          person_username: value,
+        })
+        .then(function(res) {
+          const data = res.data;
+          console.log(data.status);
+          if (data.status) {
+            self.$notification["warning"]({
+              message: "การแจ้งเตือน",
+              description: "มีข้อมูลผู้ใช้งานอยู่ในระบบ",
+              duration: 3,
+            });
+          }
+          else if (value == "") {
+            self.$notification["warning"]({
+              message: "ชื่อผู้ใช้งาน ไม่ได้กรอกข้อมูล",
+              description: "กรุณากรอกชื่อผู้ใช้งาน",
+              duration: 3,
+            });
+          } else if (!self.checkSpecificKey(value)) {
+            self.$notification["warning"]({
+              message: "การแจ้งเตือน",
+              description: "อักษรพิเศษและช่องว่างไม่สามารถกรอกได้",
+              duration: 3,
+            });
+          } else {
+            self.showModal_LDAP();
+          }
         });
-      } else if (!this.checkSpecificKey(value)) {
-        this.$notification["warning"]({
-          message: "การแจ้งเตือน",
-          description: "อักษรพิเศษและช่องว่างไม่สามารถกรอกได้",
-          duration: 3,
-        });
-      } else {
-        console.log(this.person.username_search);
-        this.showModal_LDAP();
-      }
     },
     next1() {
       if (this.checkLogin) {
         this.current++;
-        console.log("111111");
       } else {
         this.$notification["warning"]({
           message: "การแจ้งเตือน",
@@ -904,8 +995,8 @@ export default {
     },
     next2() {
       this.current++;
-      console.log("222222");
       console.log(this.prefixVeri);
+      console.log(this.person);
       this.nameEngVeri = this.person.nameEng + " " + this.person.lastnameEng;
 
       // this.nameThaiVeri =
@@ -1007,10 +1098,17 @@ export default {
         position_access_id: undefined,
         sub_access: [],
       });
+      this.indexpostion++;
+    },
+    removePositionAccess(id) {
+      this.person.position_access.splice(
+        this.person.position_access.findIndex((ele) => ele.key == id),
+        1
+      );
     },
     saveUser() {
       const self = this;
-      console.log(self.person);
+      console.log("sukarnya", self.person);
       axios
         .post("http://localhost:8080/personRouters/insertPerson", self.person)
         .then(function(res) {
@@ -1059,24 +1157,24 @@ export default {
     },
     getPrefixId() {
       const self = this;
-      self.prefixVeri =
-        self.dataPrefix[
-          self.dataPrefix.findIndex(
-            (ele) => ele.pf_id === self.person.prefix_id
-          )
-        ].pf_name_abbr;
+      // self.prefixVeri =
+      //   self.dataPrefix[
+      //     self.dataPrefix.findIndex(
+      //       (ele) => ele.pf_id === self.person.prefix_id
+      //     )
+      //   ].pf_name_abbr;
 
-      // axios
-      //   .post("http://localhost:8080/personRouters/getPrefixId", {
-      //     pf_id: self.person.prefix_id,
-      //   })
-      //   .then(function(res) {
-      //     const data = res.data;
-      //     self.prefixVeri = data.results[0].pf_name;
+      axios
+        .post("http://localhost:8080/personRouters/getPrefixId", {
+          pf_id: self.person.prefix_id,
+        })
+        .then(function(res) {
+          const data = res.data;
+          self.prefixVeri = data.results[0].pf_name;
 
-      //     // console.log(self.person.prefix_id)
-      //     // console.log(data.results[0].pf_name)
-      //   });
+          // console.log(self.person.prefix_id)
+          // console.log(data.results[0].pf_name)
+        });
     },
     getPositionId() {
       const self = this;

@@ -116,7 +116,7 @@
                     <a-tooltip placement="top" title="จัดการสิทธิ์">
                       <a-button
                         type="warning"
-                        @click="showModal_manage"
+                        @click="getPostionAccessById(record.person_id)"
                         icon="edit"
                       >
                       </a-button>
@@ -189,69 +189,110 @@
         @ok="handleOk"
         cancelText="ปิด"
         okText="ยืนยัน"
+        :footer="null"
       >
         <a-table
           :columns="columns_modal_manage"
-          :data-source="data_modal_manage"
+          :data-source="personPositionAccess"
           size="small"
           :pagination="false"
           bordered
         >
-          <p slot="expandedRowRender" slot-scope="record" style="margin: 0">
-            {{ record.description }}
-          </p>
-          <template slot="permission" slot-scope="text, record, index">
-            <div v-if="index < data_modal_manage.length - 1">
+          <!-- <span slot="expandedRowRender" slot-scope="record" style="margin: 0">
+            <div v-for="(item, index) in record.sub_system" :key="index">
+              <p v-if="item.sub_system_name_TH == null">
+                ไม่มีระบบย่อย
+              </p>
+              <p v-else>
+                {{ item.sub_system_name_TH }}
+              </p>
+            </div>
+            
+          </span> -->
+          <span slot="postion_access_name_TH" slot-scope="text, record, index">
+            <div
+              v-if="index != personPositionAccess.length - 1"
+              style="text-align:center"
+            >
               {{ text }}
             </div>
             <div
-              v-if="index == data_modal_manage.length - 1"
+              v-if="index == personPositionAccess.length - 1"
               style="text-align:center"
             >
               <a-select
-                default-value="lucy"
-                style="width: 100%"
-                @change="handleChange"
+                style="width:100%"
+                v-model="personPositionAccess[index].postion_access_id"
+                placeholder="โปรดเลือกสิทธิ์เข้าถึง"
               >
-                <a-select-opt-group>
-                  <span slot="label"><a-icon type="user" />ตำแหน่ง</span>
-                  <a-select-option value="lucy">
-                    อาจารย์ที่ปรึกษา
-                  </a-select-option>
-                  <a-select-option value="jack">
-                    เจ้าหน้าเบิกจ่ายวัสดุ
-                  </a-select-option>
-                </a-select-opt-group>
-                <!-- <a-select-opt-group label="Engineer">
-                  <a-select-option value="Yiminghe">
-                    yiminghe
-                  </a-select-option>
-                </a-select-opt-group> -->
+                <a-select-option
+                  v-for="item in dataPostionAccess"
+                  :key="item.key"
+                  :value="item.postion_access_id"
+                  :disabled="
+                    personPositionAccess.find(
+                      (ele) => ele.postion_access_id == item.postion_access_id
+                    )
+                  "
+                >
+                  {{ item.postion_access_name_TH }}
+                </a-select-option>
               </a-select>
             </div>
-          </template>
-
+          </span>
           <span slot="status_modal" slot-scope="text, record, index">
             <div
-              v-if="index < data_modal_manage.length - 1"
+              v-if="index != personPositionAccess.length - 1"
               style="text-align:center"
             >
-              <a-switch default-checked />
+              <a-switch
+                :checked="personPositionAccess[index].prepair_status"
+                @click="
+                  () =>
+                    (personPositionAccess[
+                      index
+                    ].prepair_status = !personPositionAccess[index]
+                      .prepair_status)
+                "
+                @change="changeStatusPositionAccess(record.person_id)"
+              >
+                <a-icon slot="checkedChildren" type="check" />
+                <a-icon slot="unCheckedChildren" type="close" />
+              </a-switch>
             </div>
             <div
-              v-if="index == data_modal_manage.length - 1"
+              v-if="index == personPositionAccess.length - 1"
               style="text-align:center"
             >
-              <a-button type="success" icon="save"></a-button>
+              <a-button
+                type="success"
+                icon="save"
+                @click="
+                  updatePermission(record.postion_access_id, record.person_id)
+                "
+              ></a-button>
             </div>
           </span>
+
           <!-- <template slot="title" >
             Header
           </template> -->
-          <!-- <template slot="footer">
+          <!-- <template slot="footer" :footer="null">
             Footer
           </template> -->
         </a-table>
+
+        <!-- <template slot="footer">
+          <a-select
+            default-value="lucy"
+            style="width: 120px"
+            @change="handleChange"
+          >
+            <a-select-option value="jack">
+              Jack
+            </a-select-option>
+          </a-select>
+        </template> -->
       </a-modal>
 
       <a-modal
@@ -447,8 +488,9 @@ const columns = [
 const columns_modal_manage = [
   {
     title: "สิทธิ์การใช้งาน",
-    dataIndex: "permission",
-    scopedSlots: { customRender: "permission" },
+    dataIndex: "postion_access_name_TH",
+    key: "postion_access_name_TH",
+    scopedSlots: { customRender: "postion_access_name_TH" },
   },
   {
     title: "จัดการ",
@@ -498,24 +540,6 @@ const columns_modal_info = [
 //   },
 // ];
 
-const data_modal_manage = [
-  {
-    key: "1",
-    description: "ระบบคำนวณภาระงาน",
-    permission: "เจ้าหน้าที่ฝ่ายธุรการ",
-  },
-  {
-    key: "2",
-    description: "ระบบเบิกจ่ายวัสดุ",
-    permission: "บุคลากรทั่วไป",
-  },
-  {
-    key: "3",
-    description: "ระบบคำนวณภาระงาน",
-    permission: "บุคลากรทั่วไป",
-  },
-];
-
 const data_modal_info = [
   {
     key: "1",
@@ -532,6 +556,8 @@ export default {
     return {
       dataPerson: [],
       personSystem: [],
+      personPositionAccess: [],
+      dataPostionAccess: [],
       // dataPersonId: {
       //   person_id: "",
       //   person_username: "",
@@ -547,7 +573,6 @@ export default {
       // },
       // data,
       columns,
-      data_modal_manage,
       columns_modal_manage,
       data_modal_info,
       columns_modal_info,
@@ -562,8 +587,10 @@ export default {
       districtInfo: "",
       zipcodeInfo: "",
       nameDeleteFirm: "",
+      sub_system: "",
       numPerson: 0,
       numSystemPermission: 0,
+      position_access_index: 1,
     };
   },
   methods: {
@@ -654,10 +681,121 @@ export default {
           if (data.results) {
             self.$notification["success"]({
               message: "การแจ้งเตือน",
-              description: "เปลี่ยนสถานะสำเร็จ",
+              description: "การเปลี่ยนสถานะสำเร็จ",
               duration: 3,
             });
           }
+        });
+    },
+    updatePermission(position_access_id_update, person_id_update) {
+      console.log(position_access_id_update);
+      console.log(person_id_update);
+      const self = this;
+      axios
+        .post("http://localhost:8080/personRouters/updatePermission", {
+          position_access_id: position_access_id_update,
+          person_id: person_id_update,
+        })
+        .then(function(res) {
+          const data = res.data;
+          if (data.results) {
+            self.$notification["success"]({
+              message: "การแจ้งเตือน",
+              description: "การเปลี่ยนสิทธิ์สำเร็จ",
+              duration: 3,
+            });
+          }
+        });
+      this.visible_manage = false;
+    },
+    changeStatusPositionAccess(data) {
+      const self = this;
+      axios
+        .post(
+          "http://localhost:8080/personRouters/changeStatusPositionAccess",
+          {
+            person_id: data,
+          }
+        )
+        .then(function(res) {
+          const data = res.data;
+          if (data.results) {
+            self.$notification["success"]({
+              message: "การแจ้งเตือน",
+              description: "การเปลี่ยนสถานะสำเร็จ",
+              duration: 3,
+            });
+          }
+        });
+    },
+
+    getPostionAccessById(index) {
+      this.visible_manage = true;
+      const self = this;
+      self.personPositionAccess = [];
+      axios
+        .post("http://localhost:8080/personRouters/getPostionAccessById", {
+          person_id: index,
+        })
+        .then(function(res) {
+          const data = res.data;
+
+          data.results.forEach(function(ele, index) {
+            self.personPositionAccess.push({
+              key: index + 1,
+              postion_access_id: ele.postion_access_id,
+              postion_access_name_TH: ele.postion_access_name_TH,
+              person_id: ele.person_id,
+              prepair_status: ele.prepair_status == 1 ? true : false,
+            });
+            self.position_access_index++;
+          });
+          self.personPositionAccess.push({
+            key: self.position_access_index,
+            postion_access_id: undefined,
+            postion_access_name_TH: undefined,
+            person_id: index,
+            prepair_status: undefined,
+          });
+          self.position_access_index++;
+        });
+      // self.getPositionDetail(self.personPositionAccess.postion_access_id);
+    },
+
+    getPositionDetail(index) {
+      console.log(index);
+      const self = this;
+      console.log(self.person.position_access[index].position_access_id);
+      axios
+        .post("http://localhost:8080/personRouters/getPositionName", {
+          position_access_id:
+            self.person.position_access[index].position_access_id,
+        })
+        .then(function(result) {
+          console.log(result.data.results);
+          self.systemPositionAccess = [];
+          result.data.results.forEach(function(res) {
+            self.systemPositionAccess.push(res);
+          });
+        });
+    },
+
+    getPostionAccess() {
+      const self = this;
+      axios
+        .post("http://localhost:8080/personRouters/getPostionAccess")
+        .then(function(res) {
+          console.log(res.data);
+          const data = res.data;
+          // console.log(data.results);
+          data.results.forEach(function(ele, index) {
+            let data = {
+              key: index + 1,
+              postion_access_id: ele.postion_access_id,
+              postion_access_name_TH: ele.postion_access_name_TH,
+            };
+            self.dataPostionAccess.push(data);
+          });
         });
     },
 
@@ -703,9 +841,6 @@ export default {
     //     },
     //   });
     // },
-    showModal_manage() {
-      this.visible_manage = true;
-    },
     handleOk(e) {
       console.log(e);
       this.visible_manage = false;
@@ -717,8 +852,9 @@ export default {
   },
   created() {
     this.getAllPerson();
-    console.log(this.$store.state.user.user_name);
-    console.log(this.$store.state.user.user_id);
+    this.getPostionAccess();
+    // console.log(this.$store.state.user.user_name);
+    // console.log(this.$store.state.user.user_id);
     // console.log(this.$store.state.user_menu);
   },
 };

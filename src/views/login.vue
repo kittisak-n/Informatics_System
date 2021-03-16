@@ -157,7 +157,8 @@ export default {
       for (var i = 0; i < this.username.length; i++) {
         if (specialKey.indexOf(this.username.substr(i, 1)) != -1) {
           return false;
-        } else if (this.username[i] == " ") {
+        }
+        if (this.username[i] == " ") {
           return false;
         }
       }

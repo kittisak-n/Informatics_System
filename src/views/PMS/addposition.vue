@@ -138,15 +138,11 @@
                 </router-link>
               </a-col>
               <a-col :span="12" style="text-align:left">
-                <router-link :to="{ path: '/permission_manage' }">
-                  <a-button
-                    type="primary"
-                    v-on:click="add_success"
-                    @click="savePositionAssess()"
-                  >
-                    บันทึก
-                  </a-button>
-                </router-link>
+                <!-- <router-link :to="{ path: '/permission_manage' }"> -->
+                <a-button type="primary" @click="savePositionAssess()">
+                  บันทึก
+                </a-button>
+                <!-- </router-link> -->
               </a-col>
             </a-col>
           </a-row>
@@ -164,7 +160,7 @@ export default {
       System: [],
       sub_System: [],
       positionAccess: {
-        name_positionaccess: null,
+        name_positionaccess: "",
         create_by: this.$store.state.user.user_id,
       },
       select_system: [
@@ -173,12 +169,26 @@ export default {
           sub_system: [],
         },
       ],
+      checkSelect: true,
     };
   },
   methods: {
     // show_system() {
     //   console.log(this.system);
     // },
+    checkSpecificKey(data) {
+      var specialKey =
+        "[`~!#$^&*()=|{}':;',\\[\\].<>/?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'";
+      for (var i = 0; i < data.length; i++) {
+        if (specialKey.indexOf(data.substr(i, 1)) != -1) {
+          return false;
+        }
+        if (data[i] == " ") {
+          return false;
+        }
+      }
+      return true;
+    },
     add_select_system() {
       this.select_system.push({
         system_id: null,
@@ -238,36 +248,68 @@ export default {
         });
     },
     savePositionAssess() {
-      const self = this;
-      let obj = [];
-      self.select_system.forEach(function(ele) {
-        if (ele.sub_system.length == 0) {
-          let data = {
-            system_id: ele.system_id,
-            sub_system_id: null,
-          };
-          obj.push(data);
-        } else {
-          ele.sub_system.forEach(function(ele_sub) {
-            if (ele_sub.status) {
-              let data = {
-                system_id: ele_sub.system_id,
-                sub_system_id: ele_sub.sub_system_id,
-              };
-              obj.push(data);
-            }
+      console.log(this.positionAccess.name_positionaccess);
+      if (!this.checkSpecificKey(this.positionAccess.name_positionaccess)) {
+        this.$notification["warning"]({
+          message: "การแจ้งเตือน",
+          description: "อักษรพิเศษและช่องว่างไม่สามารถกรอกได้",
+          duration: 3,
+        });
+      } else if (this.positionAccess.name_positionaccess == "") {
+        this.$notification["warning"]({
+          message: "ชื่อสิทธิ์การเข้าถึง ไม่ได้กรอกข้อมูล",
+          description: "กรุณากรอกชื่อสิทธิ์การเข้าถึง",
+          duration: 3,
+        });
+      } else {
+        const self = this;
+        let obj = [];
+        self.select_system.forEach(function(ele) {
+          if (ele.sub_system.length == 0) {
+            let data = {
+              system_id: ele.system_id,
+              sub_system_id: null,
+            };
+            obj.push(data);
+          } else {
+            ele.sub_system.forEach(function(ele_sub) {
+              if (ele_sub.status) {
+                let data = {
+                  system_id: ele_sub.system_id,
+                  sub_system_id: ele_sub.sub_system_id,
+                };
+                obj.push(data);
+              }
+            });
+          }
+        });
+        self.checkSelect = true;
+        obj.forEach(function(ele) {
+          if (ele.system_id == null) {
+            self.checkSelect = false;
+          }
+        });
+        console.log(self.checkSelect);
+
+        if (self.checkSelect) {
+          this.sentdata(obj);
+          this.$notification["success"]({
+            message: "การแจ้งเตือน",
+            description: "บันทึกสำเร็จ",
+            duration: 3,
+          });
+          this.$router.push({ path: "permission_manage" });
+        } else if (!self.checkSelect) {
+          this.$notification["warning"]({
+            message: "การแจ้งเตือน",
+            description: "กรุณาเลือกระบบ",
+            duration: 3,
           });
         }
-      });
-      console.log(obj);
-      this.sentdata(obj);
-      this.$notification["success"]({
-        message: "การแจ้งเตือน",
-        description: "บันทึกสำเร็จ",
-        duration: 3,
-      });
+      }
     },
     sentdata(obj) {
+      console.log(obj);
       const self = this;
       axios
         .post(
